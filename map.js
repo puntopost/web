@@ -7,11 +7,11 @@ const defaultPos = { // Coordenadas de Ciudad de México
 const defaultZoom = 13;
 const defaultRadiusKm = 10;
 const icon = L.icon({
-	iconUrl: 'img/PING1.svg',
+	iconUrl: 'https://www.puntopost.mx/img/PING1.svg',
 	iconSize: [49, 54]
 });
 const iconSelected = L.icon({
-	iconUrl: 'img/PING2.svg',
+	iconUrl: 'https://www.puntopost.mx/img/PING2.svg',
 	iconSize: [63, 70]
 });
 
