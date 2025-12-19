@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PuntoPost - Compra online, recoge aquí</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
+
+    <link href="bootstrap.min.css" rel="stylesheet">
+    
+    <link href="bootstrap-icons.min.css" rel="stylesheet">
+</head>
+<body>
+
+    <header class="bg-primary-subtle p-lg-3">
+        <div class="bg-primary rounded-4">
+            <nav class="navbar navbar-dark">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="./home.html">
+                        <img src="https://www.puntopost.mx/static/media/logob.8ffaaadc3649b5102616.png" alt="PuntoPost Logo" style="height: 45px;">
+                    </a>
+                    
+                    <!-- Desktop Navigation - Hidden on mobile -->
+                    <div class="d-none d-lg-flex gap-5">
+                        <a href="./map.html" class="nav-link text-white fw-bold">Busca tu PuntoPost</a>
+                        <a href="./atrae.html" class="nav-link text-white fw-bold">Solicita ser PuntoPost</a>
+                    </div>
+                    
+                    <!-- Mobile Menu Button - Hidden on desktop -->
+                    <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    
+                    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+                        <div class="offcanvas-header">
+                            <img src="img/puntopost2.svg" alt="PuntoPost" class="offcanvas-title" id="offcanvasNavbarLabel" style="height: 30px;">
+                            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                        </div>
+                        <div class="offcanvas-body p-0">
+                            <div class="px-3 py-4">
+                                <a href="./map.html" class="nav-link text-dark fs-5 py-3 d-block text-decoration-none fw-bold">Busca tu PuntoPost</a>
+                                <hr class="my-0">
+                                <a href="./atrae.html" class="nav-link text-dark fs-5 py-3 d-block text-decoration-none fw-bold">Solicita ser PuntoPost</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+            <section class="text-white text-center rounded-bottom-4 pb-3">
+                <h2 class="fw-bold display-5 mb-3">Estado del pedido</h2>
+            </section>            
+        </div>
+    </header>
+
+    <main class="d-flex justify-content-center">
+        <section class="px-3 mt-3" style="max-width: 600px;">
+            <div id="tracking-error-alert" class="d-none">
+                <div class="alert alert-danger d-flex align-items-center gap-3" role="alert">
+                    <span class="bi bi-exclamation-triangle"></span>
+                    <div>
+                        No se ha encontrado ningún pedido con el código de seguimiento proporcionado.
+                    </div>
+                </div>
+                <div class="text-center">
+                    <a href="./home.html" class="btn btn-link text-decoration-none fw-bold text-primary">Volver</a>
+                </div>
+            </div>
+            <div id="tracking-summary-container" class="container border rounded-3 mb-5 d-none">
+                <div class="row bg-light border-bottom">
+                    <div class="col-12 p-3">
+                        <span class="badge rounded-pill fw-normal mb-3 d-none text-bg-success js-status-badge-delivered">ENTREGADO</span>
+                        <span class="badge rounded-pill fw-normal mb-3 d-none text-bg-warning js-status-badge-incidence">INCIDENCIA</span>
+                        <span class="badge rounded-pill fw-normal mb-3 d-none text-bg-danger js-status-badge-cancelled">CANCELADO</span>
+                        <div>
+                            <span class="text-dark-emphasis">Tracking</span> <span class="js-tracking-id"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="p-3 fw-bold">Historial de estados</div>
+                        <div class="d-flex border-bottom py-2 gap-2 fs-7">
+                            <img src="./img/Circle_check_ON.svg" height="28" width="28" class="align-self-center">
+                            <div>
+                                <div class="fw-bold js-current-status"></div>
+                                <div class="text-dark-emphasis js-current-status-time"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="status-history collapse">
+                    <template id="status-history-tmpl">
+                        <div class="d-flex border-bottom py-2 gap-2 fs-7">
+                            <img src="./img/Circle_check.svg" height="28" width="28" class="align-self-center">
+                            <div>
+                                <div class="fw-bold js-current-status"></div>
+                                <div class="text-dark-emphasis js-current-status-time"></div>
+                            </div>
+                        </div>                        
+                    </template>
+                </div>
+                <div class="text-center">
+                    <button class="btn btn-link text-decoration-none fw-bold text-primary" type="button" data-bs-toggle="collapse" data-bs-target=".status-history">Ver más</button>
+                </div>
+                <div class="row">
+                    <div class="col-12 d-flex flex-column gap-2 p-3">
+                        <b>Destino</b>
+                        <div class="text-dark-emphasis fs-7 mt-2">
+                            <b>Nombre</b>: <span class="js-name"></span>
+                        </div>
+                        <div class="text-dark-emphasis fs-7">
+                            <b>Dirección</b>: <span class="js-address"></span>
+                        </div>
+                        <div class="text-dark-emphasis fs-7">
+                            <b>Horario</b>: <span class="js-schedule"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-primary text-white text-center rounded-bottom-4 py-4">
+        <div class="container">
+            <div class="d-flex flex-column justify-content-center align-items-center gap-2">
+                <img src="img/logo-isotipo-verde 2.svg" alt="Pin" height="40">
+                <a href="./condiciones.html" class="text-white fs-7 fw-bold link-underline link-underline-opacity-0">Términos y Condiciones</a>
+                <a href="./privacidad.html" class="text-white fs-7 fw-bold link-underline link-underline-opacity-0">Política de privacidad</a>
+                <b class="text-white fs-7">© PuntoPost</b>
+            </div>
+        </div>
+    </footer>
+
+    <script src="tracking-summary.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

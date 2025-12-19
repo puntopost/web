@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PuntoPost - Compra online, recoge aquí</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
+
+    <link href="bootstrap.min.css" rel="stylesheet">
+    
+    <link href="bootstrap-icons.min.css" rel="stylesheet">
+</head>
+<body>
+
+    <header class="bg-primary-subtle p-lg-3">
+        <div class="bg-primary rounded-4">
+            <nav class="navbar navbar-dark">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="./home.html">
+                        <img src="https://www.puntopost.mx/static/media/logob.8ffaaadc3649b5102616.png" alt="PuntoPost Logo" style="height: 45px;">
+                    </a>
+                    
+                    <!-- Desktop Navigation - Hidden on mobile -->
+                    <div class="d-none d-lg-flex gap-5">
+                        <a href="./map.html" class="nav-link text-white fw-bold">Busca tu PuntoPost</a>
+                        <a href="./atrae.html" class="nav-link text-white fw-bold">Solicita ser PuntoPost</a>
+                    </div>
+                    
+                    <!-- Mobile Menu Button - Hidden on desktop -->
+                    <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    
+                    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+                        <div class="offcanvas-header">
+                            <img src="img/puntopost2.svg" alt="PuntoPost" class="offcanvas-title" id="offcanvasNavbarLabel" style="height: 30px;">
+                            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                        </div>
+                        <div class="offcanvas-body p-0">
+                            <div class="px-3 py-4">
+                                <a href="./map.html" class="nav-link text-dark fs-5 py-3 d-block text-decoration-none fw-bold">Busca tu PuntoPost</a>
+                                <hr class="my-0">
+                                <a href="./atrae.html" class="nav-link text-dark fs-5 py-3 d-block text-decoration-none fw-bold">Solicita ser PuntoPost</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+            <section class="text-white text-center rounded-bottom-4 p-3 m-auto">
+                <img src="./img/speak.svg" height="160" width="160">
+                <h2 class="fw-bold display-5 mb-3 mt-4">Atrae a más clientes</h2>
+                <div class="d-flex flex-column gap-3">
+                    <div>
+                        <b>Incrementa ventas</b> hasta en un <b>20% sin costo</b> siendo PuntoPost
+                    </div>
+                    <div class="d-flex flex-column flex-md-row justify-content-center gap-3">
+                        <div class="d-flex gap-2">
+                            <b class="badge rounded-circle bg-secondary-subtle text-primary fs-6 align-self-center">1</b> <b class="text-white">Envía solicitud sin compromiso</b>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <b class="badge rounded-circle bg-secondary-subtle text-primary fs-6 align-self-center">2</b> <b class="text-white">Contacto por email</b>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <b class="badge rounded-circle bg-secondary-subtle text-primary fs-6 align-self-center">3</b> <b class="text-white">Recibes el material PuntoPost</b>
+                        </div>
+                    </div>
+                </div>
+                <a href="#form-ser-puntopost" class="btn bg-white text-primary fw-bold rounded-pill mt-5 px-5 w-auto">Solicitar sin compromiso</a>
+            </section>            
+        </div>
+    </header>
+
+    <main>
+        <section class="py-5 text-center bg-light">
+            <div class="container p-lg-5">
+                <h5 class="mb-3 mb-lg-5 fw-bold d-lg-none">+100 ecommerce confían en nosotros</h5>
+                <h3 class="mb-3 mb-lg-5 fw-bold d-none d-lg-block">+100 ecommerce confían en nosotros</h3>
+                <div class="d-flex justify-content-around justify-content-lg-center align-items-center gap-4 overflow-x-auto">
+                    <img src="img/GOTRENDIER.svg" alt="GoTrendier" height="25">
+                    <img src="img/prixz.png" alt="Prixz" height="25">
+                    <img src="img/PLATANOMELON.svg" alt="PlatanoMelon" height="25">
+                </div>
+            </div>
+        </section>
+        <section class="bg-secondary-subtle">
+            <div class="container pt-2 pb-4 pt-lg-4 pb-lg-5">
+                <h2 class="text-center mb-4 fs-3 fw-bold">¿En qué consiste?</h2>
+                <div class="row">
+                    <div class="col-12 text-center mb-4">
+                        Recibe y entrega paquetes en tu negocio y <b>obtén una comisión</b> por cada paquete gestionado. <b>¡Sólo te llevará 1 minuto!</b> Podrás expandir tu cartera de clientes y tus ventas al <b>atraer más gente a tu tienda</b>.
+                    </div>
+                </div>
+                <div class="row g-4">
+                    <div class="col-12 col-lg-6 col-xxl-3 offset-xxl-3">
+                        <div class="card shadow-sm border-0 rounded-3">
+                            <img src="img/cardImage.png" class="card-img-top">
+                            <div class="card-body p-4">
+                                <h5 class="card-title fw-bold">Recibir paquetes</h5>
+                                <p class="card-text text-body-secondary">Los clientes <b>traerán sus paquetes a tu tienda para enviar o hacer devoluciones</b>. El cliente llevará un QR, podrás escanearlo y pegar una etiqueta que te facilitará PuntoPost. ¡Una excelente manera de atraer nuevos clientes!</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-6 col-xxl-3">
+                        <div class="card shadow-sm border-0 rounded-3">
+                            <img src="img/image.png" class="card-img-top">
+                            <div class="card-body p-4">
+                                <h5 class="card-title fw-bold">Entregar paquetes</h5>
+                                <p class="card-text text-body-secondary">Los clientes también irán a tu tienda para <b>recoger los paquetes</b>, que te dejará cada día nuestro chofer. Escanea el QR y entrega el paquete. ¡Así de sencillo! <b>Incrementa tus ingresos sin complicaciones</b>.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="bg-primary py-5">
+            <div class="container">
+                <!-- Mobile: Centered title -->
+                <div class="text-center text-white mb-4 mb-xxl-5 d-xxl-none">
+                    <h2 class="fw-bold mb-3">Te lo ponemos fácil. Nos encargamos de todo.</h2>
+                    <div class="fw-medium fs-5">Sigue estos pasos y <b>empieza a formar parte de la red de PuntoPost</b>, pronto <b>la más extensa de todo México</b>. ¿Qué esperas?</div>
+                </div>
+                
+                <!-- Desktop: Title and image aligned -->
+                <div class="row align-items-center mb-5 d-none d-xxl-flex">
+                    <div class="col-12 d-flex align-items-center text-white justify-content-center gap-5">
+                        <div>
+                            <h2 class="fw-bold mb-4 display-6 text-center">Te lo ponemos fácil. Nos encargamos de todo.</h2>
+                            <div class="fw-medium fs-5 text-center">Sigue estos pasos y <b>empieza a formar parte de la red de PuntoPost</b>, pronto <b>la más extensa de todo México</b>. ¿Qué esperas?</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row g-4">
+                    <div class="col-12 col-xxl-4">
+                        <div class="bg-white rounded-4 border border-light-subtle p-4 text-start h-100">
+                            <div class="d-flex gap-3 mb-2">
+                                <div class="display-6 fw-bold text-secondary-emphasis opacity-50" style="font-size:62px; line-height:62px;">1</div>
+                                <div class="fw-medium fs-5 align-self-sm-center">Déjanos la información de tu negocio rellenando el formulario</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-xxl-4">
+                        <div class="bg-white rounded-4 border border-light-subtle p-4 text-start h-100">
+                            <div class="d-flex gap-3 mb-2">
+                                <div class="display-6 fw-bold text-secondary-emphasis opacity-50" style="font-size:62px; line-height:62px;">2</div>
+                                <div class="fw-medium fs-5 align-self-sm-center">Nosotros analizaremos tus datos y te contactaremos por email</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-xxl-4">
+                        <div class="bg-white rounded-4 border border-light-subtle p-4 text-start h-100">
+                            <div class="d-flex gap-3 mb-2">
+                                <div class="display-6 fw-bold text-secondary-emphasis opacity-50" style="font-size:62px; line-height:62px;">3</div>
+                                <div class="fw-medium fs-5 align-self-sm-center">Procederemos a la instalación</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="pt-5 pb-4 bg-primary-subtle">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <h2 class="fw-bold mb-4">Beneficios de ser PuntoPost</h2>
+                        <p class="mb-5 fs-5">
+                            Sigue estos pasos y <b>empieza a formar parte de la red de PuntoPost</b>, pronto <b>la más extensa de todo México</b>. ¿Qué esperas?
+                        </p>
+                    </div>
+                </div>
+                <div class="row g-4">
+                    <div class="col-12 col-xl-3 offset-xl-3">
+                        <div class="bg-white rounded-4 border border-light-subtle p-4 text-start h-100">
+                            <div class="d-flex gap-3 mb-2">
+                                <img src="./img/icon1.svg" height="70" width="70" class="align-self-center">
+                                <div class="fw-medium fs-5 align-self-sm-center d-flex flex-column gap-2">
+                                    <b class="fs-5">Más ingresos</b>
+                                    <div class="text-black-50 fs-6">Aumenta tus ventas en un 20% y obtén un <b>ingreso extra cada mes</b>.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-xl-3">
+                        <div class="bg-white rounded-4 border border-light-subtle p-4 text-start h-100">
+                            <div class="d-flex gap-3 mb-2">
+                                <img src="./img/icon3.svg" height="70" width="70" class="align-self-center">
+                                <div class="fw-medium fs-5 align-self-sm-center d-flex flex-column gap-2">
+                                    <b class="fs-5">Lealtad de clientes</b>
+                                    <div class="text-black-50 fs-6">Ampliarás tu cartera de clientes y repetirán el servicio.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-xl-3 offset-xl-3">
+                        <div class="bg-white rounded-4 border border-light-subtle p-4 text-start h-100">
+                            <div class="d-flex gap-3 mb-2">
+                                <img src="./img/icon2.svg" height="70" width="70" class="align-self-center">
+                                <div class="fw-medium fs-5 align-self-sm-center d-flex flex-column gap-2">
+                                    <b class="fs-5">Más tráfico en tu negocio</b>
+                                    <div class="text-black-50 fs-6">Recibe más clientes y <b>aumenta tus ventas en un 20%</b>.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-xl-3">
+                        <div class="bg-white rounded-4 border border-light-subtle p-4 text-start h-100">
+                            <div class="d-flex gap-3 mb-2">
+                                <img src="./img/icon4.svg" height="70" width="70" class="align-self-center">
+                                <div class="fw-medium fs-5 align-self-sm-center d-flex flex-column gap-2">
+                                    <b class="fs-5">Apoyo al comercio local</b>
+                                    <div class="text-black-50 fs-6">Fortalece la economía de tu comunidad <b>atrayendo más clientes</b> a tu negocio.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="bg-body-secondary">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 col-xxl-6 offset-xxl-3 text-center">
+                        <h2 class="fw-bold my-5">¿Tienes dudas?</h2>
+                        <div id="accordion-dudas" class="accordion accordion-flush d-flex flex-column gap-3 mb-5">
+                            <div class="accordion-item rounded-4 overflow-hidden">
+                                <h2 class="accordion-header" >
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordion-a" aria-expanded="false">
+                                    <b>¿Con qué eCommerce trabajan?</b>
+                                </button>
+                                </h2>
+                                <div id="accordion-a" class="accordion-collapse collapse" data-bs-parent="#accordion-dudas">
+                                    <div class="accordion-body text-black-50 text-start fs-6">¡Con los grandes! Gestionamos la logística de gigantes como GoTrendier, Prixz, Platanomelon y muchos más. Tus clientes tendrán acceso a sus tiendas favoritas. En México trabajamos con más de 100 eCommerce. ¡Tu negocio estará en buena compañía!</div>
+                                </div>
+                            </div>
+                            <div class="accordion-item rounded-4 overflow-hidden">
+                                <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordion-b" aria-expanded="false">
+                                    <b>¿Cuánto dinero percibo por ser un PuntoPost?</b>
+                                </button>
+                                </h2>
+                                <div id="accordion-b" class="accordion-collapse collapse" data-bs-parent="#accordion-dudas">
+                                    <div class="accordion-body text-black-50 text-start fs-6">Depende del desempeño de cada uno. Te pagamos por paquete gestionado. Cuantos más tráfico de paquetes, más ingresos obtendrás.</div>
+                                </div>
+                            </div>
+                            <div class="accordion-item rounded-4 overflow-hidden">
+                                <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordion-c" aria-expanded="false">
+                                    <b>¿Cómo afecta esto al tráfico de clientes en mi tienda?</b>
+                                </button>
+                                </h2>
+                                <div id="accordion-c" class="accordion-collapse collapse" data-bs-parent="#accordion-dudas">
+                                    <div class="accordion-body text-black-50 text-start fs-6">¡Prepárate para más visitas! Aumentará el tráfico de clientes, ya que las personas que recojan, envíen o hagan las devoluciones de sus paquetes visitarán tu tienda. ¡Es una gran oportunidad para dar a conocer tu negocio y atraer nuevos clientes!</div>
+                                </div>
+                            </div>
+                            <div class="accordion-item rounded-4 overflow-hidden">
+                                <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordion-d" aria-expanded="false">
+                                    <b>¿Qué materiales me darán para operar como PuntoPost?</b>
+                                </button>
+                                </h2>
+                                <div id="accordion-d" class="accordion-collapse collapse" data-bs-parent="#accordion-dudas">
+                                    <div class="accordion-body text-black-50 text-start fs-6">Te damos todo lo necesario: alta en la aplicación movil de PuntoPost, un rollo de etiquetas, carteleria para identificar tu negocio como PuntoPost, bolsas y cinchos de seguridad. ¡Todo listo para empezar!</div>
+                                </div>
+                            </div>
+                            <div class="accordion-item rounded-4 overflow-hidden">
+                                <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordion-e" aria-expanded="false">
+                                    <b>¿Necesito formación antes de empezar a recibir paquetes?</b>
+                                </button>
+                                </h2>
+                                <div id="accordion-e" class="accordion-collapse collapse" data-bs-parent="#accordion-dudas">
+                                    <div class="accordion-body text-black-50 text-start fs-6">Sí, nuestro equipo comercial te dará toda la formación necesaria antes de que empieces a gestionar paquetes. ¡Nada de preocuparse, estarás más que preparado!</div>
+                                </div>
+                            </div>
+                            <div class="accordion-item rounded-4 overflow-hidden">
+                                <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordion-f" aria-expanded="false">
+                                    <b>¿Puedo trabajar con otras empresas de paquetería?</b>
+                                </button>
+                                </h2>
+                                <div id="accordion-f" class="accordion-collapse collapse" data-bs-parent="#accordion-dudas">
+                                    <div class="accordion-body text-black-50 text-start fs-6">¡Por supuesto! No tenemos exclusividad de marca, así que puedes trabajar con otras empresas de paquetería sin problema.</div>
+                                </div>
+                            </div>
+                            <div class="accordion-item rounded-4 overflow-hidden">
+                                <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordion-g" aria-expanded="false">
+                                    <b>¿Hay alguna penalización si quiero terminar la colaboración antes de tiempo?</b>
+                                </button>
+                                </h2>
+                                <div id="accordion-g" class="accordion-collapse collapse" data-bs-parent="#accordion-dudas">
+                                    <div class="accordion-body text-black-50 text-start fs-6">No, no hay penalización. Solo te pedimos un mes de notificación previa. ¡Sin ataduras!</div>
+                                </div>
+                            </div>
+                            <div class="accordion-item rounded-4 overflow-hidden">
+                                <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordion-h" aria-expanded="false">
+                                    <b>¿Qué pasa después de firmar el preacuerdo?</b>
+                                </button>
+                                </h2>
+                                <div id="accordion-h" class="accordion-collapse collapse" data-bs-parent="#accordion-dudas">
+                                    <div class="accordion-body text-black-50 text-start fs-6">El preacuerdo queda pendiente de valoración por parte del comercial de tu zona, quien determinará si es factible abrir un nuevo PuntoPost en tu área.</div>
+                                </div>
+                            </div>
+                            <div class="accordion-item rounded-4 overflow-hidden">
+                                <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordion-i" aria-expanded="false">
+                                    <b>¿Qué hago si hay alguna incidencia con los paquetes?</b>
+                                </button>
+                                </h2>
+                                <div id="accordion-i" class="accordion-collapse collapse" data-bs-parent="#accordion-dudas">
+                                    <div class="accordion-body text-black-50 text-start fs-6">Los PuntoPost reciben un asesoramiento constante. Pueden llamar a su delegado de zona o bien al correo electrónico de atención al cliente: <a href="mailto:hola@puntopost.mx">hola@puntopost.mx</a>.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="bg-light" id="form-ser-puntopost">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 col-xxl-6 offset-xxl-3 text-center">
+                        <h2 class="fw-bold my-5">Regístrate y únete a nuestra red</h2>
+                        <div class="pipedriveWebForms" data-pd-webforms="https://webforms.pipedrive.com/f/6qbGf0M9Reknaxvl0RFJIm8fuGmLfRfoGccdkYeJW8FQn5xCu0u8QnOB0OtKfwVuQb"><script src="https://webforms.pipedrive.com/f/loader"></script></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-primary text-white text-center rounded-bottom-4 py-4">
+        <div class="container">
+            <div class="d-flex flex-column justify-content-center align-items-center gap-2">
+                <img src="img/logo-isotipo-verde 2.svg" alt="Pin" height="40">
+                <a href="./condiciones.html" class="text-white fs-7 fw-bold link-underline link-underline-opacity-0">Términos y Condiciones</a>
+                <a href="./privacidad.html" class="text-white fs-7 fw-bold link-underline link-underline-opacity-0">Política de privacidad</a>
+                <b class="text-white fs-7">© PuntoPost</b>
+            </div>
+        </div>
+    </footer>
+
+    <script>window.pipedriveLeadboosterConfig = {base: 'leadbooster-chat.pipedrive.com',companyId: 13939026,playbookUuid: '447f2f57-036c-4750-8349-e81893bb186c',version: 2};(function () {var w = window;if (w.LeadBooster) {console.warn('LeadBooster already exists');} else {w.LeadBooster = {q: [],on: function (n, h) {this.q.push({ t: 'o', n: n, h: h });},trigger: function (n) {this.q.push({ t: 't', n: n });},};}})();</script><script src="https://leadbooster-chat.pipedrive.com/assets/loader.js" async></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

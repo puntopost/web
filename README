@@ -1,0 +1,7 @@
+Per canviar colors:
+- Instalar Bootstrap a local seguint les instruccions a https://getbootstrap.com/docs/5.3/getting-started/download/#source-files
+- Obrir el fitxer (segons versió) /bootstrap-5.3.8/scss/_variables.scss
+- Afegir els colors nous i, si cal, assignar-los a $primary, $secondary...
+- Seguir els passos per executar els scripts de npm https://getbootstrap.com/docs/5.3/getting-started/download/#source-files i executar npm start i npm run dist
+- Agafar el fitxer /bootstrap-5.3.8/dist/css/bootstrap.min.css i copiar-lo a l'arrel del directori on tinguem la web de punto post
+

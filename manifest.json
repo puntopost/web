@@ -1,0 +1,108 @@
+{
+  "short_name": "PuntoPost",
+  "name": "PuntoPost 📦 PUDO",
+  "description": "PuntoPost application for PUDOs",
+  "icons": [
+    {
+      "src": "/pudo/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/pudo/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "/pudo?pwa",
+  "display": "browser",
+  "theme_color": "#f6d721",
+  "background_color": "#1ea494",
+  "id": "mx.puntopost.pudo",
+  "orientation": "portrait",
+  "prefer_related_applications": true,
+  "related_applications": [
+    {
+      "platform": "play",
+      "url": "https://play.google.com/store/apps/details?id=com.puntopost",
+      "id": "com.puntopost"
+    },
+    {
+      "platform": "itunes",
+      "url": "https://apps.apple.com/us/app/puntopost/id6746641073"
+    }
+  ],
+  "launch_handler": {
+    "client_mode": ["navigate-existing", "auto"]
+  },
+  "lang" : "es",
+  "display_override": [
+    "window-controls-overlay",
+    "standalone",
+    "minimal-ui",
+    "browser"
+  ],
+  "shortcuts": [
+    {
+      "name": "Escanear etiqueta",
+      "url": "/pudo?scanner",
+      "description": "Escanea una etiqueta",
+      "icons": [
+        {
+          "src": "/pudo/qr-small.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Etiqueta dañada",
+      "url": "/pudo/unknwon_parcel",
+      "description": "Asignar una etiqueta a paquete desconocido",
+      "icons": [
+        {
+          "src": "/pudo/warning-small.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Contáctanos",
+      "url": "/pudo/contact",
+      "description": "Contacta con nosotros a través de whatsapp",
+      "icons": [
+        {
+          "src": "/pudo/whatsapp-small.png",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ],
+  "scope_extensions": [],
+  "scope" : "/pudo",
+  "edge_side_panel": {
+    "preferred_width": 400
+  },
+  "protocol_handlers": [],
+  "dir": "auto",
+  "categories": ["shopping", "business"],
+  "screenshots" : [
+    {
+      "src": "screenshot_desktop.jpg",
+      "sizes": "1920x959",
+      "type": "image/jpg",
+      "form_factor": "wide"
+    },
+    {
+      "src": "screenshot_phone.jpg",
+      "sizes" : "750x1334",
+      "type": "image/jpg"
+    }
+  ],
+  "share_target": {
+    "method": "GET",
+    "action": "/pudo/",
+    "params": {
+      "text": "code_form[code]"
+    }
+  }
+}
