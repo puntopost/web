@@ -4,8 +4,8 @@ const defaultPos = { // Coordenadas de Ciudad de México
 		lon: -99.1331565
 	}
 };
-const defaultZoom = 15;
-const defaultRadiusKm = 10;
+const defaultZoom = 14;
+const defaultRadiusKm = 12;
 const icon = L.icon({
 	iconUrl: 'https://www.puntopost.mx/img/PING1.svg',
 	iconSize: [49, 54]
