@@ -4,7 +4,7 @@ const defaultPos = { // Coordenadas de Ciudad de México
 		lon: -99.1331565
 	}
 };
-const defaultZoom = 13;
+const defaultZoom = 15;
 const defaultRadiusKm = 10;
 const icon = L.icon({
 	iconUrl: 'https://www.puntopost.mx/img/PING1.svg',
@@ -153,12 +153,13 @@ const centerPopupOnMap = (map, popup) => {
 };
 
 const centerMapToPudo = (map, pudo) => {
-	map.panTo(
+	map.flyTo(
 		[
 			pudo.address.coordinate.latitude,
 			pudo.address.coordinate.longitude
 		],
-		{animate: true}
+		defaultZoom,
+		{animate: true, duration: 0.75}
 	);
 };
 
