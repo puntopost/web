@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PuntoPost - Plugin WooCommerce - Documentación</title>
+
+    <link rel="icon" type="image/x-icon" href="https://www.puntopost.mx/favicon.ico">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com/">
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
+
+    <link href="bootstrap.min.css" rel="stylesheet">
+
+    <link href="bootstrap-icons.min.css" rel="stylesheet">
+</head>
+<body>
+
+    <header class="bg-primary-subtle p-lg-3">
+        <div class="bg-primary rounded-4">
+            <nav class="navbar navbar-dark">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="https://www.puntopost.mx/">
+                        <img src="https://www.puntopost.mx/img/logo-puntopost-amarillo.png" alt="PuntoPost Logo" style="height: 45px;">
+                    </a>
+
+                    <!-- Desktop Navigation - Hidden on mobile -->
+                    <div class="d-none d-lg-flex gap-5">
+                        <a href="https://www.puntopost.mx/integrations.html" class="nav-link text-white fw-bold">Integraciones</a>
+                        <a href="https://www.puntopost.mx/map.html" class="nav-link text-white fw-bold">Busca tu PuntoPost</a>
+                        <a href="https://www.puntopost.mx/atrae.html" class="nav-link text-white fw-bold">Solicita ser PuntoPost</a>
+                    </div>
+
+                    <!-- Mobile Menu Button - Hidden on desktop -->
+                    <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+                        <div class="offcanvas-header">
+                            <img src="https://www.puntopost.mx/img/puntopost2.svg" alt="PuntoPost" class="offcanvas-title" id="offcanvasNavbarLabel" style="height: 30px;">
+                            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                        </div>
+                        <div class="offcanvas-body p-0">
+                            <div class="px-3 py-4">
+                                <a href="https://www.puntopost.mx/integrations.html" class="nav-link text-dark fs-5 py-3 d-block text-decoration-none fw-bold">Integraciones</a>
+                                <hr class="my-0">
+                                <a href="https://www.puntopost.mx/map.html" class="nav-link text-dark fs-5 py-3 d-block text-decoration-none fw-bold">Busca tu PuntoPost</a>
+                                <hr class="my-0">
+                                <a href="https://www.puntopost.mx/atrae.html" class="nav-link text-dark fs-5 py-3 d-block text-decoration-none fw-bold">Solicita ser PuntoPost</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+            <section class="text-white text-center rounded-bottom-4 pb-4 pt-3">
+                <h1 class="fw-bold display-5 mb-3">Plugin WooCommerce</h1>
+                <p class="fs-5 mb-0">Documentación de integración</p>
+            </section>
+        </div>
+    </header>
+
+    <main>
+        <section class="bg-primary-subtle py-4">
+            <div class="container">
+                <div class="row">
+                    <!-- Table of Contents - Desktop -->
+                    <div class="col-lg-3 d-none d-lg-block">
+                        <div class="sticky-top" style="top: 20px;">
+                            <div class="bg-white rounded-3 shadow-sm p-4">
+                                <h5 class="fw-bold mb-3">Índice</h5>
+                                <nav class="nav flex-column">
+                                    <a class="nav-link text-dark py-2" href="#introduccion">Introducción</a>
+                                    <a class="nav-link text-dark py-2" href="#requisitos">Requisitos</a>
+                                    <a class="nav-link text-dark py-2" href="#instalacion">Instalación</a>
+                                    <a class="nav-link text-dark py-2" href="#configuracion">Configuración</a>
+                                    <a class="nav-link text-dark py-2" href="#webhook">Webhook</a>
+                                    <a class="nav-link text-dark py-2" href="#checkout">Checkout</a>
+                                    <a class="nav-link text-dark py-2" href="#flujo">Flujo</a>
+                                    <a class="nav-link text-dark py-2" href="#solucion">Solución de problemas</a>
+                                    <a class="nav-link text-dark py-2" href="#preguntas-frecuentes">Preguntas frecuentes</a>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Documentation Content -->
+                    <div class="col-lg-9">
+                        <!-- Mobile Table of Contents -->
+                        <div class="d-lg-none mb-4">
+                            <div class="bg-white rounded-3 shadow-sm p-3">
+                                <button class="btn btn-link text-dark text-decoration-none w-100 text-start fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#mobileTOC">
+                                    <i class="bi bi-list me-2"></i>Índice
+                                </button>
+                                <div class="collapse" id="mobileTOC">
+                                    <nav class="nav flex-column mt-3">
+                                        <a class="nav-link text-dark py-2" href="#introduccion">Introducción</a>
+                                        <a class="nav-link text-dark py-2" href="#requisitos">Requisitos</a>
+                                        <a class="nav-link text-dark py-2" href="#instalacion">Instalación</a>
+                                        <a class="nav-link text-dark py-2" href="#configuracion">Configuración</a>
+                                        <a class="nav-link text-dark py-2" href="#webhook">Webhook</a>
+                                        <a class="nav-link text-dark py-2" href="#checkout">Checkout</a>
+                                        <a class="nav-link text-dark py-2" href="#flujo">Flujo</a>
+                                        <a class="nav-link text-dark py-2" href="#solucion">Solución de problemas</a>
+                                        <a class="nav-link text-dark py-2" href="#preguntas-frecuentes">Preguntas frecuentes</a>
+                                    </nav>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Introduction Section -->
+                        <section id="introduccion" class="bg-white rounded-3 shadow-sm p-4 p-lg-5 mb-4">
+                            <h2 class="fw-bold mb-4">Introducción</h2>
+                            <p class="text-body-secondary">
+                                Integra el método de envío PuntoPost en tu tienda WooCommerce para que tus clientes recojan sus pedidos en puntos de recogida cercanos.
+                                Incluye mapa interactivo, creación automática de paquetes, etiquetas QR, actualizaciones de estado y correos de notificación.
+                            </p>
+                        </section>
+
+                        <!-- Requirements Section -->
+                        <section id="requisitos" class="bg-white rounded-3 shadow-sm p-4 p-lg-5 mb-4">
+                            <h2 class="fw-bold mb-4">Requisitos</h2>
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><i class="bi bi-check-circle-fill text-primary me-2"></i>WordPress 6.0 o superior</li>
+                                <li class="mb-2"><i class="bi bi-check-circle-fill text-primary me-2"></i>WooCommerce 7.0 o superior</li>
+                                <li class="mb-2"><i class="bi bi-check-circle-fill text-primary me-2"></i>PHP 7.4 o superior</li>
+                                <li class="mb-2"><i class="bi bi-check-circle-fill text-primary me-2"></i>Permitir solicitudes salientes desde el servidor (para la API de PuntoPost)</li>
+                            </ul>
+                        </section>
+
+                        <!-- Installation Section -->
+                        <section id="instalacion" class="bg-white rounded-3 shadow-sm p-4 p-lg-5 mb-4">
+                            <h2 class="fw-bold mb-4">Instalación</h2>
+                            <p class="text-body-secondary mb-4">
+                                <ol>
+                                    <li>En tu panel de WordPress ve a: Plugins > Añadir nuevo > Buscar plugins.</li>
+                                    <li>Busca "PuntoPost" y haz clic en "Instalar ahora".</li>
+                                    <li>Activa el plugin.</li>
+                                    <li>Configura el método de envío.</li>
+                                </ol>
+                            </p>
+                        </section>
+
+                        <!-- Configuration Section -->
+                        <section id="configuracion" class="bg-white rounded-3 shadow-sm p-4 p-lg-5 mb-4">
+                            <h2 class="fw-bold mb-4">Configuración</h2>
+
+                            <div class="border rounded p-3 bg-light text-center mb-3">
+                                <img src="img/puntopost-woocommerce-1.png" alt="Configuración de método de envío PuntoPost" class="img-fluid">
+                            </div>
+
+                            <p class="text-body-secondary mb-4">
+                                <ol>
+                                    <li>Ve a WooCommerce > Ajustes > Envío > PuntoPost</li>
+                                    <li>Completa los campos para configurar los datos del plugin:</li>
+                                    <ul>
+                                        <li>Título: nombre visible para el cliente en el checkout</li>
+                                        <li>PuntoPost API Username (datos proporcionados por PuntoPost)</li>
+                                        <li>PuntoPost API Password (datos proporcionados por PuntoPost)</li>
+                                        <li>PuntoPost Merchant ID (datos proporcionados por PuntoPost)</li>
+                                        <li>PuntoPost Origin ID (datos proporcionados por PuntoPost)</li>
+                                    </ul>
+                                    <li>Guarda los cambios. El plugin validará las credenciales con PuntoPost.</li>
+                                </ol>
+                            </p>
+                            <p class="text-body-secondary mb-4">
+                                Notas: Si falta cualquier credencial, el método no se mostrará a los clientes.
+                            </p>
+
+                            <div class="mb-4">
+                                <h3 class="fw-bold mb-3">Configuración de las zonas de envío</h3>
+
+                                <div class="border rounded p-3 bg-light text-center mb-3">
+                                    <img src="img/puntopost-woocommerce-2.png" alt="Configuración de las zonas de envío" class="img-fluid">
+                                </div>
+                                <p class="text-body-secondary mb-3">
+                                    1. Ve a WooCommerce > Ajustes > Envío > Zonas de envío
+                                </p>
+
+                                <div class="border rounded p-3 bg-light text-center mb-3">
+                                    <img src="img/puntopost-woocommerce-3.png" alt="Configuración de las zonas de envío" class="img-fluid">
+                                </div>
+                                <p class="text-body-secondary mb-3">
+                                    2. Edita la zona y haz clic en “Añadir método de envío”
+                                </p>
+
+                                <div class="border rounded p-3 bg-light text-center mb-3">
+                                    <img src="img/puntopost-woocommerce-4.png" alt="Crear método de envío" class="img-fluid">
+                                </div>
+                                <p class="text-body-secondary mb-3">
+                                    3. Selecciona el método de envío PuntoPost y haz clic en "Seguir"
+                                </p>
+
+                                <div class="border rounded p-3 bg-light text-center mb-3">
+                                    <img src="img/puntopost-woocommerce-5.png" alt="Crear método de envío" class="img-fluid">
+                                </div>
+                                <p class="text-body-secondary mb-3">
+                                    4. Indica el coste del envío para el usuario en la zona donde se está añadiendo el método de envío de PuntoPost.
+                                    Si quieres ofrecer envío gratuito a partir de una cantidad determinada, indica la cantidad mínima para aplicar el envío gratuito.
+                                </p>
+                            </div>
+                        </section>
+
+                        <!-- Webhook Section -->
+                        <section id="webhook" class="bg-white rounded-3 shadow-sm p-4 p-lg-5 mb-4">
+                            <h2 class="fw-bold mb-4">Webhook</h2>
+
+                            <p class="text-body-secondary mb-3">
+                                Para recibir actualizaciones de estado de los paquetes desde PuntoPost, se deberá configurar la cuenta de PuntoPost con la URL correspondiente (consulta con tu contacto de PuntoPost).
+                            </p>
+                            <ul>
+                                <li>URL: https://<tudominio.com>/wp-json/puntopost/v1/webhook</li>
+                                <li>Método: POST</li>
+                            </ul>
+                            <p class="text-body-secondary mb-3">
+                                El webhook actualiza los datos del paquete en el pedido y cambia el estado del pedido según corresponda.
+                            </p>
+                        </section>
+
+                        <!-- Checkout Section -->
+                        <section id="checkout" class="bg-white rounded-3 shadow-sm p-4 p-lg-5 mb-4">
+                            <h2 class="fw-bold mb-4">Checkout</h2>
+
+                            <div class="border rounded p-3 bg-light text-center mb-3">
+                                <img src="img/puntopost-woocommerce-6.png" alt="Checkout" class="img-fluid">
+                            </div>
+                            <p class="text-body-secondary mb-3">
+                                Una vez habilitado y configurado el plugin, al seleccionar el método de envío "PuntoPost" en el checkout, aparecerá un botón para elegir punto de recogida.
+                            </p>
+
+                            <div class="border rounded p-3 bg-light text-center mb-3">
+                                <img src="img/puntopost-woocommerce-7.png" alt="Checkout - Selección de punto de recogida" class="img-fluid">
+                            </div>
+                            <p class="text-body-secondary mb-3">
+                                Al pulsar el botón se abrirá un mapa para buscar por código postal o por el área visible en el mapa.<br />
+                                Al seleccionar un punto, se mostrará el resumen y la selección quedará guardada en el pedido.
+                            </p>
+                        </section>
+
+                        <!-- Flow Section -->
+                        <section id="flow" class="bg-white rounded-3 shadow-sm p-4 p-lg-5 mb-4">
+                            <h2 class="fw-bold mb-4">Flujo de pedido</h2>
+
+                            <p class="text-body-secondary mb-3">
+                                1. El cliente realiza un pedido eligiendo PuntoPost y un punto de recogida.
+                            </p>
+
+                            <div class="border rounded p-3 bg-light text-center mb-3">
+                                <img src="img/puntopost-woocommerce-8.png" alt="Flujo de pedido 1" class="img-fluid">
+                            </div>
+                            <p class="text-body-secondary mb-3">
+                                2. Al procesarse el pedido, el plugin crea automáticamente el paquete en PuntoPost y guarda en el pedido el ID y tracking del paquete.
+                            </p>
+
+                            <div class="border rounded p-3 bg-light text-center mb-3">
+                                <img src="img/puntopost-woocommerce-9.png" alt="Flujo de pedido 1" class="img-fluid">
+                            </div>
+                            <p class="text-body-secondary mb-3">
+                                3. El pedido se marca con el estado “PuntoPost - Procesando” para que podamos filtrar los paquetes pendientes de preparar para PuntoPost.
+                            </p>
+
+                            <div class="border rounded p-3 bg-light text-center mb-3">
+                                <img src="img/puntopost-woocommerce-10.png" alt="Flujo de pedido 2" class="img-fluid">
+                            </div>
+                            <p class="text-body-secondary mb-3">
+                                4. Una vez preparado el paquete del pedido, se deberá editar el pedido y marcarlo como "PuntoPost - Pendiente de recogida".
+                            </p>
+
+                            <div class="border rounded p-3 bg-light text-center mb-3">
+                                <img src="img/puntopost-woocommerce-11.png" alt="Flujo de pedido 2" class="img-fluid">
+                            </div>
+                            <p class="text-body-secondary mb-3">
+                                5. También se pueden marcar múltiples pedidos al mismo tiempo mediante las “Acciones en lote” desde el listado de Pedidos.
+                            </p>
+
+                            <div class="border rounded p-3 bg-light text-center mb-3">
+                                <img src="img/puntopost-woocommerce-11.png" alt="Flujo de pedido 2" class="img-fluid">
+                            </div>
+                            <p class="text-body-secondary mb-3">
+                                6. Desde el propio pedido se puede imprimir la etiqueta con el código QR que se debe adjuntar al exterior del paquete.
+                                <br /><br />
+                                7. Una vez el paquete sea recogido por PuntoPost, el estado del pedido pasará automáticamente a “PuntoPost – Recogido”.
+                                <br /><br />
+                                8. Una vez el paquete sea entregado por PuntoPost al punto de recogida, el comprador recibirá automáticamente un correo con las instrucciones para su recogida.
+                                <br /><br />
+                                9. Una vez el paquete sea recogido por el comprador, el pedido pasará automáticamente a “Completado”.
+                                <br /><br />
+                                10. En caso que el comprador no recoja el paquete en 7 días, este será devuelto automáticamente al almacén de origen.
+                            </p>
+                        </section>
+
+                        <!-- Troubleshooting Section -->
+                        <section id="solucion" class="bg-white rounded-3 shadow-sm p-4 p-lg-5 mb-4">
+                            <h2 class="fw-bold mb-4">Solución de problemas</h2>
+
+                            <p class="text-body-secondary mb-3">
+                                <strong>El método no aparece en el checkout</strong>
+                            </p>
+                            <p class="text-body-secondary mb-3">
+                                <ul>
+                                <li>Verifica que WooCommerce esté activo y la zona de envío incluya el método</li>
+                                <li>Revisa que todas las credenciales de PuntoPost estén completas y válidas</li>
+                                <li>Asegúrate de que el cliente haya ingresado un código postal válido</li>
+                                </ul>
+                            </p>
+
+                            <p class="text-body-secondary mb-3">
+                                <strong>Error al crear el paquete</strong>
+                            </p>
+                            <p class="text-body-secondary mb-3">
+                                <ul>
+                                <li>Revisa las notas del pedido para ver el mensaje de error</li>
+                                <li>Usa el botón de reintento o espera a los reintentos automáticos (cada hora, hasta 3 veces)</li>
+                                </ul>
+                            </p>
+
+                            <p class="text-body-secondary mb-3">
+                                <strong>No llegan las notificaciones de estatus</strong>
+                            </p>
+                            <p class="text-body-secondary mb-3">
+                                <ul>
+                                <li>Verifica la configuración del webhook en PuntoPost (`/wp-json/puntopost/v1/webhook`)</li>
+                                <li>Confirma que tu sitio acepte solicitudes POST externas y no estén bloqueadas por firewall</li>
+                                </ul>
+                            </p>
+
+                            <p class="text-body-secondary mb-3">
+                                <strong>El QR o la etiqueta no se muestran</strong>
+                            </p>
+                            <p class="text-body-secondary mb-3">
+                                <ul>
+                                <li>Verifica que el pedido tenga meta `_puntopost_qr` / `_puntopost_qr_label` con datos</li>
+                                <li>Intenta reimprimir desde la acción del pedido</li>
+                                </ul>
+                            </p>
+
+                        </section>
+
+                        <!-- FAQ Section -->
+                        <section id="preguntas-frecuentes" class="bg-white rounded-3 shadow-sm p-4 p-lg-5 mb-4">
+                            <h2 class="fw-bold mb-4">Preguntas frecuentes</h2>
+
+                            <div class="accordion" id="faqAccordion">
+                                <div class="accordion-item">
+                                    <h3 class="accordion-header">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                                            ¿Puedo limitar PuntoPost a ciertas zonas/países?
+                                        </button>
+                                    </h3>
+                                    <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                        <div class="accordion-body">
+                                            Sí. Añade el método solo a las zonas de envío adecuadas en WooCommerce.
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="accordion-item">
+                                    <h3 class="accordion-header">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                                            ¿Cómo calculo costes diferentes por zona?
+                                        </button>
+                                    </h3>
+                                    <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                        <div class="accordion-body">
+                                            Configura el coste en cada instancia del método dentro de la zona.
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="accordion-item">
+                                    <h3 class="accordion-header">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                                            ¿Qué mapa se usa?
+                                        </button>
+                                    </h3>
+                                    <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                        <div class="accordion-body">
+                                            OpenStreetMap, no requiere clave de Google Maps.
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="accordion-item">
+                                    <h3 class="accordion-header">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                                            ¿Se puede personalizar el texto o estilos?
+                                        </button>
+                                    </h3>
+                                    <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                        <div class="accordion-body">
+                                            Se pueden sobreescribir las plantillas de los correos y adaptar los CSS. Pida ayuda a su contacto de PuntoPost si requiere de estas modificaciones.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-primary text-white text-center rounded-bottom-4 py-4">
+        <div class="container">
+            <div class="d-flex flex-column justify-content-center align-items-center gap-2">
+                <img src="img/logo-isotipo-verde 2.svg" alt="Pin" height="40">
+                <a href="https://www.puntopost.mx/condiciones.html" class="text-white fs-7 fw-bold link-underline link-underline-opacity-0">Términos y Condiciones</a>
+                <a href="https://www.puntopost.mx/privacidad.html" class="text-white fs-7 fw-bold link-underline link-underline-opacity-0">Política de privacidad</a>
+                <b class="text-white fs-7">© PuntoPost</b>
+            </div>
+        </div>
+    </footer>
+
+    <script src="bootstrap.bundle.min.js"></script>
+
+
+</body></html>
