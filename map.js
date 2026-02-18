@@ -96,22 +96,26 @@ const fillMarkers = (map, pudos) => {
 			pudo.address.coordinate.latitude,
 			pudo.address.coordinate.longitude,
 			pudo.name,
+			pudo.external_id,
 			pudo.address.address,
 			pudo.schedule
 		);
 	});
 };
 
-const createMarker = (map, lat, lon, name, address, schedule) => {
+const createMarker = (map, lat, lon, name, externalId, address, schedule) => {
 	const marker = L.marker([lat, lon], {icon: icon}).addTo(map);
-	const popupHTML = getPopupHTML(name, address, schedule);
+	const popupHTML = getPopupHTML(name, externalId, address, schedule);
 	marker.bindPopup(popupHTML, {offset: L.point(0, -20)});
 	currentLocations.push(marker.getLatLng());
 };
 
-const getPopupHTML = (name, address, schedule) =>
+const getPopupHTML = (name, externalId, address, schedule) =>
 	`<div class="d-flex flex-column gap-3">
-  	<b class="fs-6">${name}</b>
+		<div class="d-flex flex-column gap-0">
+  			<b class="fs-6">${name}</b>
+			${externalId ? `<span class="text-body-tertiary small">${externalId}</span>` : ''}
+		</div>
 		<div class="d-flex align-items-center gap-2">
 			<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="flex-shrink-0">
 				<path d="M19 10C19 13.866 15.866 21 12 21C8.13401 21 5 13.866 5 10C5 6.13401 8.13401 3 12 3C15.866 3 19 6.13401 19 10Z" stroke="#868C8D"/>
