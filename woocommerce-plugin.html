@@ -159,13 +159,49 @@
                                         <li>PuntoPost API Username (datos proporcionados por PuntoPost)</li>
                                         <li>PuntoPost API Password (datos proporcionados por PuntoPost)</li>
                                         <li>PuntoPost Merchant ID (datos proporcionados por PuntoPost)</li>
-                                        <li>PuntoPost Origin ID (datos proporcionados por PuntoPost)</li>
                                     </ul>
-                                    <li>Guarda los cambios. El plugin validará las credenciales con PuntoPost.</li>
+                                    <li>Guarda los cambios. El plugin validará las credenciales con PuntoPost y determinará el tipo de comercio asociado (B2B o B2C).</li>
                                 </ol>
                             </p>
                             <p class="text-body-secondary mb-4">
                                 Notas: Si falta cualquier credencial, el método no se mostrará a los clientes.
+                            </p>
+
+                            <h3>Configuración de método de envío PuntoPost B2C</h3>
+
+                            <div class="border rounded p-3 bg-light text-center mb-3">
+                                <img src="img/puntopost-woocommerce-1-b2c.png" alt="Configuración de método de envío PuntoPost B2C" class="img-fluid">
+                            </div>
+
+                            <p class="text-body-secondary mb-4">
+                                <ul>
+                                    <li>Completa los campos para configurar los datos del plugin:</li>
+                                    <ul>
+                                        <li>PuntoPost Origin ID (dato proporcionado por PuntoPost)</li>
+                                        <li>Usar plugin solo como frontend: si está activo, el plugin no utilizara estados propios y no se mostrará en los pedidos</li>
+                                        <li>Crear paquete en PuntoPost cuando la orden este procesada: si está activo, el plugin creará el paquete en PuntoPost, en caso contrario deberá realizarse la integración de forma externa</li>
+                                    </ul>
+                                </ul>
+                            </p>
+
+                            <h3>Configuración de método de envío PuntoPost C2C</h3>
+
+                            <div class="border rounded p-3 bg-light text-center mb-3">
+                                <img src="img/puntopost-woocommerce-1-c2c.png" alt="Configuración de método de envío PuntoPost C2C" class="img-fluid">
+                            </div>
+
+                            <p class="text-body-secondary mb-4">
+                                <ul>
+                                    <li>Cuando el tipo de comercio asociado sea C2C, debes configurar los datos del remitente para poder crear el paquete en PuntoPost:</li>
+                                    <ul>
+                                        <li>Nombre del remitente</li>
+                                        <li>Apellido del remitente</li>
+                                        <li>Email del remitente</li>
+                                        <li>Teléfono del remitente</li>
+                                        <li>Código postal del remitente</li>
+                                    </ul>
+                                </ul>
+                                En este caso, los paquetes deberán ser entregados en un punto de recogida PuntoPost junto a la etiqueta con el código QR en el exterior del paquete.
                             </p>
 
                             <div class="mb-4">
@@ -247,35 +283,37 @@
                             </p>
 
                             <div class="border rounded p-3 bg-light text-center mb-3">
-                                <img src="img/puntopost-woocommerce-8.png" alt="Flujo de pedido 1" class="img-fluid">
+                                <img src="img/puntopost-woocommerce-8.png" alt="Flujo de pedido" class="img-fluid">
                             </div>
                             <p class="text-body-secondary mb-3">
                                 2. Al procesarse el pedido, el plugin crea automáticamente el paquete en PuntoPost y guarda en el pedido el ID y tracking del paquete.
                             </p>
 
                             <div class="border rounded p-3 bg-light text-center mb-3">
-                                <img src="img/puntopost-woocommerce-9.png" alt="Flujo de pedido 1" class="img-fluid">
+                                <img src="img/puntopost-woocommerce-9.png" alt="Flujo de pedido" class="img-fluid">
                             </div>
                             <p class="text-body-secondary mb-3">
                                 3. El pedido se marca con el estado “PuntoPost - Procesando” para que podamos filtrar los paquetes pendientes de preparar para PuntoPost.
                             </p>
 
+                            <h3>Flujo de pedido para comercio B2B</h3>
+
                             <div class="border rounded p-3 bg-light text-center mb-3">
-                                <img src="img/puntopost-woocommerce-10.png" alt="Flujo de pedido 2" class="img-fluid">
+                                <img src="img/puntopost-woocommerce-10.png" alt="Flujo de pedido" class="img-fluid">
                             </div>
                             <p class="text-body-secondary mb-3">
                                 4. Una vez preparado el paquete del pedido, se deberá editar el pedido y marcarlo como "PuntoPost - Pendiente de recogida".
                             </p>
 
                             <div class="border rounded p-3 bg-light text-center mb-3">
-                                <img src="img/puntopost-woocommerce-11.png" alt="Flujo de pedido 2" class="img-fluid">
+                                <img src="img/puntopost-woocommerce-11.png" alt="Flujo de pedido" class="img-fluid">
                             </div>
                             <p class="text-body-secondary mb-3">
                                 5. También se pueden marcar múltiples pedidos al mismo tiempo mediante las “Acciones en lote” desde el listado de Pedidos.
                             </p>
 
                             <div class="border rounded p-3 bg-light text-center mb-3">
-                                <img src="img/puntopost-woocommerce-11.png" alt="Flujo de pedido 2" class="img-fluid">
+                                <img src="img/puntopost-woocommerce-12.png" alt="Flujo de pedido" class="img-fluid">
                             </div>
                             <p class="text-body-secondary mb-3">
                                 6. Desde el propio pedido se puede imprimir la etiqueta con el código QR que se debe adjuntar al exterior del paquete.
@@ -288,6 +326,29 @@
                                 <br /><br />
                                 10. En caso que el comprador no recoja el paquete en 7 días, este será devuelto automáticamente al almacén de origen.
                             </p>
+
+                            <h3>Flujo de pedido para comercio B2C</h3>
+
+                            <div class="border rounded p-3 bg-light text-center mb-3">
+                                <img src="img/puntopost-woocommerce-12.png" alt="Flujo de pedido" class="img-fluid">
+                            </div>
+
+                            <p class="text-body-secondary mb-3">
+                                4. Una vez preparado el paquete del pedido, se deberá imprimir la etiqueta con el tracking y adjuntarla al exterior del paquete.
+                            </p>
+
+                            <p class="text-body-secondary mb-3">
+                                5. El paquete con la etiqueta deberá ser entregado en un punto de recogida PuntoPost. Puedes buscar los puntos de recogida más cercanos en <a href="https://www.puntopost.mx/map.html" target=""_blank">Encuentra tu PuntoPost</a>.
+                            </p>
+
+                            <p class="text-body-secondary mb-3">
+                                6. Una vez el paquete sea recogido por el comprador, el pedido pasará automáticamente a “Completado”.
+                            </p>
+
+                            <p class="text-body-secondary mb-3">
+                                7. En caso que el comprador no recoja el paquete en 7 días, este será devuelto automáticamente al remitente indicado en la configuración.
+                            </p>
+
                         </section>
 
                         <!-- Troubleshooting Section -->
@@ -405,7 +466,7 @@
     <footer class="bg-primary text-white text-center rounded-bottom-4 py-4">
         <div class="container">
             <div class="d-flex flex-column justify-content-center align-items-center gap-2">
-                <img src="img/logo-isotipo-verde 2.svg" alt="Pin" height="40">
+                <img src="https://www.puntopost.mx/img/logo-isotipo-verde 2.svg" alt="Pin" height="40">
                 <a href="https://www.puntopost.mx/condiciones.html" class="text-white fs-7 fw-bold link-underline link-underline-opacity-0">Términos y Condiciones</a>
                 <a href="https://www.puntopost.mx/privacidad.html" class="text-white fs-7 fw-bold link-underline link-underline-opacity-0">Política de privacidad</a>
                 <b class="text-white fs-7">© PuntoPost</b>
@@ -413,7 +474,7 @@
         </div>
     </footer>
 
-    <script src="bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 
 </body></html>
