@@ -14,6 +14,49 @@
     <link href="bootstrap.min.css" rel="stylesheet">
     
     <link href="bootstrap-icons.min.css" rel="stylesheet">
+
+    <style>
+        .brand-logos {
+            -ms-overflow-style: none; /* IE y Edge */
+            scrollbar-width: none;    /* Firefox */
+        }
+
+        .brand-logos::-webkit-scrollbar {
+            display: none;            /* Chrome, Safari, Opera */
+        }
+
+        @media (min-width: 992px) {
+            .brand-logos {
+                column-gap: 4rem;
+                row-gap: 4rem;
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .brand-logo {
+                height: 32px;
+            }
+
+            .ecommerce-logos {
+                column-gap: 4rem;
+                row-gap: 4rem;
+            }
+
+            .ecommerce-logos-row {
+                flex: 1 1 0;
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .ecom-logo {
+                height: 48px;
+            }
+
+            .ecom-logo-api {
+                height: 64px;
+            }
+        }
+    </style>
 </head>
 <body>
 
@@ -139,14 +182,18 @@
             </div>
         </section>
 
-        <section class="py-5 text-center">
-            <div class="container p-lg-5">
+        <section class="py-5 text-center bg-light">
+            <div class="container-fluid p-lg-5 px-0">
                 <h5 class="mb-3 mb-lg-5 fw-bold d-lg-none">Recoge en tu PuntoPost</h5>
                 <h3 class="mb-3 mb-lg-5 fw-bold d-none d-lg-block">Recoge en tu PuntoPost</h3>
-                <div class="d-flex justify-content-around justify-content-lg-center align-items-center gap-4 overflow-x-auto">
-                    <img src="https://www.puntopost.mx/img/GOTRENDIER.svg" alt="GoTrendier" height="25">
-                    <img src="https://www.puntopost.mx/img/prixz.png" alt="Prixz" height="25">
-                    <img src="https://www.puntopost.mx/img/PLATANOMELON.svg" alt="PlatanoMelon" height="25">
+                <div class="d-flex align-items-center gap-4 overflow-x-auto brand-logos px-4 px-lg-5">
+                    <img src="https://www.puntopost.mx/img/zara.png" alt="Zara" height="25" class="brand-logo">
+                    <img src="https://www.puntopost.mx/img/massimo.png" alt="Massimo Dutti" height="25" class="brand-logo">
+                    <img src="https://www.puntopost.mx/img/GOTRENDIER.svg" alt="GoTrendier" height="25" class="brand-logo">
+                    <img src="https://www.puntopost.mx/img/PLATANOMELON.svg" alt="PlatanoMelon" height="25" class="brand-logo">
+                    <img src="https://www.puntopost.mx/img/oysho.png" alt="Oysho" height="25" class="brand-logo">
+                    <img src="https://www.puntopost.mx/img/lefties.svg" alt="Lefties" height="25" class="brand-logo">
+                    <img src="https://www.puntopost.mx/img/prixz.png" alt="Prixz" height="25" class="brand-logo">
                 </div>
             </div>
         </section>
