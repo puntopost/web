@@ -25,23 +25,49 @@ const displayTrackingInfo = (data) => {
 	document.querySelector('.js-name').textContent = data.destination.name;
 	document.querySelector('.js-address').textContent = data.destination.address.address;
 	document.querySelector('.js-schedule').textContent = data.destination.schedule;
+	const returnFailOriginEntry = Array.isArray(data.status_history)
+		? data.status_history.find((item) => item.status === 'return_fail_in_origin_point')
+		: null;
+	const returnFailCutDate = returnFailOriginEntry ? new Date(returnFailOriginEntry.when) : null;
 
 	// Construir eventos combinando status_history y movements
-	const events = buildTimelineEvents(data);
+	const allEvents = buildTimelineEvents(data);
+	const events = returnFailCutDate
+		? allEvents.filter((event) => event.date < returnFailCutDate)
+		: allEvents;
 
 	// Estado actual (usamos el status global)
 	const currentStatusElement = document.querySelector('.js-current-status');
 	const currentStatusTimeElement = document.querySelector('.js-current-status-time');
-	currentStatusElement.textContent = getStatusText(data.status);
+	const isReturnFailStatus =
+		typeof data.status === 'string' && data.status.startsWith('return_fail');
+	currentStatusElement.textContent = isReturnFailStatus
+		? 'Devolución al remitente'
+		: getStatusText(data.status);
 
-	// Buscamos la marca de tiempo del estado actual en el historial, si existe
-	const currentHistoryEntry = Array.isArray(data.status_history)
-		? [...data.status_history].reverse().find((item) => item.status === data.status)
-		: null;
-	const currentStatusDate = currentHistoryEntry
-		? new Date(currentHistoryEntry.when)
-		: new Date(data.created_at);
-	currentStatusTimeElement.textContent = currentStatusDate.toLocaleString();
+	// Buscamos la marca de tiempo del estado actual en el historial, si existe.
+	// Si no existe, usamos la fecha del último estado del historial.
+	let currentStatusWhen = data.created_at;
+	if (Array.isArray(data.status_history) && data.status_history.length > 0) {
+		if (isReturnFailStatus && returnFailOriginEntry) {
+			// Para cualquier estado final return_fail*, usamos la fecha
+			// de return_fail_in_origin_point como momento de "Devolución al remitente".
+			currentStatusWhen = returnFailOriginEntry.when;
+		} else {
+			const matchingEntry = [...data.status_history]
+				.reverse()
+				.find((item) => item.status === data.status);
+			if (matchingEntry) {
+				currentStatusWhen = matchingEntry.when;
+			} else {
+				const latestEntry = data.status_history.reduce((latest, item) =>
+					item.when > latest.when ? item : latest
+				);
+				currentStatusWhen = latestEntry.when;
+			}
+		}
+	}
+	currentStatusTimeElement.textContent = formatApiDate(currentStatusWhen);
 
 	// Rellenar historial (excluimos el evento que coincide con el estado actual para no duplicar)
 	const historyContainer = document.querySelector('.status-history');
@@ -55,7 +81,7 @@ const displayTrackingInfo = (data) => {
 		}
 		const tmpl = document.getElementById('status-history-tmpl').content.cloneNode(true);
 		tmpl.querySelector('.js-current-status').textContent = event.label;
-		tmpl.querySelector('.js-current-status-time').textContent = event.date.toLocaleString();
+		tmpl.querySelector('.js-current-status-time').textContent = formatApiDate(event.rawDate);
 		historyContainer.appendChild(tmpl);
 	});
 
@@ -90,6 +116,8 @@ const buildTimelineEvents = (data) => {
 	const events = [];
 	const hasMovements = Array.isArray(data.movements) && data.movements.length > 0;
 	const returnStartDate = getReturnStartDate(data);
+	const globalOriginId = data.origin?.id;
+	const globalDestinationId = data.destination?.id;
 
 	// Eventos basados en status_history
 	if (Array.isArray(data.status_history)) {
@@ -100,7 +128,8 @@ const buildTimelineEvents = (data) => {
 					type: 'status',
 					status: item.status,
 					label: getStatusText(item.status),
-					date: new Date(item.when)
+					date: new Date(item.when),
+					rawDate: item.when
 				});
 			});
 		} else {
@@ -111,7 +140,8 @@ const buildTimelineEvents = (data) => {
 					type: 'status',
 					status: item.status,
 					label: getStatusText(item.status),
-					date: new Date(item.when)
+					date: new Date(item.when),
+					rawDate: item.when
 				});
 			});
 		}
@@ -142,11 +172,26 @@ const buildTimelineEvents = (data) => {
 			const movementDate = new Date(movement.created_at);
 			const isReturn = returnStartDate && movementDate >= returnStartDate;
 
+			const originRole =
+				movement.origin && movement.origin.id === globalOriginId
+					? 'origin'
+					: movement.origin && movement.origin.id === globalDestinationId
+						? 'destination'
+						: null;
+
+			const destinationRole =
+				movement.destination && movement.destination.id === globalOriginId
+					? 'origin'
+					: movement.destination && movement.destination.id === globalDestinationId
+						? 'destination'
+						: null;
+
 			events.push({
 				type: 'movement',
 				status: movement.status,
-				label: getMovementText(movement, isReturn),
-				date: movementDate
+				label: getMovementText(movement, isReturn, originRole, destinationRole),
+				date: movementDate,
+				rawDate: movement.created_at
 			});
 		});
 	}
@@ -161,7 +206,10 @@ const shouldIncludeStatusFromHistoryWithMovements = (status) =>
 	status === 'incidence' ||
 	status === 'cancelled' ||
 	status === 'returned' ||
-	status.startsWith('return_');
+	// Devolución: solo estados "especiales" que no se solapan con movements
+	status === 'return_in_destination_point' || // Entrega fallida, inicio proceso de devolución
+	status === 'return_delivered' || // Devolución entregada
+	status.startsWith('return_fail'); // Estados finales de devolución fallida (aunque luego cortemos por fecha)
 
 const getReturnStartDate = (data) => {
 	if (!Array.isArray(data.status_history)) return null;
@@ -191,10 +239,22 @@ const getReturnStartDate = (data) => {
 	return new Date(firstReturnWhen);
 };
 
-const formatPlaceName = (place) => {
+const formatPlaceName = (place, role, isReturn) => {
 	if (!place) return '';
-	if (place.type === 'pudo') return `punto ${place.name}`;
-	if (place.type === 'logistic') return `almacén ${place.name}`;
+
+	if (place.type === 'pudo') {
+		if (isReturn) {
+			// En devolución no marcamos origen/destino, solo el PuntoPost.
+			return `PuntoPost ${place.name}`;
+		}
+
+		if (role === 'origin') return `PuntoPost origen ${place.name}`;
+		if (role === 'destination') return `PuntoPost destino ${place.name}`;
+		return `PuntoPost ${place.name}`;
+	}
+
+	if (place.type === 'logistic') return ` ${place.name}`;
+
 	return place.name;
 };
 
@@ -203,9 +263,23 @@ const capitalizeFirst = (text) => {
 	return text.charAt(0).toUpperCase() + text.slice(1);
 };
 
-const getMovementText = (movement, isReturn) => {
-	const originName = formatPlaceName(movement.origin);
-	const destinationName = formatPlaceName(movement.destination);
+const formatApiDate = (isoString) => {
+	if (!isoString) return '';
+	const [datePart, timeAndOffset] = isoString.split('T');
+	if (!timeAndOffset) return isoString;
+
+	const [timePart] = timeAndOffset.split(/[+-]/); // antes del offset
+	const [year, month, day] = datePart.split('-');
+
+	const d = Number(day);
+	const m = Number(month);
+
+	return `${d}/${m}/${year}, ${timePart}`;
+};
+
+const getMovementText = (movement, isReturn, originRole, destinationRole) => {
+	const originName = formatPlaceName(movement.origin, originRole, isReturn);
+	const destinationName = formatPlaceName(movement.destination, destinationRole, isReturn);
 
 	const prefix = isReturn ? 'Devolución ' : '';
 
@@ -215,11 +289,9 @@ const getMovementText = (movement, isReturn) => {
 				? capitalizeFirst(`${prefix}en ${originName}`)
 				: capitalizeFirst(`${prefix}en origen`);
 		case 'in_transit':
-			return originName && destinationName
-				? capitalizeFirst(
-						`${prefix}en tránsito de ${originName} a ${destinationName}`
-					)
-				: capitalizeFirst(`${prefix}en tránsito`);
+			return destinationName
+				? capitalizeFirst(`${prefix}en camino a ${destinationName}`)
+				: capitalizeFirst(`${prefix}en camino`);
 		case 'in_destination':
 			return destinationName
 				? capitalizeFirst(`${prefix}en ${destinationName}`)
@@ -232,7 +304,7 @@ const getMovementText = (movement, isReturn) => {
 const getStatusText = (status) => {
 	switch (status) {
 		case 'created':
-			return 'Registrado en el sistema';
+			return 'QR generado para tu envío';
 		case 'in_origin_point':
 			return 'Recolectado';
 		case 'in_transit_depot':
@@ -246,7 +318,7 @@ const getStatusText = (status) => {
 		case 'delivered':
 			return 'Entregado';
 		case 'return_in_destination_point':
-			return 'Devolución recolectada';
+			return 'Entrega fallida, inicio proceso de devolución';
 		case 'return_in_transit_depot':
 			return 'Devolución en camino al almacén';
 		case 'return_in_depot':
