@@ -125,9 +125,10 @@
                                 La aplicación PuntoPost puede instalarse fácilmente desde la Shopify App Store siguiendo los pasos que se indican a continuación:
                             </p>
                             <ol class="text-body-secondary">
-                                <li class="mb-3">Inicia sesión en tu cuenta de Shopify y visita la <a href="https://apps.shopify.com/" target="_blank" rel="noopener noreferrer">Shopify App Store</a>.</li>
-                                <li class="mb-3">Utiliza el cuadro de búsqueda en la parte superior de la pantalla y escribe "PuntoPost" para buscar la aplicación.</li>
+                                <li class="mb-3">Inicia sesión en tu cuenta de Shopify.</li>
+                                <li class="mb-3">Visita la <a href="https://apps.shopify.com/" target="_blank" rel="noopener noreferrer">Shopify App Store</a> y utiliza el cuadro de búsqueda en la parte superior de la pantalla, escribiendo "PuntoPost" para buscar la aplicación.</li>
                                 <li class="mb-3">Una vez encontrada en los resultados de búsqueda, haz clic en el icono o título de la aplicación para acceder a la página de la aplicación.</li>
+                                <li class="mb-3">También puedes acceder directamente a la aplicación de <a href="https://apps.shopify.com/puntopost-puntos-de-entrega?locale=es" target="_blank" rel="noopener noreferrer">PuntoPost: Puntos de recogida</a>.</li>
                                 <li class="mb-3">Haz clic en el botón <em>Instalar</em> y completa los pasos adicionales de instalación en tu tienda, confirmando todo el proceso con el botón <em>Instalar aplicación</em>.</li>
                             </ol>
                             <p class="text-body-secondary mb-0">
@@ -230,8 +231,23 @@
                                 Si no dispones de estas credenciales, consulta con tu contacto de PuntoPost para recibirlas.
                             </p>
                             <div class="border rounded p-3 bg-light text-center mb-3">
-                                <img src="img/puntopost-shopify-8.png" alt="Configuración de la asignación de tarifa" class="img-fluid">
+                                <img src="img/puntopost-shopify-8.png" alt="Configuración de las credenciales" class="img-fluid">
                             </div>
+                            <p class="text-body-secondary mb-4">
+                                Introduce primero tu usuario y contraseña, junto al ID de comercio (Merchant ID), y pulsa el botón <em>Detectar tipo de comercio</em>. Dependiendo del tipo de comercio, deberás finalizar introduciendo las credenciales necesarias.
+                            </p>
+                            <div class="border rounded p-3 bg-light text-center mb-3">
+                                <img src="img/puntopost-shopify-8-1.png" alt="Configuración de las credenciales B2C" class="img-fluid">
+                            </div>
+                            <p class="text-body-secondary mb-4">
+                                En el caso de que el comercio sea B2C, deberás finalizar introduciendo el punto de origen (Origin ID).
+                            </p>
+                            <div class="border rounded p-3 bg-light text-center mb-3">
+                                <img src="img/puntopost-shopify-8-2.png" alt="Configuración de las credenciales C2C" class="img-fluid">
+                            </div>
+                            <p class="text-body-secondary mb-4">
+                                En el caso de que el comercio sea C2C, deberás introducir los datos del remitente para poder gestionar los pedidos con PuntoPost.
+                            </p>
                         </section>
 
                         <!-- Customer View Section -->
@@ -343,13 +359,16 @@
                                     <img src="img/puntopost-shopify-16.png" alt="Gestión de pedidos con punto de recogida" class="img-fluid">
                                 </div>
                                 <p class="text-body-secondary mb-3">
-                                    Una vez impresa la etiqueta, se debe adjuntar al exterior del paquete y se debe marcar el paquete como pendiente de recogida, pulsando el botón <em>Marcar como preparado</em>.
+                                    Una vez impresa la etiqueta, se debe adjuntar al exterior del paquete.
                                 </p>
                                 <div class="border rounded p-3 bg-light text-center mb-3">
                                     <img src="img/puntopost-shopify-17.png" alt="Gestión de pedidos con punto de recogida" class="img-fluid">
                                 </div>
                                 <p class="text-body-secondary mb-3">
-                                    Esto indicará a PuntoPost que el paquete está listo y que debe pasar por el almacen de la tienda para recogerlo y poderlo enviar al punto de recogida.
+                                    En el caso de que el comercio sea B2C, se debe marcar el paquete como pendiente de recogida, pulsando el botón <em>Marcar como preparado</em>.                                    Esto indicará a PuntoPost que el paquete está listo y que debe pasar por el almacen de la tienda para recogerlo y poderlo enviar al punto de recogida.
+                                </p>
+                                <p class="text-body-secondary mb-3">
+                                    En el caso de que el comercio sea C2C, se puede llevar el paquete a un punto de recogida PuntoPost para que sea enviado al comprador.
                                 </p>
                             </div>
                         </section>
