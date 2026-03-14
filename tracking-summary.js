@@ -335,6 +335,8 @@ const getStatusText = (status) => {
 			return 'Cancelado';
 		case 'returned':
 			return 'Devolución completada';
+		case 'lost':
+			return 'Siniestrado';
 		default:
 			return status;
 	}
