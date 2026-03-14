@@ -6,7 +6,7 @@ const defaultPos = { // Coordenadas de Ciudad de México
 };
 const defaultZoom = 15;
 const defaultRadiusKm = 8;
-const maxRadiusKm = 30;
+const maxRadiusKm = 200;
 const SHOW_DEBUG_CENTER = false; // Marcar centro y radio de cada llamada a /pudos para depuración
 const icon = L.icon({
 	iconUrl: 'https://www.puntopost.mx/img/PING1.svg',
@@ -21,6 +21,7 @@ const currentLocations = [];
 let postalCodeMarker = null;
 let debugCenterMarker = null;
 let debugRadiusCircle = null;
+let clusterGroup = null;
 
 const setMap = async (lat = defaultPos.coords.lat, lon = defaultPos.coords.lon) => {
 	const map = L.map('map').setView([lat, lon], defaultZoom);
@@ -39,8 +40,17 @@ const setMap = async (lat = defaultPos.coords.lat, lon = defaultPos.coords.lon) 
 		attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 	}).addTo(map);
 
+	// Agrupación de PUDOs: por debajo de zoom 15 se agrupan; a partir de 15 se ven sueltos.
+	clusterGroup = L.markerClusterGroup({
+		disableClusteringAtZoom: 15,
+		chunkedLoading: true
+	});
+	map.addLayer(clusterGroup);
+
 	const initialRadiusKm = getRadiusKmForZoom(map.getZoom());
 	const pudos = await getPudos(lat, lon, null, initialRadiusKm);
+	clusterGroup.clearLayers();
+	currentLocations.length = 0;
 	fillMarkers(map, pudos);
 	if (SHOW_DEBUG_CENTER) {
 		markDebugCenterAndRadius(map, lat, lon, initialRadiusKm);
@@ -58,9 +68,12 @@ const setMap = async (lat = defaultPos.coords.lat, lon = defaultPos.coords.lon) 
 
 const getAndPrintNewMarkers = async (map, cp = null) => {
 	const center = map.getCenter();
-	removeOutOfSightMarkers(map);
 	const radiusKm = getRadiusKmForZoom(map.getZoom());
 	const pudos = await getPudos(center.lat, center.lng, cp, radiusKm);
+	if (clusterGroup) {
+		clusterGroup.clearLayers();
+		currentLocations.length = 0;
+	}
 	fillMarkers(map, pudos);
 	if (SHOW_DEBUG_CENTER) {
 		markDebugCenterAndRadius(map, center.lat, center.lng, radiusKm);
@@ -119,14 +132,14 @@ const getPudos = async (lat, lon, cp = null, radiusKm = defaultRadiusKm) => {
 		params = {
 			postal_code: cp,
 			radius_km: effectiveRadius,
-			cursor: '1000-0' // limit 1000, offset 0
+			cursor: '2000-0' // limit 2000, offset 0
 		};
 	} else {
 		params = {
 			latitude: lat,
 			longitude: lon,
 			radius_km: effectiveRadius,
-			cursor: '1000-0' // limit 1000, offset 0
+			cursor: '2000-0' // limit 2000, offset 0
 		};
 	}
 	
@@ -139,25 +152,10 @@ const getPudos = async (lat, lon, cp = null, radiusKm = defaultRadiusKm) => {
 	return result;
 };
 
-const removeOutOfSightMarkers = (map) => {
-	map.eachLayer(layer => {
-		if (layer instanceof L.Marker && !map.getBounds().contains(layer.getLatLng())) {
-			map.removeLayer(layer);
-			const index = currentLocations.findIndex(loc => loc.equals(layer.getLatLng()));
-			if (index !== -1) {
-				currentLocations.splice(index, 1);
-			}
-		}
-	});
-};
-
 const fillMarkers = (map, pudos) => {
+	if (!pudos.items || !clusterGroup) return;
 	pudos.items.forEach(pudo => {
-		const lat = pudo.address.coordinate.latitude;
-		const lon = pudo.address.coordinate.longitude;
-		if (currentLocations.some(loc => loc.equals(L.latLng([lat, lon])))) return; // Evitar duplicados
 		createMarker(
-			map,
 			pudo.address.coordinate.latitude,
 			pudo.address.coordinate.longitude,
 			pudo.name,
@@ -168,10 +166,11 @@ const fillMarkers = (map, pudos) => {
 	});
 };
 
-const createMarker = (map, lat, lon, name, externalId, address, schedule) => {
-	const marker = L.marker([lat, lon], {icon: icon}).addTo(map);
+const createMarker = (lat, lon, name, externalId, address, schedule) => {
+	const marker = L.marker([lat, lon], { icon: icon });
 	const popupHTML = getPopupHTML(name, externalId, address, schedule);
-	marker.bindPopup(popupHTML, {offset: L.point(0, -20)});
+	marker.bindPopup(popupHTML, { offset: L.point(0, -20) });
+	clusterGroup.addLayer(marker);
 	currentLocations.push(marker.getLatLng());
 };
 
@@ -233,14 +232,16 @@ const centerMapToPudo = (map, pudo) => {
 };
 
 const getRadiusKmForZoom = (zoom) => {
-	// Radios más contenidos; el límite duro lo marca maxRadiusKm.
 	if (zoom >= 17) return 2;
 	if (zoom >= 16) return 3;
 	if (zoom >= 15) return 5;
-	if (zoom >= 14) return 8;
-	if (zoom >= 13) return 16;
-	if (zoom >= 12) return 22;
-	return maxRadiusKm; // 30 km para zoom < 12
+	if (zoom >= 14) return 12;
+	if (zoom >= 13) return 20;
+	if (zoom >= 12) return 40;
+	if (zoom >= 11) return 100;
+	if (zoom >= 10) return 200;
+	if (zoom >= 9) return 400;
+	return maxRadiusKm; // 200 km para zoom < 9
 };
 
 const markDebugCenterAndRadius = (map, lat, lon, radiusKm) => {
