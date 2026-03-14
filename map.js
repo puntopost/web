@@ -4,8 +4,10 @@ const defaultPos = { // Coordenadas de Ciudad de México
 		lon: -99.1331565
 	}
 };
-const defaultZoom = 14;
-const defaultRadiusKm = 12;
+const defaultZoom = 15;
+const defaultRadiusKm = 8;
+const maxRadiusKm = 30;
+const SHOW_DEBUG_CENTER = false; // Marcar centro y radio de cada llamada a /pudos para depuración
 const icon = L.icon({
 	iconUrl: 'https://www.puntopost.mx/img/PING1.svg',
 	iconSize: [49, 54]
@@ -16,9 +18,20 @@ const iconSelected = L.icon({
 });
 
 const currentLocations = [];
+let postalCodeMarker = null;
+let debugCenterMarker = null;
+let debugRadiusCircle = null;
 
 const setMap = async (lat = defaultPos.coords.lat, lon = defaultPos.coords.lon) => {
 	const map = L.map('map').setView([lat, lon], defaultZoom);
+
+	// Pane específico para el marcador del código postal, por encima de los PUDO.
+	map.createPane('postalCodePane');
+	map.getPane('postalCodePane').style.zIndex = 650;
+
+	// Pane específico para depuración (centro y radio), por encima de todo lo demás.
+	map.createPane('debugCenterPane');
+	map.getPane('debugCenterPane').style.zIndex = 700;
 
 	L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png', {
 		maxZoom: 19,
@@ -26,8 +39,12 @@ const setMap = async (lat = defaultPos.coords.lat, lon = defaultPos.coords.lon) 
 		attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 	}).addTo(map);
 
-	const pudos = await getPudos(lat, lon);
+	const initialRadiusKm = getRadiusKmForZoom(map.getZoom());
+	const pudos = await getPudos(lat, lon, null, initialRadiusKm);
 	fillMarkers(map, pudos);
+	if (SHOW_DEBUG_CENTER) {
+		markDebugCenterAndRadius(map, lat, lon, initialRadiusKm);
+	}
 	setGeolocateButton(map);
 	map.addEventListener('zoomend', async () => getAndPrintNewMarkers(map));
 	map.addEventListener('dragend', async () => getAndPrintNewMarkers(map));
@@ -42,26 +59,74 @@ const setMap = async (lat = defaultPos.coords.lat, lon = defaultPos.coords.lon) 
 const getAndPrintNewMarkers = async (map, cp = null) => {
 	const center = map.getCenter();
 	removeOutOfSightMarkers(map);
-	const pudos = await getPudos(center.lat, center.lng, cp);
+	const radiusKm = getRadiusKmForZoom(map.getZoom());
+	const pudos = await getPudos(center.lat, center.lng, cp, radiusKm);
 	fillMarkers(map, pudos);
-	if (cp !== null && pudos.items.length > 0) {
-		centerMapToPudo(map, pudos.items[0]);
+	if (SHOW_DEBUG_CENTER) {
+		markDebugCenterAndRadius(map, center.lat, center.lng, radiusKm);
+	}
+
+	// Si la búsqueda es por código postal, marcamos la ubicación aproximada del CP.
+	if (cp !== null) {
+		// El backend puede devolver distintas claves para la coordenada de búsqueda.
+		// Probamos varias y, si no existe ninguna, usamos el primer PUDO como aproximación.
+		const searchCoord =
+			pudos.search_coordinate ||
+			pudos.center ||
+			pudos.coordinate ||
+			(pudos.items && pudos.items[0]
+				? {
+						latitude: pudos.items[0].address.coordinate.latitude,
+						longitude: pudos.items[0].address.coordinate.longitude
+					}
+				: null);
+
+		if (searchCoord && typeof searchCoord.latitude === 'number' && typeof searchCoord.longitude === 'number') {
+			const { latitude, longitude } = searchCoord;
+
+			// Eliminar posible marcador anterior del código postal.
+			if (postalCodeMarker) {
+				map.removeLayer(postalCodeMarker);
+				postalCodeMarker = null;
+			}
+
+			postalCodeMarker = L.circleMarker(
+				[latitude, longitude],
+				{
+					pane: 'postalCodePane',
+					// Punto rojo pequeño y muy visible
+					color: '#FF4B5C',
+					fillColor: '#FF4B5C',
+					fillOpacity: 1,
+					radius: 5,
+					weight: 2
+				}
+			).addTo(map);
+
+			map.flyTo([latitude, longitude], defaultZoom, { animate: true, duration: 0.75 });
+		} else if (pudos.items && pudos.items.length > 0) {
+			// Fallback: centramos en el primer PUDO si no tenemos coordenada explícita del CP.
+			centerMapToPudo(map, pudos.items[0]);
+		}
 	}
 };
 
-const getPudos = async (lat, lon, cp = null) => {
+const getPudos = async (lat, lon, cp = null, radiusKm = defaultRadiusKm) => {
 	const url = 'https://back.puntopost.mx/api/web/v1/pudos';
 	let params = {};
+	const effectiveRadius = Math.min(radiusKm || defaultRadiusKm, maxRadiusKm);
 	if (cp) {
 		params = {
 			postal_code: cp,
-			radius_km: defaultRadiusKm
+			radius_km: effectiveRadius,
+			cursor: '1000-0' // limit 1000, offset 0
 		};
 	} else {
 		params = {
 			latitude: lat,
 			longitude: lon,
-			radius_km: defaultRadiusKm
+			radius_km: effectiveRadius,
+			cursor: '1000-0' // limit 1000, offset 0
 		};
 	}
 	
@@ -165,6 +230,64 @@ const centerMapToPudo = (map, pudo) => {
 		defaultZoom,
 		{animate: true, duration: 0.75}
 	);
+};
+
+const getRadiusKmForZoom = (zoom) => {
+	// Radios más contenidos; el límite duro lo marca maxRadiusKm.
+	if (zoom >= 17) return 2;
+	if (zoom >= 16) return 3;
+	if (zoom >= 15) return 5;
+	if (zoom >= 14) return 8;
+	if (zoom >= 13) return 16;
+	if (zoom >= 12) return 22;
+	return maxRadiusKm; // 30 km para zoom < 12
+};
+
+const markDebugCenterAndRadius = (map, lat, lon, radiusKm) => {
+	const zoom = map.getZoom();
+
+	// Eliminar marcadores de depuración anteriores
+	if (debugCenterMarker) {
+		map.removeLayer(debugCenterMarker);
+		debugCenterMarker = null;
+	}
+	if (debugRadiusCircle) {
+		map.removeLayer(debugRadiusCircle);
+		debugRadiusCircle = null;
+	}
+
+	// Punto azul pequeño en el centro de la llamada
+	debugCenterMarker = L.circleMarker(
+		[lat, lon],
+		{
+			pane: 'debugCenterPane',
+			color: '#007AFF',
+			fillColor: '#007AFF',
+			fillOpacity: 0.9,
+			radius: 4,
+			weight: 1
+		}
+	).addTo(map);
+
+	const label = `z${zoom} r${radiusKm || defaultRadiusKm}km`;
+	debugCenterMarker.bindTooltip(label, {
+		permanent: true,
+		direction: 'top',
+		offset: [0, -8],
+		className: 'debug-center-tooltip'
+	});
+
+	// Círculo mostrando el radio en km de la llamada
+	debugRadiusCircle = L.circle(
+		[lat, lon],
+		{
+			pane: 'debugCenterPane',
+			color: '#007AFF',
+			fillOpacity: 0,
+			weight: 1,
+			radius: (radiusKm || defaultRadiusKm) * 1000 // Leaflet usa metros
+		}
+	).addTo(map);
 };
 
 const centerMapToLocation = (map, lat, lon) => {
