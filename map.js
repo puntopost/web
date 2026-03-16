@@ -22,6 +22,18 @@ let postalCodeMarker = null;
 let debugCenterMarker = null;
 let debugRadiusCircle = null;
 let clusterGroup = null;
+let mapUpdateTimeout = null;
+let lastDataZoom = defaultZoom;
+
+const showMapLoading = () => {
+	const el = document.getElementById('map-loading');
+	if (el) el.classList.remove('d-none');
+};
+
+const hideMapLoading = () => {
+	const el = document.getElementById('map-loading');
+	if (el) el.classList.add('d-none');
+};
 
 const setMap = async (lat = defaultPos.coords.lat, lon = defaultPos.coords.lon) => {
 	const map = L.map('map').setView([lat, lon], defaultZoom);
@@ -41,23 +53,41 @@ const setMap = async (lat = defaultPos.coords.lat, lon = defaultPos.coords.lon) 
 	}).addTo(map);
 
 	// Agrupación de PUDOs: por debajo de zoom 15 se agrupan; a partir de 15 se ven sueltos.
+	// Usamos siempre el estilo \"small\" (verde) para todos los clústeres, independientemente del tamaño.
 	clusterGroup = L.markerClusterGroup({
 		disableClusteringAtZoom: 15,
-		chunkedLoading: true
+		chunkedLoading: true,
+		// Sin áreas azules ni \"spider\" de líneas al abrir un clúster
+		showCoverageOnHover: false,
+		spiderfyOnEveryZoom: false,
+		spiderfyOnMaxZoom: false,
+		zoomToBoundsOnClick: true,
+		iconCreateFunction: (cluster) =>
+			L.divIcon({
+				html: `<div><span>${cluster.getChildCount()}</span></div>`,
+				className: 'marker-cluster marker-cluster-small',
+				iconSize: L.point(40, 40)
+			})
 	});
 	map.addLayer(clusterGroup);
 
 	const initialRadiusKm = getRadiusKmForZoom(map.getZoom());
-	const pudos = await getPudos(lat, lon, null, initialRadiusKm);
-	clusterGroup.clearLayers();
-	currentLocations.length = 0;
-	fillMarkers(map, pudos);
-	if (SHOW_DEBUG_CENTER) {
-		markDebugCenterAndRadius(map, lat, lon, initialRadiusKm);
+	showMapLoading();
+	try {
+		const pudos = await getPudos(lat, lon, null, initialRadiusKm);
+		clusterGroup.clearLayers();
+		currentLocations.length = 0;
+		fillMarkers(map, pudos);
+		lastDataZoom = map.getZoom();
+		if (SHOW_DEBUG_CENTER) {
+			markDebugCenterAndRadius(map, lat, lon, initialRadiusKm);
+		}
+	} finally {
+		hideMapLoading();
 	}
 	setGeolocateButton(map);
-	map.addEventListener('zoomend', async () => getAndPrintNewMarkers(map));
-	map.addEventListener('dragend', async () => getAndPrintNewMarkers(map));
+	map.addEventListener('zoomend', () => scheduleMapUpdate(map));
+	map.addEventListener('dragend', () => scheduleMapUpdate(map));
 	map.addEventListener('popupopen', e => {
 		toggleIcon(e.popup._source, true);
 		centerPopupOnMap(map, e.popup);
@@ -66,61 +96,87 @@ const setMap = async (lat = defaultPos.coords.lat, lon = defaultPos.coords.lon) 
 	setCPInput(map);
 };
 
-const getAndPrintNewMarkers = async (map, cp = null) => {
-	const center = map.getCenter();
-	const radiusKm = getRadiusKmForZoom(map.getZoom());
-	const pudos = await getPudos(center.lat, center.lng, cp, radiusKm);
-	if (clusterGroup) {
+const scheduleMapUpdate = (map) => {
+	if (mapUpdateTimeout) {
+		clearTimeout(mapUpdateTimeout);
+	}
+	const currentZoom = map.getZoom();
+
+	// Siempre mostramos el spinner cuando se programa una nueva carga.
+	showMapLoading();
+
+	// Solo limpiamos los puntos inmediatamente si ha cambiado el nivel de zoom.
+	if (clusterGroup && currentZoom !== lastDataZoom) {
 		clusterGroup.clearLayers();
 		currentLocations.length = 0;
 	}
-	fillMarkers(map, pudos);
-	if (SHOW_DEBUG_CENTER) {
-		markDebugCenterAndRadius(map, center.lat, center.lng, radiusKm);
-	}
 
-	// Si la búsqueda es por código postal, marcamos la ubicación aproximada del CP.
-	if (cp !== null) {
-		// El backend puede devolver distintas claves para la coordenada de búsqueda.
-		// Probamos varias y, si no existe ninguna, usamos el primer PUDO como aproximación.
-		const searchCoord =
-			pudos.search_coordinate ||
-			pudos.center ||
-			pudos.coordinate ||
-			(pudos.items && pudos.items[0]
-				? {
-						latitude: pudos.items[0].address.coordinate.latitude,
-						longitude: pudos.items[0].address.coordinate.longitude
-					}
-				: null);
+	mapUpdateTimeout = setTimeout(() => {
+		getAndPrintNewMarkers(map);
+	}, 200);
+};
 
-		if (searchCoord && typeof searchCoord.latitude === 'number' && typeof searchCoord.longitude === 'number') {
-			const { latitude, longitude } = searchCoord;
-
-			// Eliminar posible marcador anterior del código postal.
-			if (postalCodeMarker) {
-				map.removeLayer(postalCodeMarker);
-				postalCodeMarker = null;
-			}
-
-			postalCodeMarker = L.circleMarker(
-				[latitude, longitude],
-				{
-					pane: 'postalCodePane',
-					// Punto rojo pequeño y muy visible
-					color: '#FF4B5C',
-					fillColor: '#FF4B5C',
-					fillOpacity: 1,
-					radius: 5,
-					weight: 2
-				}
-			).addTo(map);
-
-			map.flyTo([latitude, longitude], defaultZoom, { animate: true, duration: 0.75 });
-		} else if (pudos.items && pudos.items.length > 0) {
-			// Fallback: centramos en el primer PUDO si no tenemos coordenada explícita del CP.
-			centerMapToPudo(map, pudos.items[0]);
+const getAndPrintNewMarkers = async (map, cp = null) => {
+	showMapLoading();
+	try {
+		const center = map.getCenter();
+		const radiusKm = getRadiusKmForZoom(map.getZoom());
+		const pudos = await getPudos(center.lat, center.lng, cp, radiusKm);
+		if (clusterGroup) {
+			clusterGroup.clearLayers();
+			currentLocations.length = 0;
 		}
+		fillMarkers(map, pudos);
+		lastDataZoom = map.getZoom();
+		if (SHOW_DEBUG_CENTER) {
+			markDebugCenterAndRadius(map, center.lat, center.lng, radiusKm);
+		}
+
+		// Si la búsqueda es por código postal, marcamos la ubicación aproximada del CP.
+		if (cp !== null) {
+			// El backend puede devolver distintas claves para la coordenada de búsqueda.
+			// Probamos varias y, si no existe ninguna, usamos el primer PUDO como aproximación.
+			const searchCoord =
+				pudos.search_coordinate ||
+				pudos.center ||
+				pudos.coordinate ||
+				(pudos.items && pudos.items[0]
+					? {
+							latitude: pudos.items[0].address.coordinate.latitude,
+							longitude: pudos.items[0].address.coordinate.longitude
+						}
+					: null);
+
+			if (searchCoord && typeof searchCoord.latitude === 'number' && typeof searchCoord.longitude === 'number') {
+				const { latitude, longitude } = searchCoord;
+
+				// Eliminar posible marcador anterior del código postal.
+				if (postalCodeMarker) {
+					map.removeLayer(postalCodeMarker);
+					postalCodeMarker = null;
+				}
+
+				postalCodeMarker = L.circleMarker(
+					[latitude, longitude],
+					{
+						pane: 'postalCodePane',
+						// Punto rojo pequeño y muy visible
+						color: '#FF4B5C',
+						fillColor: '#FF4B5C',
+						fillOpacity: 1,
+						radius: 5,
+						weight: 2
+					}
+				).addTo(map);
+
+				map.flyTo([latitude, longitude], defaultZoom, { animate: true, duration: 0.75 });
+			} else if (pudos.items && pudos.items.length > 0) {
+				// Fallback: centramos en el primer PUDO si no tenemos coordenada explícita del CP.
+				centerMapToPudo(map, pudos.items[0]);
+			}
+		}
+	} finally {
+		hideMapLoading();
 	}
 };
 

@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>PuntoPost - Compra online, recoge aquí</title>
     
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
@@ -82,6 +82,11 @@
     <main>
         <section>
             <div id="map" class="position-absolute top-0 start-0 bottom-0 end-0 z-n1"></div>
+            <div id="map-loading" class="position-absolute top-50 start-50 translate-middle d-none">
+                <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+                    <span class="visually-hidden">Cargando puntos...</span>
+                </div>
+            </div>
         </section>
     </main>
     <script src="map.js"></script>
