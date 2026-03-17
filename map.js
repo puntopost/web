@@ -35,8 +35,45 @@ const hideMapLoading = () => {
 	if (el) el.classList.add('d-none');
 };
 
+const createClusterGroup = (map) => {
+	// Destruimos cualquier grupo anterior para evitar restos de DOM/animaciones.
+	if (clusterGroup) {
+		map.removeLayer(clusterGroup);
+		clusterGroup = null;
+	}
+
+	clusterGroup = L.markerClusterGroup({
+		disableClusteringAtZoom: 15,
+		chunkedLoading: true,
+		// Sin áreas azules ni \"spider\" de líneas al abrir un clúster
+		showCoverageOnHover: false,
+		spiderfyOnEveryZoom: false,
+		spiderfyOnMaxZoom: false,
+		zoomToBoundsOnClick: true,
+		// Desactivamos animaciones internas del plugin, que también pueden
+		// dejar iconos \"fantasma\" en algunos navegadores.
+		animate: false,
+		animateAddingMarkers: false,
+		iconCreateFunction: (cluster) =>
+			L.divIcon({
+				html: `<div><span>${cluster.getChildCount()}</span></div>`,
+				className: 'marker-cluster marker-cluster-small',
+				iconSize: L.point(40, 40)
+			})
+	});
+	map.addLayer(clusterGroup);
+};
+
 const setMap = async (lat = defaultPos.coords.lat, lon = defaultPos.coords.lon) => {
-	const map = L.map('map').setView([lat, lon], defaultZoom);
+	const map = L.map('map', {
+		// Evitamos animaciones de zoom y de markers que en algunos navegadores
+		// dejan \"fantasmas\" de los iconos en pantalla al hacer zoom in / out.
+		zoomAnimation: false,
+		markerZoomAnimation: false,
+		fadeAnimation: false,
+		// Forzamos canvas para minimizar glitches de repintado de iconos SVG.
+		preferCanvas: true
+	}).setView([lat, lon], defaultZoom);
 
 	// Pane específico para el marcador del código postal, por encima de los PUDO.
 	map.createPane('postalCodePane');
@@ -53,23 +90,7 @@ const setMap = async (lat = defaultPos.coords.lat, lon = defaultPos.coords.lon) 
 	}).addTo(map);
 
 	// Agrupación de PUDOs: por debajo de zoom 15 se agrupan; a partir de 15 se ven sueltos.
-	// Usamos siempre el estilo \"small\" (verde) para todos los clústeres, independientemente del tamaño.
-	clusterGroup = L.markerClusterGroup({
-		disableClusteringAtZoom: 15,
-		chunkedLoading: true,
-		// Sin áreas azules ni \"spider\" de líneas al abrir un clúster
-		showCoverageOnHover: false,
-		spiderfyOnEveryZoom: false,
-		spiderfyOnMaxZoom: false,
-		zoomToBoundsOnClick: true,
-		iconCreateFunction: (cluster) =>
-			L.divIcon({
-				html: `<div><span>${cluster.getChildCount()}</span></div>`,
-				className: 'marker-cluster marker-cluster-small',
-				iconSize: L.point(40, 40)
-			})
-	});
-	map.addLayer(clusterGroup);
+	createClusterGroup(map);
 
 	const initialRadiusKm = getRadiusKmForZoom(map.getZoom());
 	showMapLoading();
@@ -89,10 +110,27 @@ const setMap = async (lat = defaultPos.coords.lat, lon = defaultPos.coords.lon) 
 	map.addEventListener('zoomend', () => scheduleMapUpdate(map));
 	map.addEventListener('dragend', () => scheduleMapUpdate(map));
 	map.addEventListener('popupopen', e => {
+		// Cambiamos el icono del PUDO seleccionado
 		toggleIcon(e.popup._source, true);
 		centerPopupOnMap(map, e.popup);
+		// Mientras el popup está abierto desactivamos el zoom con la rueda
+		// para evitar el bug de \"PUDO fantasma\" en Firefox al hacer scroll
+		// con la rueda del ratón sobre el mapa.
+		if (map.scrollWheelZoom && map.scrollWheelZoom.enabled()) {
+			map.scrollWheelZoom.disable();
+		}
 	});
-	map.addEventListener('popupclose', e => toggleIcon(e.popup._source, false));
+	map.addEventListener('popupclose', e => {
+		toggleIcon(e.popup._source, false);
+		// Rehabilitamos el zoom con rueda cuando se cierra el popup.
+		if (map.scrollWheelZoom && !map.scrollWheelZoom.enabled()) {
+			map.scrollWheelZoom.enable();
+		}
+	});
+
+	// Ya no necesitamos hacks de scroll / wheel para cerrar el popup,
+	// porque el zoom con rueda queda desactivado mientras el popup está abierto.
+
 	setCPInput(map);
 };
 
@@ -105,10 +143,10 @@ const scheduleMapUpdate = (map) => {
 	// Siempre mostramos el spinner cuando se programa una nueva carga.
 	showMapLoading();
 
-	// Solo limpiamos los puntos inmediatamente si ha cambiado el nivel de zoom.
+	// Solo recreamos el grupo de clústeres inmediatamente si ha cambiado el nivel de zoom.
 	if (clusterGroup && currentZoom !== lastDataZoom) {
-		clusterGroup.clearLayers();
 		currentLocations.length = 0;
+		createClusterGroup(map);
 	}
 
 	mapUpdateTimeout = setTimeout(() => {
@@ -122,10 +160,10 @@ const getAndPrintNewMarkers = async (map, cp = null) => {
 		const center = map.getCenter();
 		const radiusKm = getRadiusKmForZoom(map.getZoom());
 		const pudos = await getPudos(center.lat, center.lng, cp, radiusKm);
-		if (clusterGroup) {
-			clusterGroup.clearLayers();
-			currentLocations.length = 0;
-		}
+		// Siempre regeneramos el grupo para asegurarnos de que no queden restos
+		// de DOM / animaciones anteriores.
+		createClusterGroup(map);
+		currentLocations.length = 0;
 		fillMarkers(map, pudos);
 		lastDataZoom = map.getZoom();
 		if (SHOW_DEBUG_CENTER) {
