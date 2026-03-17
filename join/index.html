@@ -7,8 +7,8 @@
     
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
 
-    <link href="bootstrap.min.css" rel="stylesheet">
-    <link href="bootstrap-icons.min.css" rel="stylesheet">
+    <link href="../bootstrap.min.css" rel="stylesheet">
+    <link href="../bootstrap-icons.min.css" rel="stylesheet">
 </head>
 <body>
 
@@ -18,14 +18,12 @@
                 <img src="https://www.puntopost.mx/img/logo-puntopost-amarillo.png" alt="PuntoPost Logo" style="height: 52px;">
             </a>
             
-            <!-- Desktop Navigation - Hidden on mobile -->
             <div class="d-none d-lg-flex gap-5 align-items-center">
-                <a href="https://www.puntopost.mx/map.html" class="nav-link text-white fw-bold fs-5">Mapa de puntos</a>
-                <a href="https://www.puntopost.mx/atrae.html" class="nav-link text-white fw-bold fs-5">Quiero ser punto</a>
-                <a href="https://www.puntopost.mx/envia.html" class="btn rounded-pill fw-bold fs-5 px-4 py-2 text-dark border-0" style="background-color: #FFE135;">Envía con PuntoPost</a>
+                <a href="https://www.puntopost.mx/map" class="nav-link text-white fw-bold fs-5">Mapa de puntos</a>
+                <a href="https://www.puntopost.mx/atrae" class="nav-link text-white fw-bold fs-5">Quiero ser punto</a>
+                <a href="https://www.puntopost.mx/envia" class="btn rounded-pill fw-bold fs-5 px-4 py-2 text-dark border-0" style="background-color: #FFE135;">Envía con PuntoPost</a>
             </div>
             
-            <!-- Mobile Menu Button - Hidden on desktop -->
             <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -37,11 +35,11 @@
                 </div>
                 <div class="offcanvas-body p-0">
                     <div class="px-3 py-4">
-                        <a href="https://www.puntopost.mx/map.html" class="nav-link text-dark fs-5 py-3 d-block text-decoration-none fw-bold">Mapa de puntos</a>
+                        <a href="https://www.puntopost.mx/map" class="nav-link text-dark fs-5 py-3 d-block text-decoration-none fw-bold">Mapa de puntos</a>
                         <hr class="my-0">
-                        <a href="https://www.puntopost.mx/atrae.html" class="nav-link text-dark fs-5 py-3 d-block text-decoration-none fw-bold">Quiero ser punto</a>
+                        <a href="https://www.puntopost.mx/atrae" class="nav-link text-dark fs-5 py-3 d-block text-decoration-none fw-bold">Quiero ser punto</a>
                         <hr class="my-0">
-                        <a href="https://www.puntopost.mx/envia.html" class="btn rounded-pill fw-bold fs-5 px-4 py-2 text-dark border-0 d-block text-center text-decoration-none mt-2" style="background-color: #FFE135;">Envía con PuntoPost</a>
+                        <a href="https://www.puntopost.mx/envia" class="btn rounded-pill fw-bold fs-5 px-4 py-2 text-dark border-0 d-block text-center text-decoration-none mt-2" style="background-color: #FFE135;">Envía con PuntoPost</a>
                     </div>
                 </div>
             </div>
@@ -49,7 +47,6 @@
     </nav>
 
     <main>
-        <!-- Hero Section -->
         <section class="bg-primary text-white text-center py-5">
             <div class="container">
                 <div class="row justify-content-center">
@@ -60,7 +57,6 @@
                         <h1 class="display-4 fw-bold mb-3">Atrae más clientes</h1>
                         <p class="lead mb-4">Incrementa ventas hasta en un 20% sin costo siendo PuntoPost</p>
                         
-                        <!-- Steps List -->
                         <div class="mb-4 ms-5">
                             <div class="d-flex align-items-center mb-3">
                                 <span class="bg-warning text-primary rounded-circle d-flex align-items-center justify-content-center me-3 fw-bold" style="width: 50px; height: 50px;">1</span>
@@ -82,7 +78,6 @@
             </div>
         </section>
 
-        <!-- Trust Section -->
         <section class="py-3 bg-light">
             <div class="container text-center">
                 <p class="mb-3 fw-semibold">+100 ecommerce confían en nosotros</p>
@@ -94,7 +89,6 @@
             </div>
         </section>
 
-        <!-- How it works Section -->
         <section class="py-5 bg-light">
             <div class="container">
                 <h2 class="text-center fw-bold mb-4">¿En qué consiste?</h2>
@@ -103,7 +97,6 @@
                     Sólo te llevará 1 minuto! Podrás expandir tu cartera de clientes y tus ventas al atraer más gente a tu tienda.
                 </p>
                 
-                <!-- Service Cards -->
                 <div class="row g-4">
                     <div class="col-12 col-lg-6">
                         <div class="card border-0 shadow-sm h-100">
@@ -134,7 +127,6 @@
             </div>
         </section>
 
-        <!-- Steps Section -->
         <section class="py-5 bg-primary text-white">
             <div class="container">
                 <div class="text-center mb-5">
@@ -181,7 +173,6 @@
             </div>
         </section>
 
-        <!-- Benefits Section -->
         <section class="py-5 bg-success bg-opacity-10">
             <div class="container">
                 <h2 class="text-center fw-bold mb-4">Beneficios de ser PuntoPost</h2>
@@ -248,85 +239,6 @@
             </div>
         </section>
 
-        <!-- FAQ Section -->
-        <section class="py-5 bg-white">
-            <div class="container">
-                <h2 class="text-center fw-bold mb-5">¿Tienes dudas?</h2>
-                
-                <div class="row justify-content-center">
-                    <div class="col-lg-8">
-                        <div class="accordion" id="faqAccordion">
-                            <div class="accordion-item border-0 shadow-sm mb-3">
-                                <h2 class="accordion-header">
-                                    <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq1" aria-expanded="false" aria-controls="faq1">
-                                        ¿Con qué eCommerce trabajan?
-                                    </button>
-                                </h2>
-                                <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-                                    <div class="accordion-body">
-                                        Trabajamos con más de 100 plataformas de eCommerce en México, incluyendo las principales como MercadoLibre, Amazon, y muchas más.
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="accordion-item border-0 shadow-sm mb-3">
-                                <h2 class="accordion-header">
-                                    <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq2" aria-expanded="false" aria-controls="faq2">
-                                        ¿Cuánto dinero percibo por ser un PuntoPost?
-                                    </button>
-                                </h2>
-                                <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-                                    <div class="accordion-body">
-                                        Recibes una comisión por cada paquete que manejes. El monto varía según el tipo de servicio, pero en promedio nuestros socios ganan entre $500-2000 pesos adicionales al mes.
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="accordion-item border-0 shadow-sm mb-3">
-                                <h2 class="accordion-header">
-                                    <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq3" aria-expanded="false" aria-controls="faq3">
-                                        ¿Qué requisitos necesito para ser PuntoPost?
-                                    </button>
-                                </h2>
-                                <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-                                    <div class="accordion-body">
-                                        Necesitas tener un negocio establecido con horarios de atención al público, espacio para almacenar paquetes temporalmente, y acceso a internet para el sistema de gestión.
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="accordion-item border-0 shadow-sm mb-3">
-                                <h2 class="accordion-header">
-                                    <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq4" aria-expanded="false" aria-controls="faq4">
-                                        ¿Cuánto tiempo toma el proceso de instalación?
-                                    </button>
-                                </h2>
-                                <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-                                    <div class="accordion-body">
-                                        Una vez aprobada tu solicitud, el proceso de instalación y capacitación toma aproximadamente 1-2 semanas.
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="accordion-item border-0 shadow-sm mb-3">
-                                <h2 class="accordion-header">
-                                    <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq5" aria-expanded="false" aria-controls="faq5">
-                                        ¿Hay algún costo de instalación?
-                                    </button>
-                                </h2>
-                                <div id="faq5" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-                                    <div class="accordion-body">
-                                        No, no hay costo de instalación. PuntoPost proporciona todo el material necesario sin costo alguno para ti.
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Registration Form Section -->
         <section id="form" class="py-5 bg-light">
             <div class="container">
                 <h2 class="text-center fw-bold mb-5">Regístrate y únete a nuestra red</h2>
@@ -363,8 +275,8 @@
         <div class="container">
             <div class="d-flex flex-column flex-md-row justify-content-center align-items-center">
                 <img src="https://www.puntopost.mx/img/speak.svg" alt="PuntoPost" class="mb-2 h-auto">
-                <a href="#" class="text-white mx-2">Términos y Condiciones</a>
-                <a href="#" class="text-white mx-2">Política de privacidad</a>
+                <a href="https://www.puntopost.mx/condiciones" class="text-white mx-2">Términos y Condiciones</a>
+                <a href="https://www.puntopost.mx/privacidad" class="text-white mx-2">Política de privacidad</a>
             </div>
             <p class="mb-0 mt-2">© 2023 PuntoPost</p>
         </div>
