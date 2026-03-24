@@ -56,6 +56,73 @@
             }
         }
 
+        .envia-hero {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)),
+                url("https://www.puntopost.mx/img/ecommerce-hero-envia.png");
+            background-size: cover;
+            background-position: center;
+            min-height: 380px;
+            position: relative;
+        }
+
+        .envia-hero-content {
+            max-width: 900px;
+        }
+
+        .envia-hero-content h2 {
+            font-size: clamp(1.9rem, 3.2vw, 3rem);
+            line-height: 1.12;
+        }
+
+        .envia-hero-content p {
+            max-width: 760px;
+            line-height: 1.35;
+        }
+
+        @media (min-width: 992px) {
+            .envia-hero-content h2 {
+                white-space: nowrap;
+            }
+
+            .envia-hero-content p {
+                white-space: nowrap;
+            }
+        }
+
+        @media (max-width: 767.98px) {
+            .envia-hero {
+                min-height: 300px;
+                background-position: 62% center;
+            }
+
+            .envia-hero-content {
+                display: block;
+                max-width: 280px;
+                padding-top: 0.5rem;
+            }
+
+            .envia-hero-content h2 {
+                font-size: 1.55rem;
+                line-height: 1.15;
+                margin-bottom: 0.5rem !important;
+            }
+
+            .envia-hero-content p {
+                font-size: 1.05rem !important;
+                line-height: 1.28;
+                margin-bottom: 0.9rem !important;
+            }
+
+            .envia-hero-content p br {
+                display: none;
+            }
+
+            .envia-hero-content a.btn {
+                font-size: 1.2rem !important;
+                padding: 0.55rem 1.6rem !important;
+            }
+        }
+
         /* Evitar que el iframe de Pipedrive quede por encima del footer */
         .pipedriveWebForms iframe {
             position: relative !important;
@@ -101,7 +168,19 @@
                         </div>
                     </div>
                 </div>
-            </nav>         
+            </nav>
+            <section class="envia-hero rounded-bottom-4 overflow-hidden d-flex align-items-center">
+                <div class="container-fluid px-4 px-lg-5">
+                    <div class="envia-hero-content text-white py-4">
+                        <h2 class="fw-bold mb-3">El Futuro de las Entregas y Devoluciones</h2>
+                        <p class="fs-4 fw-medium mb-4">
+                            <span>Ofrece a tus clientes la mayor red de puntos de recolección de paquetes de todo México,</span><br>
+                            <span>al mejor precio, sin imprimir etiquetas. ¡Más fácil y punto!</span>
+                        </p>
+                        <a href="#form-ser-puntopost" class="btn rounded-pill fw-bold px-5 py-3 fs-4 text-dark border-0" style="background-color: #FFE135;">Contáctanos</a>
+                    </div>
+                </div>
+            </section>
         </div>
     </header>
 
