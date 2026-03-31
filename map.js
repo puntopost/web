@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------
-//  PuntoPost Map v2 — spatial cache + incremental rendering
+//  PuntoPost Map — spatial cache + incremental rendering
 // ---------------------------------------------------------------------------
 
 const API_URL = 'https://back.puntopost.mx/api/web/v1/pudos';
@@ -20,6 +20,7 @@ const markerIconSelected = L.icon({ iconUrl: '/img/PING2.svg', iconSize: [63, 70
 const markerCache = new Map();
 const loadedCells = new Set();
 let clusterGroup = null;
+let cpMarker = null;
 let debounceTimer = null;
 let spinnerTimer = null;
 let activeFetchId = 0;
@@ -96,10 +97,21 @@ function uncoveredCenter(map) {
 // ---- API ------------------------------------------------------------------
 
 async function fetchURL(url) {
-	const res = await fetch(url);
-	const data = await res.json();
-	if (['VALIDATION', 'NOT_FOUND'].includes(data.type)) return null;
-	return data;
+	try {
+		const res = await fetch(url);
+		if (res.status === 404) {
+			showToast('Código postal no encontrado.', 'warning');
+			return null;
+		}
+		if (!res.ok) {
+			showToast('Error al cargar los puntos. Inténtalo más tarde.', 'error');
+			return null;
+		}
+		return await res.json();
+	} catch {
+		showToast('Error de conexión. Inténtalo más tarde.', 'error');
+		return null;
+	}
 }
 
 function buildFirstURL(lat, lng, radiusKm, cp) {
@@ -114,7 +126,8 @@ async function fetchAllPages(firstURL, fetchId, onPage) {
 	while (url) {
 		const data = await fetchURL(url);
 		if (fetchId !== activeFetchId || !data) return;
-		onPage(data);
+		const stop = onPage(data);
+		if (stop) return;
 		url = data.next || null;
 	}
 }
@@ -138,12 +151,6 @@ function mergeMarkers(pudos) {
 		toAdd.push(marker);
 	}
 	if (toAdd.length) clusterGroup.addLayers(toAdd);
-}
-
-function clearAllMarkers() {
-	if (clusterGroup) clusterGroup.clearLayers();
-	markerCache.clear();
-	loadedCells.clear();
 }
 
 function buildPopupHTML(pudo) {
@@ -182,51 +189,80 @@ function buildPopupHTML(pudo) {
 
 // ---- Viewport loading -----------------------------------------------------
 
-async function loadViewport(map, cp) {
-	if (!cp && isViewportCovered(map)) {
+let cpSearchInProgress = false;
+
+async function loadCPSearch(map, cp) {
+	cpSearchInProgress = true;
+	const fetchId = ++activeFetchId;
+	showSpinner(true);
+
+	const radiusKm = viewportRadiusKm(map);
+	const url = buildFirstURL(null, null, radiusKm, cp);
+	let handled = false;
+
+	await fetchAllPages(url, fetchId, (page) => {
+		const coord = page.coordinate;
+
+		if (!handled) {
+			handled = true;
+			hideSpinner();
+
+			if (coord) {
+				// Quitar marcador CP anterior y poner uno nuevo
+				if (cpMarker) map.removeLayer(cpMarker);
+				cpMarker = L.circleMarker(
+					[coord.latitude, coord.longitude],
+					{ color: '#FF4B5C', fillColor: '#FF4B5C', fillOpacity: 1, radius: 5, weight: 2 }
+				).addTo(map);
+
+				const cellKey = Math.floor(coord.latitude / CELL_SIZE) + ',' + Math.floor(coord.longitude / CELL_SIZE);
+				const alreadyCovered = loadedCells.has(cellKey);
+
+				if (!alreadyCovered) {
+					registerFetchedArea(coord.latitude, coord.longitude, radiusKm);
+				}
+
+				map.flyTo([coord.latitude, coord.longitude], DEFAULT_ZOOM, { animate: true, duration: 0.75 });
+				if (alreadyCovered) return true;
+			}
+		}
+
+		mergeMarkers(page);
+	});
+
+	if (!handled) hideSpinner();
+	cpSearchInProgress = false;
+}
+
+async function loadViewport(map) {
+	if (isViewportCovered(map)) {
 		hideSpinner();
 		return;
 	}
 
-	if (cp) {
-		clearAllMarkers();
-		++activeFetchId;
-	}
-
 	const fetchId = activeFetchId;
-	showSpinner(cp != null);
+	showSpinner(false);
 
-	const maxFetches = cp ? 1 : 5;
 	let fetchCount = 0;
-	let handledCP = false;
 
-	while (fetchCount < maxFetches) {
+	while (fetchCount < 5) {
 		if (fetchId !== activeFetchId) return;
 
-		const center = (cp && fetchCount === 0)
-			? map.getCenter()
-			: (uncoveredCenter(map) || map.getCenter());
+		const center = uncoveredCenter(map) || map.getCenter();
 		const radiusKm = viewportRadiusKm(map);
 
 		registerFetchedArea(center.lat, center.lng, radiusKm);
 
-		const url = buildFirstURL(center.lat, center.lng, radiusKm, cp);
+		const url = buildFirstURL(center.lat, center.lng, radiusKm, null);
 		let gotData = false;
 
 		await fetchAllPages(url, fetchId, (page) => {
 			gotData = true;
 			mergeMarkers(page);
-			if (!handledCP && cp) {
-				handledCP = true;
-				handlePostalCodeResult(map, page);
-			}
 			hideSpinner();
 		});
 
-		if (!gotData && fetchCount === 0) {
-			showToast('No se encontraron PUDOs para la búsqueda realizada.', 'warning');
-			break;
-		}
+		if (!gotData && fetchCount === 0) break;
 
 		fetchCount++;
 		if (isViewportCovered(map)) break;
@@ -235,21 +271,17 @@ async function loadViewport(map, cp) {
 	hideSpinner();
 }
 
-function enqueueViewportLoad(map, cp) {
-	fetchQueue = fetchQueue.then(() => loadViewport(map, cp));
+function enqueueViewportLoad(map) {
+	fetchQueue = fetchQueue.then(() => loadViewport(map));
+}
+
+function enqueueCPSearch(map, cp) {
+	fetchQueue = fetchQueue.then(() => loadCPSearch(map, cp));
 }
 
 function scheduleViewportLoad(map) {
 	clearTimeout(debounceTimer);
 	debounceTimer = setTimeout(() => enqueueViewportLoad(map), DEBOUNCE_MS);
-}
-
-// ---- Postal code ----------------------------------------------------------
-
-function handlePostalCodeResult(map, pudos) {
-	const coord = pudos.coordinate;
-	if (!coord) return;
-	map.flyTo([coord.latitude, coord.longitude], DEFAULT_ZOOM, { animate: true, duration: 0.75 });
 }
 
 // ---- Utilities ------------------------------------------------------------
@@ -275,9 +307,15 @@ function setupCPInput(map) {
 
 	const mask = IMask(cpInput, { mask: '00000', lazy: true, placeholderChar: '_' });
 
-	cpInput.addEventListener('focus', () => mask.updateOptions({ lazy: false }));
+	cpInput.addEventListener('focus', () => {
+		mask.updateOptions({ lazy: false });
+		cpInput.classList.add('has-value');
+	});
 	cpInput.addEventListener('blur', () => {
-		if (!mask.unmaskedValue) mask.updateOptions({ lazy: true });
+		if (!mask.unmaskedValue) {
+			mask.updateOptions({ lazy: true });
+			cpInput.classList.remove('has-value');
+		}
 	});
 
 	const submit = () => {
@@ -287,23 +325,81 @@ function setupCPInput(map) {
 			cpInput.focus();
 			return;
 		}
-		enqueueViewportLoad(map, cp);
+		if (cpSearchInProgress) return;
+		if (geoWatchId !== null) stopGeolocate(map);
+		enqueueCPSearch(map, cp);
 	};
 
+	cpInput.addEventListener('input', () => {
+		if (mask.unmaskedValue.length === 5) submit();
+	});
 	cpInput.addEventListener('keypress', e => { if (e.key === 'Enter') submit(); });
 	btn.addEventListener('click', submit);
 }
 
 // ---- Geolocate ------------------------------------------------------------
 
+let geoWatchId = null;
+let geoMarker = null;
+let geoStopOnInteraction = null;
+
+function stopGeolocate(map) {
+	if (geoWatchId !== null) {
+		navigator.geolocation.clearWatch(geoWatchId);
+		geoWatchId = null;
+	}
+	if (geoMarker) { map.removeLayer(geoMarker); geoMarker = null; }
+	if (geoStopOnInteraction) {
+		map.off('moveend', geoStopOnInteraction);
+		geoStopOnInteraction = null;
+	}
+	const btn = document.querySelector('.js-geolocate');
+	if (btn) btn.classList.remove('active');
+}
+
+function startGeolocate(map) {
+	if (!('geolocation' in navigator)) return;
+
+	const btn = document.querySelector('.js-geolocate');
+	if (btn) btn.classList.add('active');
+
+	// Desactivar si la posición sale del viewport
+	geoStopOnInteraction = () => {
+		if (geoMarker && !map.getBounds().contains(geoMarker.getLatLng())) {
+			stopGeolocate(map);
+		}
+	};
+	map.on('moveend', geoStopOnInteraction);
+
+	geoWatchId = navigator.geolocation.watchPosition(
+		pos => {
+			if (geoWatchId === null) return;
+			const latlng = L.latLng(pos.coords.latitude, pos.coords.longitude);
+
+			if (geoMarker) {
+				geoMarker.setLatLng(latlng);
+			} else {
+				geoMarker = L.circleMarker(latlng, {
+					color: '#4A90D9', fillColor: '#4A90D9', fillOpacity: 1, radius: 7, weight: 2
+				}).addTo(map);
+			}
+
+			map.setView(latlng, map.getZoom());
+		},
+		() => showToast('No se pudo obtener la ubicación.', 'error'),
+		{ enableHighAccuracy: true, maximumAge: 3000 }
+	);
+}
+
 function setupGeolocate(map) {
 	const btn = document.querySelector('.js-geolocate');
 	if (!btn) return;
 	btn.addEventListener('click', () => {
-		if (!('geolocation' in navigator)) return;
-		navigator.geolocation.getCurrentPosition(pos => {
-			map.flyTo([pos.coords.latitude, pos.coords.longitude], DEFAULT_ZOOM, { animate: true, duration: 0.75 });
-		});
+		if (geoWatchId !== null) {
+			stopGeolocate(map);
+		} else {
+			startGeolocate(map);
+		}
 	});
 }
 
@@ -311,22 +407,22 @@ function setupGeolocate(map) {
 
 (function init() {
 	const map = L.map('map', {
-		maxBounds: MEXICO_BOUNDS.pad(0.1),
+		maxBounds: MEXICO_BOUNDS.pad(0.2),
 		maxBoundsViscosity: 0.8
 	}).setView(DEFAULT_CENTER, DEFAULT_ZOOM);
 
 	L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}{r}.png', {
 		maxZoom: 19,
-		minZoom: 9,
+		minZoom: 6,
 		attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 	}).addTo(map);
 
 	clusterGroup = L.markerClusterGroup({
-		disableClusteringAtZoom: 15,
+		disableClusteringAtZoom: 14,
 		chunkedLoading: true,
 		chunkInterval: 100,
 		chunkDelay: 10,
-		maxClusterRadius: 60,
+		maxClusterRadius: 40,
 		showCoverageOnHover: false,
 		spiderfyOnEveryZoom: false,
 		spiderfyOnMaxZoom: false,
