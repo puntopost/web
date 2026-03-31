@@ -39,6 +39,10 @@ GitHub Pages — push to `main` publishes automatically. Domain configured in `C
 
 `https://back.puntopost.mx/api/web/v1/` — used by map.js and tracking-summary.js.
 
+## Design principles
+
+- **Mobile first** — all UI changes must be designed for mobile first, then adapted to desktop.
+
 ## Language
 
 All content is in Spanish (Mexico). `<html lang="es">`.

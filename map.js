@@ -1,240 +1,157 @@
-const defaultPos = { // Coordenadas de Ciudad de México
-	coords: {  
-		lat: 19.4327402,
-		lon: -99.1331565
-	}
-};
-const defaultZoom = 15;
-const defaultRadiusKm = 8;
-const maxRadiusKm = 200;
-const SHOW_DEBUG_CENTER = false; // Marcar centro y radio de cada llamada a /pudos para depuración
-const icon = L.icon({
-	iconUrl: '/img/PING1.svg',
-	iconSize: [49, 54]
-});
-const iconSelected = L.icon({
-	iconUrl: '/img/PING2.svg',
-	iconSize: [63, 70]
-});
+// ---------------------------------------------------------------------------
+//  PuntoPost Map v2 — spatial cache + incremental rendering
+// ---------------------------------------------------------------------------
 
-const currentLocations = [];
-let postalCodeMarker = null;
-let debugCenterMarker = null;
-let debugRadiusCircle = null;
+const API_URL = 'https://back.puntopost.mx/api/web/v1/pudos';
+const DEFAULT_CENTER = [19.4327402, -99.1331565];
+const DEFAULT_ZOOM = 15;
+const DEBOUNCE_MS = 350;
+const SPINNER_DELAY_MS = 400;
+const COVERAGE_MARGIN = 1.3;
+const CELL_SIZE = 0.05;                 // ~5.5 km per grid cell
+const MIN_FETCH_RADIUS_KM = Math.ceil(CELL_SIZE * 111 * 1.5);
+const MEXICO_BOUNDS = L.latLngBounds([14.5, -118.5], [32.8, -86.5]);
+
+const markerIcon = L.icon({ iconUrl: '/img/PING1.svg', iconSize: [49, 54] });
+const markerIconSelected = L.icon({ iconUrl: '/img/PING2.svg', iconSize: [63, 70] });
+
+// ---- State ----------------------------------------------------------------
+
+const markerCache = new Map();
+const loadedCells = new Set();
 let clusterGroup = null;
-let mapUpdateTimeout = null;
-let lastDataZoom = defaultZoom;
+let debounceTimer = null;
+let spinnerTimer = null;
+let activeFetchId = 0;
+let fetchQueue = Promise.resolve();
 
-const showMapLoading = () => {
+// ---- Spinner --------------------------------------------------------------
+
+function showSpinner(immediate) {
 	const el = document.getElementById('map-loading');
-	if (el) el.classList.remove('d-none');
-};
+	if (!el) return;
+	clearTimeout(spinnerTimer);
+	if (immediate) {
+		el.classList.remove('d-none', 'fade-out');
+		return;
+	}
+	spinnerTimer = setTimeout(() => el.classList.remove('d-none', 'fade-out'), SPINNER_DELAY_MS);
+}
 
-const hideMapLoading = () => {
+function hideSpinner() {
 	const el = document.getElementById('map-loading');
-	if (el) el.classList.add('d-none');
-};
+	if (!el) return;
+	clearTimeout(spinnerTimer);
+	el.classList.add('fade-out');
+	setTimeout(() => el.classList.add('d-none'), 200);
+}
 
-const setMap = async (lat = defaultPos.coords.lat, lon = defaultPos.coords.lon) => {
-	const map = L.map('map').setView([lat, lon], defaultZoom);
+// ---- Spatial grid ---------------------------------------------------------
 
-	// Pane específico para el marcador del código postal, por encima de los PUDO.
-	map.createPane('postalCodePane');
-	map.getPane('postalCodePane').style.zIndex = 650;
+function viewportRadiusKm(map) {
+	const dist = map.getCenter().distanceTo(map.getBounds().getNorthEast());
+	return Math.max(Math.ceil((dist / 1000) * COVERAGE_MARGIN), MIN_FETCH_RADIUS_KM);
+}
 
-	// Pane específico para depuración (centro y radio), por encima de todo lo demás.
-	map.createPane('debugCenterPane');
-	map.getPane('debugCenterPane').style.zIndex = 700;
+function getVisibleCells(map) {
+	const b = map.getBounds();
+	const minR = Math.floor(b.getSouth() / CELL_SIZE);
+	const maxR = Math.floor(b.getNorth() / CELL_SIZE);
+	const minC = Math.floor(b.getWest() / CELL_SIZE);
+	const maxC = Math.floor(b.getEast() / CELL_SIZE);
+	const cells = [];
+	for (let r = minR; r <= maxR; r++)
+		for (let c = minC; c <= maxC; c++)
+			cells.push(r + ',' + c);
+	return cells;
+}
 
-	L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png', {
-		maxZoom: 19,
-		minZoom: 9,
-		attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-	}).addTo(map);
+function isViewportCovered(map) {
+	return getVisibleCells(map).every(c => loadedCells.has(c));
+}
 
-	// Agrupación de PUDOs: por debajo de zoom 15 se agrupan; a partir de 15 se ven sueltos.
-	// Usamos siempre el estilo \"small\" (verde) para todos los clústeres, independientemente del tamaño.
-	clusterGroup = L.markerClusterGroup({
-		disableClusteringAtZoom: 15,
-		chunkedLoading: true,
-		// Sin áreas azules ni \"spider\" de líneas al abrir un clúster
-		showCoverageOnHover: false,
-		spiderfyOnEveryZoom: false,
-		spiderfyOnMaxZoom: false,
-		zoomToBoundsOnClick: true,
-		iconCreateFunction: (cluster) =>
-			L.divIcon({
-				html: `<div><span>${cluster.getChildCount()}</span></div>`,
-				className: 'marker-cluster marker-cluster-small',
-				iconSize: L.point(40, 40)
-			})
-	});
-	map.addLayer(clusterGroup);
+function registerFetchedArea(lat, lng, radiusKm) {
+	const deg = radiusKm / 111;
+	const minR = Math.floor((lat - deg) / CELL_SIZE);
+	const maxR = Math.floor((lat + deg) / CELL_SIZE);
+	const minC = Math.floor((lng - deg) / CELL_SIZE);
+	const maxC = Math.floor((lng + deg) / CELL_SIZE);
+	for (let r = minR; r <= maxR; r++)
+		for (let c = minC; c <= maxC; c++)
+			loadedCells.add(r + ',' + c);
+}
 
-	const initialRadiusKm = getRadiusKmForZoom(map.getZoom());
-	showMapLoading();
-	try {
-		const pudos = await getPudos(lat, lon, null, initialRadiusKm);
-		clusterGroup.clearLayers();
-		currentLocations.length = 0;
-		fillMarkers(map, pudos);
-		lastDataZoom = map.getZoom();
-		if (SHOW_DEBUG_CENTER) {
-			markDebugCenterAndRadius(map, lat, lon, initialRadiusKm);
-		}
-	} finally {
-		hideMapLoading();
+function uncoveredCenter(map) {
+	const uncovered = getVisibleCells(map).filter(c => !loadedCells.has(c));
+	if (uncovered.length === 0) return null;
+	let sumLat = 0, sumLng = 0;
+	for (const key of uncovered) {
+		const [r, c] = key.split(',').map(Number);
+		sumLat += (r + 0.5) * CELL_SIZE;
+		sumLng += (c + 0.5) * CELL_SIZE;
 	}
-	setGeolocateButton(map);
-	map.addEventListener('zoomend', () => scheduleMapUpdate(map));
-	map.addEventListener('dragend', () => scheduleMapUpdate(map));
-	map.addEventListener('popupopen', e => {
-		toggleIcon(e.popup._source, true);
-		centerPopupOnMap(map, e.popup);
-	});
-	map.addEventListener('popupclose', e => toggleIcon(e.popup._source, false));
-	setCPInput(map);
-};
+	return L.latLng(sumLat / uncovered.length, sumLng / uncovered.length);
+}
 
-const scheduleMapUpdate = (map) => {
-	if (mapUpdateTimeout) {
-		clearTimeout(mapUpdateTimeout);
+// ---- API ------------------------------------------------------------------
+
+async function fetchURL(url) {
+	const res = await fetch(url);
+	const data = await res.json();
+	if (['VALIDATION', 'NOT_FOUND'].includes(data.type)) return null;
+	return data;
+}
+
+function buildFirstURL(lat, lng, radiusKm, cp) {
+	const params = cp
+		? { postal_code: cp, radius_km: radiusKm, cursor: '2000-0' }
+		: { latitude: lat, longitude: lng, radius_km: radiusKm, cursor: '2000-0' };
+	return API_URL + '?' + new URLSearchParams(params);
+}
+
+async function fetchAllPages(firstURL, fetchId, onPage) {
+	let url = firstURL;
+	while (url) {
+		const data = await fetchURL(url);
+		if (fetchId !== activeFetchId || !data) return;
+		onPage(data);
+		url = data.next || null;
 	}
-	const currentZoom = map.getZoom();
+}
 
-	// Siempre mostramos el spinner cuando se programa una nueva carga.
-	showMapLoading();
+// ---- Markers --------------------------------------------------------------
 
-	// Solo limpiamos los puntos inmediatamente si ha cambiado el nivel de zoom.
-	if (clusterGroup && currentZoom !== lastDataZoom) {
-		clusterGroup.clearLayers();
-		currentLocations.length = 0;
-	}
+function createMarkerObj(pudo) {
+	const { latitude, longitude } = pudo.address.coordinate;
+	const marker = L.marker([latitude, longitude], { icon: markerIcon });
+	marker.bindPopup(buildPopupHTML(pudo), { offset: L.point(0, -20) });
+	return marker;
+}
 
-	mapUpdateTimeout = setTimeout(() => {
-		getAndPrintNewMarkers(map);
-	}, 200);
-};
-
-const getAndPrintNewMarkers = async (map, cp = null) => {
-	showMapLoading();
-	try {
-		const center = map.getCenter();
-		const radiusKm = getRadiusKmForZoom(map.getZoom());
-		const pudos = await getPudos(center.lat, center.lng, cp, radiusKm);
-		if (clusterGroup) {
-			clusterGroup.clearLayers();
-			currentLocations.length = 0;
-		}
-		fillMarkers(map, pudos);
-		lastDataZoom = map.getZoom();
-		if (SHOW_DEBUG_CENTER) {
-			markDebugCenterAndRadius(map, center.lat, center.lng, radiusKm);
-		}
-
-		// Si la búsqueda es por código postal, marcamos la ubicación aproximada del CP.
-		if (cp !== null) {
-			// El backend puede devolver distintas claves para la coordenada de búsqueda.
-			// Probamos varias y, si no existe ninguna, usamos el primer PUDO como aproximación.
-			const searchCoord =
-				pudos.search_coordinate ||
-				pudos.center ||
-				pudos.coordinate ||
-				(pudos.items && pudos.items[0]
-					? {
-							latitude: pudos.items[0].address.coordinate.latitude,
-							longitude: pudos.items[0].address.coordinate.longitude
-						}
-					: null);
-
-			if (searchCoord && typeof searchCoord.latitude === 'number' && typeof searchCoord.longitude === 'number') {
-				const { latitude, longitude } = searchCoord;
-
-				// Eliminar posible marcador anterior del código postal.
-				if (postalCodeMarker) {
-					map.removeLayer(postalCodeMarker);
-					postalCodeMarker = null;
-				}
-
-				postalCodeMarker = L.circleMarker(
-					[latitude, longitude],
-					{
-						pane: 'postalCodePane',
-						// Punto rojo pequeño y muy visible
-						color: '#FF4B5C',
-						fillColor: '#FF4B5C',
-						fillOpacity: 1,
-						radius: 5,
-						weight: 2
-					}
-				).addTo(map);
-
-				map.flyTo([latitude, longitude], defaultZoom, { animate: true, duration: 0.75 });
-			} else if (pudos.items && pudos.items.length > 0) {
-				// Fallback: centramos en el primer PUDO si no tenemos coordenada explícita del CP.
-				centerMapToPudo(map, pudos.items[0]);
-			}
-		}
-	} finally {
-		hideMapLoading();
-	}
-};
-
-const getPudos = async (lat, lon, cp = null, radiusKm = defaultRadiusKm) => {
-	const url = 'https://back.puntopost.mx/api/web/v1/pudos';
-	let params = {};
-	const effectiveRadius = Math.min(radiusKm || defaultRadiusKm, maxRadiusKm);
-	if (cp) {
-		params = {
-			postal_code: cp,
-			radius_km: effectiveRadius,
-			cursor: '2000-0' // limit 2000, offset 0
-		};
-	} else {
-		params = {
-			latitude: lat,
-			longitude: lon,
-			radius_km: effectiveRadius,
-			cursor: '2000-0' // limit 2000, offset 0
-		};
-	}
-	
-	const response = await fetch(url + '?' + new URLSearchParams(params));
-	const result = await response.json();
-	if (['VALIDATION', 'NOT_FOUND'].includes(result.type)) {
-		showToast('No se encontraron PUDOs para la búsqueda realizada.', 'warning');
-		return {items: []};
-	}
-	return result;
-};
-
-const fillMarkers = (map, pudos) => {
+function mergeMarkers(pudos) {
 	if (!pudos.items || !clusterGroup) return;
-	pudos.items.forEach(pudo => {
-		createMarker(
-			pudo.address.coordinate.latitude,
-			pudo.address.coordinate.longitude,
-			pudo.name,
-			pudo.external_id,
-			pudo.address.address,
-			pudo.schedule
-		);
-	});
-};
+	const toAdd = [];
+	for (const pudo of pudos.items) {
+		if (markerCache.has(pudo.external_id)) continue;
+		const marker = createMarkerObj(pudo);
+		markerCache.set(pudo.external_id, marker);
+		toAdd.push(marker);
+	}
+	if (toAdd.length) clusterGroup.addLayers(toAdd);
+}
 
-const createMarker = (lat, lon, name, externalId, address, schedule) => {
-	const marker = L.marker([lat, lon], { icon: icon });
-	const popupHTML = getPopupHTML(name, externalId, address, schedule);
-	marker.bindPopup(popupHTML, { offset: L.point(0, -20) });
-	clusterGroup.addLayer(marker);
-	currentLocations.push(marker.getLatLng());
-};
+function clearAllMarkers() {
+	if (clusterGroup) clusterGroup.clearLayers();
+	markerCache.clear();
+	loadedCells.clear();
+}
 
-const getPopupHTML = (name, externalId, address, schedule) =>
-	`<div class="d-flex flex-column gap-3">
+function buildPopupHTML(pudo) {
+	const { name, external_id, address: { address }, schedule } = pudo;
+	return `<div class="d-flex flex-column gap-3">
 		<div class="d-flex flex-column gap-0">
-  			<b class="fs-6">${name}</b>
-			${externalId ? `<span class="text-body-tertiary small">${externalId}</span>` : ''}
+			<b class="fs-6">${name}</b>
+			${external_id ? `<span class="text-body-tertiary small">${external_id}</span>` : ''}
 		</div>
 		<div class="d-flex align-items-center gap-2">
 			<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="flex-shrink-0">
@@ -253,7 +170,7 @@ const getPopupHTML = (name, externalId, address, schedule) =>
 			<b class="text-body-tertiary fs-7">${schedule}</b>
 		</div>
 		<div class="d-flex justify-content-end align-items-center">
-			<a href="${getDirections(address)}" target="_blank" class="btn btn-outline-primary text-primary bg-light rounded-pill">
+			<a href="${getDirectionsURL(address)}" target="_blank" class="btn btn-outline-primary text-primary bg-light rounded-pill">
 				Cómo llegar
 				<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none">
 					<path d="M9 5.45654L15.6464 12.103C15.8417 12.2983 15.8417 12.6148 15.6464 12.8101L9 19.4565" stroke="#13A590" stroke-linecap="round"/>
@@ -261,171 +178,180 @@ const getPopupHTML = (name, externalId, address, schedule) =>
 			</a>
 		</div>
 	</div>`;
+}
 
-const toggleIcon = (marker, isSelected) => {
-	if (isSelected) {
-		marker.setIcon(iconSelected);
-	} else {
-		marker.setIcon(icon);
-	}
-};
+// ---- Viewport loading -----------------------------------------------------
 
-const centerPopupOnMap = (map, popup) => {
-	const px = map.project(popup._latlng);
-	px.y -= popup._container.clientHeight/1.5;
-	map.panTo(map.unproject(px),{animate: true});
-};
-
-const centerMapToPudo = (map, pudo) => {
-	map.flyTo(
-		[
-			pudo.address.coordinate.latitude,
-			pudo.address.coordinate.longitude
-		],
-		defaultZoom,
-		{animate: true, duration: 0.75}
-	);
-};
-
-const getRadiusKmForZoom = (zoom) => {
-	if (zoom >= 17) return 2;
-	if (zoom >= 16) return 3;
-	if (zoom >= 15) return 5;
-	if (zoom >= 14) return 12;
-	if (zoom >= 13) return 20;
-	if (zoom >= 12) return 40;
-	if (zoom >= 11) return 100;
-	if (zoom >= 10) return 200;
-	if (zoom >= 9) return 400;
-	return maxRadiusKm; // 200 km para zoom < 9
-};
-
-const markDebugCenterAndRadius = (map, lat, lon, radiusKm) => {
-	const zoom = map.getZoom();
-
-	// Eliminar marcadores de depuración anteriores
-	if (debugCenterMarker) {
-		map.removeLayer(debugCenterMarker);
-		debugCenterMarker = null;
-	}
-	if (debugRadiusCircle) {
-		map.removeLayer(debugRadiusCircle);
-		debugRadiusCircle = null;
+async function loadViewport(map, cp) {
+	if (!cp && isViewportCovered(map)) {
+		hideSpinner();
+		return;
 	}
 
-	// Punto azul pequeño en el centro de la llamada
-	debugCenterMarker = L.circleMarker(
-		[lat, lon],
-		{
-			pane: 'debugCenterPane',
-			color: '#007AFF',
-			fillColor: '#007AFF',
-			fillOpacity: 0.9,
-			radius: 4,
-			weight: 1
+	if (cp) {
+		clearAllMarkers();
+		++activeFetchId;
+	}
+
+	const fetchId = activeFetchId;
+	showSpinner(cp != null);
+
+	const maxFetches = cp ? 1 : 5;
+	let fetchCount = 0;
+	let handledCP = false;
+
+	while (fetchCount < maxFetches) {
+		if (fetchId !== activeFetchId) return;
+
+		const center = (cp && fetchCount === 0)
+			? map.getCenter()
+			: (uncoveredCenter(map) || map.getCenter());
+		const radiusKm = viewportRadiusKm(map);
+
+		registerFetchedArea(center.lat, center.lng, radiusKm);
+
+		const url = buildFirstURL(center.lat, center.lng, radiusKm, cp);
+		let gotData = false;
+
+		await fetchAllPages(url, fetchId, (page) => {
+			gotData = true;
+			mergeMarkers(page);
+			if (!handledCP && cp) {
+				handledCP = true;
+				handlePostalCodeResult(map, page);
+			}
+			hideSpinner();
+		});
+
+		if (!gotData && fetchCount === 0) {
+			showToast('No se encontraron PUDOs para la búsqueda realizada.', 'warning');
+			break;
 		}
-	).addTo(map);
 
-	const label = `z${zoom} r${radiusKm || defaultRadiusKm}km`;
-	debugCenterMarker.bindTooltip(label, {
-		permanent: true,
-		direction: 'top',
-		offset: [0, -8],
-		className: 'debug-center-tooltip'
-	});
-
-	// Círculo mostrando el radio en km de la llamada
-	debugRadiusCircle = L.circle(
-		[lat, lon],
-		{
-			pane: 'debugCenterPane',
-			color: '#007AFF',
-			fillOpacity: 0,
-			weight: 1,
-			radius: (radiusKm || defaultRadiusKm) * 1000 // Leaflet usa metros
-		}
-	).addTo(map);
-};
-
-const centerMapToLocation = (map, lat, lon) => {
-	
-};
-
-const getDirections = address => {
-	if (isIOS()) {
-		return `https://maps.apple.com/?daddr=${address}&dirflg=d`;
+		fetchCount++;
+		if (isViewportCovered(map)) break;
 	}
-	return `https://www.google.com/maps/dir/?api=1&destination=${address}&dir_action=navigate`;
-};
-const isIOS = () => 
-	[
-    'iPad Simulator',
-    'iPhone Simulator',
-    'iPod Simulator',
-    'iPad',
-    'iPhone',
-    'iPod'
-  ].includes(navigator.platform)
-  // iPad on iOS 13 detection
-  || (navigator.userAgent.includes("Mac") && "ontouchend" in document);
 
-const setCPInput = (map) => {
+	hideSpinner();
+}
+
+function enqueueViewportLoad(map, cp) {
+	fetchQueue = fetchQueue.then(() => loadViewport(map, cp));
+}
+
+function scheduleViewportLoad(map) {
+	clearTimeout(debounceTimer);
+	debounceTimer = setTimeout(() => enqueueViewportLoad(map), DEBOUNCE_MS);
+}
+
+// ---- Postal code ----------------------------------------------------------
+
+function handlePostalCodeResult(map, pudos) {
+	const coord = pudos.coordinate;
+	if (!coord) return;
+	map.flyTo([coord.latitude, coord.longitude], DEFAULT_ZOOM, { animate: true, duration: 0.75 });
+}
+
+// ---- Utilities ------------------------------------------------------------
+
+function getDirectionsURL(address) {
+	const encoded = encodeURIComponent(address);
+	if (isIOS()) return `https://maps.apple.com/?daddr=${encoded}&dirflg=d`;
+	return `https://www.google.com/maps/dir/?api=1&destination=${encoded}&dir_action=navigate`;
+}
+
+function isIOS() {
+	return ['iPad Simulator', 'iPhone Simulator', 'iPod Simulator', 'iPad', 'iPhone', 'iPod']
+		.includes(navigator.platform)
+		|| (navigator.userAgent.includes('Mac') && 'ontouchend' in document);
+}
+
+// ---- Input ----------------------------------------------------------------
+
+function setupCPInput(map) {
 	const cpInput = document.getElementById('find-pudos-input');
 	const btn = document.querySelector('.js-find-pudos');
 	if (!btn || !cpInput) return;
 
-	const mask = IMask(cpInput, {
-		mask: '00000',
-		lazy: true,
-		placeholderChar: '_'
-	});
+	const mask = IMask(cpInput, { mask: '00000', lazy: true, placeholderChar: '_' });
 
 	cpInput.addEventListener('focus', () => mask.updateOptions({ lazy: false }));
 	cpInput.addEventListener('blur', () => {
 		if (!mask.unmaskedValue) mask.updateOptions({ lazy: true });
 	});
 
-	const submitCP = () => {
+	const submit = () => {
 		const cp = mask.unmaskedValue;
 		if (cp.length !== 5) {
 			showToast('Ingresa un código postal de 5 dígitos.', 'warning');
 			cpInput.focus();
 			return;
 		}
-		getAndPrintNewMarkers(map, cp);
+		enqueueViewportLoad(map, cp);
 	};
 
-	cpInput.addEventListener('keypress', (event) => {
-		if (event.key === 'Enter') submitCP();
-	});
-	btn.addEventListener('click', submitCP);
-};
+	cpInput.addEventListener('keypress', e => { if (e.key === 'Enter') submit(); });
+	btn.addEventListener('click', submit);
+}
 
-const setGeolocateButton = (map) => {
-	const geoBtn = document.querySelector('.js-geolocate');
-	if (!geoBtn) return;
-	geoBtn.addEventListener('click', async () => {
-		if ("geolocation" in navigator) { // Ir a la posición, marcarla y buscar PUDOs cercanos
-			navigator.geolocation.getCurrentPosition(
-				position => {
-					map.flyTo([position.coords.latitude, position.coords.longitude], defaultZoom, {animate: true, duration: 0.75});
-					map.eachLayer(layer => { // Eliminar posible posición anterior
-						if (layer instanceof L.Circle) {
-							map.removeLayer(layer);
-						}
-					});
-					const circle = L.circle([position.coords.latitude, position.coords.longitude], { // Marcar posición actual
-						color: 'blue',
-						fillColor: 'blue',
-						fillOpacity: 0.4,
-						radius: 70,
-						weight: 1
-					}).addTo(map);
-					getAndPrintNewMarkers(map);
-				}
-			);
-		}
-	});
-};
+// ---- Geolocate ------------------------------------------------------------
 
-setMap();
+function setupGeolocate(map) {
+	const btn = document.querySelector('.js-geolocate');
+	if (!btn) return;
+	btn.addEventListener('click', () => {
+		if (!('geolocation' in navigator)) return;
+		navigator.geolocation.getCurrentPosition(pos => {
+			map.flyTo([pos.coords.latitude, pos.coords.longitude], DEFAULT_ZOOM, { animate: true, duration: 0.75 });
+		});
+	});
+}
+
+// ---- Init -----------------------------------------------------------------
+
+(function init() {
+	const map = L.map('map', {
+		maxBounds: MEXICO_BOUNDS.pad(0.1),
+		maxBoundsViscosity: 0.8
+	}).setView(DEFAULT_CENTER, DEFAULT_ZOOM);
+
+	L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}{r}.png', {
+		maxZoom: 19,
+		minZoom: 9,
+		attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+	}).addTo(map);
+
+	clusterGroup = L.markerClusterGroup({
+		disableClusteringAtZoom: 15,
+		chunkedLoading: true,
+		chunkInterval: 100,
+		chunkDelay: 10,
+		maxClusterRadius: 60,
+		showCoverageOnHover: false,
+		spiderfyOnEveryZoom: false,
+		spiderfyOnMaxZoom: false,
+		zoomToBoundsOnClick: true,
+		iconCreateFunction: cluster =>
+			L.divIcon({
+				html: `<div><span>${cluster.getChildCount()}</span></div>`,
+				className: 'marker-cluster marker-cluster-small',
+				iconSize: L.point(40, 40)
+			})
+	});
+	map.addLayer(clusterGroup);
+
+	map.on('popupopen', e => {
+		if (e.popup._source) e.popup._source.setIcon(markerIconSelected);
+		const px = map.project(e.popup._latlng);
+		px.y -= e.popup._container.clientHeight / 1.5;
+		map.panTo(map.unproject(px), { animate: true });
+	});
+	map.on('popupclose', e => {
+		if (e.popup._source) e.popup._source.setIcon(markerIcon);
+	});
+
+	map.on('moveend', () => scheduleViewportLoad(map));
+	loadViewport(map);
+	setupCPInput(map);
+	setupGeolocate(map);
+})();
