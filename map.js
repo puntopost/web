@@ -202,7 +202,7 @@ const getPudos = async (lat, lon, cp = null, radiusKm = defaultRadiusKm) => {
 	const response = await fetch(url + '?' + new URLSearchParams(params));
 	const result = await response.json();
 	if (['VALIDATION', 'NOT_FOUND'].includes(result.type)) {
-		alert('No se encontraron PUDOs para la búsqueda realizada.');
+		showToast('No se encontraron PUDOs para la búsqueda realizada.', 'warning');
 		return {items: []};
 	}
 	return result;
@@ -373,18 +373,32 @@ const setCPInput = (map) => {
 	const cpInput = document.getElementById('find-pudos-input');
 	const btn = document.querySelector('.js-find-pudos');
 	if (!btn || !cpInput) return;
-	cpInput.addEventListener('keypress', async (event) => {
-		if (event.key === 'Enter') {
-			const cp = cpInput.value.trim();
-			if (cp.length === 0) return;
-			getAndPrintNewMarkers(map, cp);
+
+	const mask = IMask(cpInput, {
+		mask: '00000',
+		lazy: true,
+		placeholderChar: '_'
+	});
+
+	cpInput.addEventListener('focus', () => mask.updateOptions({ lazy: false }));
+	cpInput.addEventListener('blur', () => {
+		if (!mask.unmaskedValue) mask.updateOptions({ lazy: true });
+	});
+
+	const submitCP = () => {
+		const cp = mask.unmaskedValue;
+		if (cp.length !== 5) {
+			showToast('Ingresa un código postal de 5 dígitos.', 'warning');
+			cpInput.focus();
+			return;
 		}
-	});
-	btn.addEventListener('click', async () => {
-		const cp = cpInput.value.trim();
-		if (cp.length === 0) return;
 		getAndPrintNewMarkers(map, cp);
+	};
+
+	cpInput.addEventListener('keypress', (event) => {
+		if (event.key === 'Enter') submitCP();
 	});
+	btn.addEventListener('click', submitCP);
 };
 
 const setGeolocateButton = (map) => {
