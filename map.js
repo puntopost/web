@@ -376,6 +376,12 @@ function startGeolocate(map) {
 			if (geoWatchId === null) return;
 			const latlng = L.latLng(pos.coords.latitude, pos.coords.longitude);
 
+			if (!MEXICO_BOUNDS.contains(latlng)) {
+				stopGeolocate(map);
+				showToast('Tu ubicación está fuera de la zona de cobertura.', 'warning');
+				return;
+			}
+
 			if (geoMarker) {
 				geoMarker.setLatLng(latlng);
 			} else {
