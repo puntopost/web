@@ -9,11 +9,11 @@ const defaultRadiusKm = 8;
 const maxRadiusKm = 200;
 const SHOW_DEBUG_CENTER = false; // Marcar centro y radio de cada llamada a /pudos para depuración
 const icon = L.icon({
-	iconUrl: 'https://www.puntopost.mx/img/PING1.svg',
+	iconUrl: '/img/PING1.svg',
 	iconSize: [49, 54]
 });
 const iconSelected = L.icon({
-	iconUrl: 'https://www.puntopost.mx/img/PING2.svg',
+	iconUrl: '/img/PING2.svg',
 	iconSize: [63, 70]
 });
 
