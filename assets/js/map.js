@@ -426,7 +426,7 @@ function setupGeolocate(map) {
 
 // ---- Deep link ------------------------------------------------------------
 
-const DEEP_LINK_UNAVAILABLE = 'Este punto ya no está disponible. En PuntoPost estamos para ayudarte, escríbenos a hola@puntopost.mx';
+const DEEP_LINK_UNAVAILABLE = 'Lo sentimos, este punto de entrega no está disponible. Por favor contáctanos en <a href="mailto:hola@puntopost.mx" class="text-white fw-bold text-decoration-none">hola@puntopost.mx</a> y te ayudaremos a resolverlo lo antes posible.';
 
 async function resolveDeepLink() {
 	const pudoId = location.hash.slice(1);

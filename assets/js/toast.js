@@ -28,6 +28,8 @@ const showToast = (() => {
 
 		const toastEl = document.createElement('div');
 		toastEl.className = `toast align-items-center border-0 ${bg} ${textColor}`;
+		toastEl.style.maxWidth = '500px';
+		toastEl.style.width = '100%';
 		toastEl.setAttribute('role', 'alert');
 		toastEl.innerHTML =
 			`<div class="d-flex">
