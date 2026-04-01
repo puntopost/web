@@ -3,7 +3,7 @@
 PORT ?= 8791
 
 server:
-	docker run --rm -d --name puntopost-web -p $(PORT):80 -v $(CURDIR):/usr/share/nginx/html:ro -v $(CURDIR)/nginx.conf:/etc/nginx/conf.d/default.conf:ro nginx:alpine
+	docker run --rm -d --name puntopost-web -p $(PORT):4000 -v $(CURDIR):/srv/jekyll jekyll/jekyll:pages sh -c "gem install webrick && jekyll serve --watch --force_polling --host 0.0.0.0"
 	@echo "Serving at http://localhost:$(PORT)"
 
 stop:

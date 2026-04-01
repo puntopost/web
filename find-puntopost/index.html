@@ -1,15 +1,8 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PuntoPost - Compra online, recoge aquí</title>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
-    <link href="/bootstrap.min.css" rel="stylesheet">
-    <link href="/bootstrap-icons.min.css" rel="stylesheet">
+---
+layout: map
+scripts_after: |
+    <script src="/assets/js/map.js"></script>
+extra_head: |
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin=""/>
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
     <style>
@@ -17,49 +10,11 @@
             font-family: inherit;
         }
     </style>
-</head>
-<body>
+---
 
     <header class="bg-primary-subtle p-lg-3">
         <div class="bg-primary rounded-4">
-            <nav class="navbar navbar-dark">
-                <div class="container-fluid">
-                    <a class="navbar-brand" href="/">
-                        <img src="/img/logo-puntopost-amarillo.png" alt="PuntoPost Logo" style="height: 52px;">
-                    </a>
-                    
-                    <!-- Desktop Navigation - Hidden on mobile -->
-                    <div class="d-none d-lg-flex gap-5 align-items-center">
-                        <a href="/integrations" class="nav-link text-white fw-bold fs-5">Integraciones</a>
-                        <a href="/map" class="nav-link text-white fw-bold fs-5">Mapa de puntos</a>
-                        <a href="/atrae" class="nav-link text-white fw-bold fs-5">Quiero ser punto</a>
-                        <a href="/envia" class="btn rounded-pill fw-bold fs-5 px-4 py-2 text-dark border-0" style="background-color: #FFE135;">Envía con PuntoPost</a>
-                    </div>
-                    
-                    <!-- Mobile Menu Button - Hidden on desktop -->
-                    <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    
-                    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
-                        <div class="offcanvas-header">
-                            <img src="/img/puntopost2.svg" alt="PuntoPost" class="offcanvas-title" id="offcanvasNavbarLabel" style="height: 30px;">
-                            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                        </div>
-                        <div class="offcanvas-body p-0">
-                            <div class="px-3 py-4">
-                                <a href="/integrations" class="nav-link text-dark fs-5 py-3 d-block text-decoration-none fw-bold">Integraciones</a>
-                                <hr class="my-0">
-                                <a href="/map" class="nav-link text-dark fs-5 py-3 d-block text-decoration-none fw-bold">Mapa de puntos</a>
-                                <hr class="my-0">
-                                <a href="/atrae" class="nav-link text-dark fs-5 py-3 d-block text-decoration-none fw-bold">Quiero ser punto</a>
-                                <hr class="my-0">
-                                <a href="/envia" class="btn rounded-pill fw-bold fs-5 px-4 py-2 text-dark border-0 d-block text-center text-decoration-none mt-2" style="background-color: #FFE135;">Envía con PuntoPost</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </nav>
+            {% include nav.html %}
             <section class="text-white text-center rounded-bottom-4 pb-3">
                 <h2 class="fw-bold fs-3 mb-3 mt-4">Encuentra tu Puntopost</h2>
                 <div class="container-fluid">
@@ -73,7 +28,7 @@
                         </div>
                     </div>
                 </div>
-            </section>            
+            </section>
         </div>
     </header>
 
@@ -82,7 +37,3 @@
             <div id="map" class="position-absolute top-0 start-0 bottom-0 end-0 z-n1"></div>
         </section>
     </main>
-    <script src="/map.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>

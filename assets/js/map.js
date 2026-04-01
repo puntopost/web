@@ -12,8 +12,8 @@ const CELL_SIZE = 0.05;                 // ~5.5 km per grid cell
 const MIN_FETCH_RADIUS_KM = Math.ceil(CELL_SIZE * 111 * 1.5);
 const MEXICO_BOUNDS = L.latLngBounds([14.5, -118.5], [32.8, -86.5]);
 
-const markerIcon = L.icon({ iconUrl: '/img/PING1.svg', iconSize: [49, 54] });
-const markerIconSelected = L.icon({ iconUrl: '/img/PING2.svg', iconSize: [63, 70] });
+const markerIcon = L.icon({ iconUrl: '/assets/img/PING1.svg', iconSize: [49, 54] });
+const markerIconSelected = L.icon({ iconUrl: '/assets/img/PING2.svg', iconSize: [63, 70] });
 
 // ---- State ----------------------------------------------------------------
 

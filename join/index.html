@@ -1,53 +1,9 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Únete a PuntoPost - Sé parte de nuestra red</title>
-    
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+---
+layout: default
+title: "Únete a PuntoPost - Sé parte de nuestra red"
+---
 
-    <link href="../bootstrap.min.css" rel="stylesheet">
-    <link href="../bootstrap-icons.min.css" rel="stylesheet">
-</head>
-<body>
-
-    <nav class="navbar navbar-dark bg-primary">
-        <div class="container">
-            <a class="navbar-brand" href="/">
-                <img src="/img/logo-puntopost-amarillo.png" alt="PuntoPost Logo" style="height: 52px;">
-            </a>
-            
-            <div class="d-none d-lg-flex gap-5 align-items-center">
-                <a href="/integrations" class="nav-link text-white fw-bold fs-5">Integraciones</a>
-                <a href="/map" class="nav-link text-white fw-bold fs-5">Mapa de puntos</a>
-                <a href="/atrae" class="nav-link text-white fw-bold fs-5">Quiero ser punto</a>
-                <a href="/envia" class="btn rounded-pill fw-bold fs-5 px-4 py-2 text-dark border-0" style="background-color: #FFE135;">Envía con PuntoPost</a>
-            </div>
-            
-            <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            
-            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
-                <div class="offcanvas-header">
-                    <img src="/img/puntopost2.svg" alt="PuntoPost" class="offcanvas-title" id="offcanvasNavbarLabel" style="height: 36px;">
-                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                </div>
-                <div class="offcanvas-body p-0">
-                    <div class="px-3 py-4">
-                        <a href="/integrations" class="nav-link text-dark fs-5 py-3 d-block text-decoration-none fw-bold">Integraciones</a>
-                        <hr class="my-0">
-                        <a href="/map" class="nav-link text-dark fs-5 py-3 d-block text-decoration-none fw-bold">Mapa de puntos</a>
-                        <hr class="my-0">
-                        <a href="/atrae" class="nav-link text-dark fs-5 py-3 d-block text-decoration-none fw-bold">Quiero ser punto</a>
-                        <hr class="my-0">
-                        <a href="/envia" class="btn rounded-pill fw-bold fs-5 px-4 py-2 text-dark border-0 d-block text-center text-decoration-none mt-2" style="background-color: #FFE135;">Envía con PuntoPost</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </nav>
+    {% include nav.html extra_class=" bg-primary" container_class="container" %}
 
     <main>
         <section class="bg-primary text-white text-center py-5">
@@ -55,11 +11,11 @@
                 <div class="row justify-content-center">
                     <div class="col-lg-8">
                         <div class="d-flex justify-content-center mb-4">
-                            <img src="/img/speak.svg" alt="Speak" class="h-auto">
+                            <img src="/assets/img/speak.svg" alt="Speak" class="h-auto">
                         </div>
                         <h1 class="display-4 fw-bold mb-3">Atrae más clientes</h1>
                         <p class="lead mb-4">Incrementa ventas hasta en un 20% sin costo siendo PuntoPost</p>
-                        
+
                         <div class="mb-4 ms-5">
                             <div class="d-flex align-items-center mb-3">
                                 <span class="bg-warning text-primary rounded-circle d-flex align-items-center justify-content-center me-3 fw-bold" style="width: 50px; height: 50px;">1</span>
@@ -74,7 +30,7 @@
                                 <span>Recibes el material PuntoPost</span>
                             </div>
                         </div>
-                        
+
                         <a href="#form" class="btn btn-light btn-lg px-5 py-3 fw-bold text-primary">Solicitar sin compromiso</a>
                     </div>
                 </div>
@@ -85,9 +41,9 @@
             <div class="container text-center">
                 <p class="mb-3 fw-semibold">+100 ecommerce confían en nosotros</p>
                 <div class="d-flex justify-content-center align-items-center gap-4">
-                    <img src="/img/GOTRENDIER.svg" alt="GoTrendier" class="h-auto" style="filter: grayscale(100%);">
-                    <img src="/img/prixz.png" alt="Prixz" class="h-auto" style="filter: grayscale(100%);">
-                    <img src="/img/PLATANOMELON.svg" alt="PlatanoMelon" class="h-auto" style="filter: grayscale(100%);">
+                    <img src="/assets/img/GOTRENDIER.svg" alt="GoTrendier" class="h-auto" style="filter: grayscale(100%);">
+                    <img src="/assets/img/prixz.png" alt="Prixz" class="h-auto" style="filter: grayscale(100%);">
+                    <img src="/assets/img/PLATANOMELON.svg" alt="PlatanoMelon" class="h-auto" style="filter: grayscale(100%);">
                 </div>
             </div>
         </section>
@@ -96,19 +52,19 @@
             <div class="container">
                 <h2 class="text-center fw-bold mb-4">¿En qué consiste?</h2>
                 <p class="text-center mb-5 fs-5">
-                    Recibe y entrega paquetes en tu negocio y obtén una comisión por cada paquete gestionado. 
+                    Recibe y entrega paquetes en tu negocio y obtén una comisión por cada paquete gestionado.
                     Sólo te llevará 1 minuto! Podrás expandir tu cartera de clientes y tus ventas al atraer más gente a tu tienda.
                 </p>
-                
+
                 <div class="row g-4">
                     <div class="col-12 col-lg-6">
                         <div class="card border-0 shadow-sm h-100">
-                            <img src="/img/cardImage.png" class="card-img-top" alt="Recibir paquetes" style="object-fit: cover;">
+                            <img src="/assets/img/cardImage.png" class="card-img-top" alt="Recibir paquetes" style="object-fit: cover;">
                             <div class="card-body">
                                 <h5 class="card-title fw-bold">Recibir paquetes</h5>
                                 <p class="card-text">
-                                    Los clientes traerán sus paquetes a tu tienda para enviar o hacer devoluciones. 
-                                    El cliente llevará un QR, podrás escanearlo y pegar una etiqueta que te facilitará PuntoPost. 
+                                    Los clientes traerán sus paquetes a tu tienda para enviar o hacer devoluciones.
+                                    El cliente llevará un QR, podrás escanearlo y pegar una etiqueta que te facilitará PuntoPost.
                                     ¡Una excelente manera de atraer nuevos clientes!
                                 </p>
                             </div>
@@ -116,11 +72,11 @@
                     </div>
                     <div class="col-12 col-lg-6">
                         <div class="card border-0 shadow-sm h-100">
-                            <img src="/img/image.png" class="card-img-top" alt="Entregar paquetes" style="object-fit: cover;">
+                            <img src="/assets/img/image.png" class="card-img-top" alt="Entregar paquetes" style="object-fit: cover;">
                             <div class="card-body">
                                 <h5 class="card-title fw-bold">Entregar paquetes</h5>
                                 <p class="card-text">
-                                    Los clientes también irán a tu tienda para recoger los paquetes, que te dejará cada día nuestro chofer. 
+                                    Los clientes también irán a tu tienda para recoger los paquetes, que te dejará cada día nuestro chofer.
                                     Escanea el QR y entrega el paquete. ¡Así de sencillo! Incrementa tus ingresos sin complicaciones.
                                 </p>
                             </div>
@@ -136,7 +92,7 @@
                     <h2 class="display-5 fw-bold mb-3">Te lo ponemos fácil. Nos encargamos de todo.</h2>
                     <p class="lead">Sigue estos pasos y empieza a formar parte de la red de PuntoPost, pronto la más extensa de todo México. ¿Qué esperas?</p>
                 </div>
-                
+
                 <div class="row justify-content-center">
                     <div class="col-lg-8">
                         <div class="row g-4">
@@ -180,7 +136,7 @@
             <div class="container">
                 <h2 class="text-center fw-bold mb-4">Beneficios de ser PuntoPost</h2>
                 <p class="text-center mb-5">Sigue estos pasos y empieza a formar parte de la red de PuntoPost, pronto la más extensa de todo México. ¿Qué esperas?</p>
-                
+
                 <div class="row justify-content-center">
                     <div class="col-lg-10">
                         <div class="row g-4">
@@ -188,7 +144,7 @@
                                 <div class="bg-white rounded-3 p-4 shadow-sm h-100">
                                     <div class="d-flex align-items-start">
                                         <div class="me-3">
-                                            <img src="/img/icon1.svg" alt="Más ingresos" class="img-fluid">
+                                            <img src="/assets/img/icon1.svg" alt="Más ingresos" class="img-fluid">
                                         </div>
                                         <div>
                                             <h5 class="fw-bold mb-2">Más ingresos</h5>
@@ -201,7 +157,7 @@
                                 <div class="bg-white rounded-3 p-4 shadow-sm h-100">
                                     <div class="d-flex align-items-start">
                                         <div class="me-3">
-                                            <img src="/img/icon3.svg" alt="Lealtad de clientes" class="img-fluid">
+                                            <img src="/assets/img/icon3.svg" alt="Lealtad de clientes" class="img-fluid">
                                         </div>
                                         <div>
                                             <h5 class="fw-bold mb-2">Lealtad de clientes</h5>
@@ -214,7 +170,7 @@
                                 <div class="bg-white rounded-3 p-4 shadow-sm h-100">
                                     <div class="d-flex align-items-start">
                                         <div class="me-3">
-                                            <img src="/img/icon2.svg" alt="Más tráfico" class="img-fluid">
+                                            <img src="/assets/img/icon2.svg" alt="Más tráfico" class="img-fluid">
                                         </div>
                                         <div>
                                             <h5 class="fw-bold mb-2">Más tráfico en tu negocio</h5>
@@ -227,7 +183,7 @@
                                 <div class="bg-white rounded-3 p-4 shadow-sm h-100">
                                     <div class="d-flex align-items-start">
                                         <div class="me-3">
-                                            <img src="/img/icon4.svg" alt="Apoyo al comercio local" class="img-fluid">
+                                            <img src="/assets/img/icon4.svg" alt="Apoyo al comercio local" class="img-fluid">
                                         </div>
                                         <div>
                                             <h5 class="fw-bold mb-2">Apoyo al comercio local</h5>
@@ -245,7 +201,7 @@
         <section id="form" class="py-5 bg-light">
             <div class="container">
                 <h2 class="text-center fw-bold mb-5">Regístrate y únete a nuestra red</h2>
-                
+
                 <div class="row justify-content-center">
                     <div class="col-lg-6">
                         <form class="bg-white rounded-3 p-4 shadow-sm">
@@ -274,17 +230,3 @@
         </section>
     </main>
 
-    <footer class="bg-primary text-white text-center py-4">
-        <div class="container">
-            <div class="d-flex flex-column flex-md-row justify-content-center align-items-center">
-                <img src="/img/speak.svg" alt="PuntoPost" class="mb-2 h-auto">
-                <a href="/condiciones" class="text-white mx-2">Términos y Condiciones</a>
-                <a href="/privacidad" class="text-white mx-2">Política de privacidad</a>
-            </div>
-            <p class="mb-0 mt-2">© 2023 PuntoPost</p>
-        </div>
-    </footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>

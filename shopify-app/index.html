@@ -1,61 +1,11 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PuntoPost - App Shopify - Documentación</title>
-
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
-
-    <link rel="preconnect" href="https://fonts.googleapis.com/">
-    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
-
-    <link href="../bootstrap.min.css" rel="stylesheet">
-
-    <link href="../bootstrap-icons.min.css" rel="stylesheet">
-</head>
-<body>
+---
+layout: default
+title: "PuntoPost - App Shopify - Documentación"
+---
 
     <header class="bg-primary-subtle p-lg-3">
         <div class="bg-primary rounded-4">
-            <nav class="navbar navbar-dark">
-                <div class="container-fluid">
-                    <a class="navbar-brand" href="/">
-                        <img src="/img/logo-puntopost-amarillo.png" alt="PuntoPost Logo" style="height: 52px;">
-                    </a>
-
-                    <div class="d-none d-lg-flex gap-5 align-items-center">
-                        <a href="/integrations" class="nav-link text-white fw-bold fs-5">Integraciones</a>
-                        <a href="/map" class="nav-link text-white fw-bold fs-5">Mapa de puntos</a>
-                        <a href="/atrae" class="nav-link text-white fw-bold fs-5">Quiero ser punto</a>
-                        <a href="/envia" class="btn rounded-pill fw-bold fs-5 px-4 py-2 text-dark border-0" style="background-color: #FFE135;">Envía con PuntoPost</a>
-                    </div>
-
-                    <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-
-                    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
-                        <div class="offcanvas-header">
-                            <img src="/img/puntopost2.svg" alt="PuntoPost" class="offcanvas-title" id="offcanvasNavbarLabel" style="height: 30px;">
-                            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                        </div>
-                        <div class="offcanvas-body p-0">
-                            <div class="px-3 py-4">
-                                <a href="/integrations" class="nav-link text-dark fs-5 py-3 d-block text-decoration-none fw-bold">Integraciones</a>
-                                <hr class="my-0">
-                                <a href="/map" class="nav-link text-dark fs-5 py-3 d-block text-decoration-none fw-bold">Mapa de puntos</a>
-                                <hr class="my-0">
-                                <a href="/atrae" class="nav-link text-dark fs-5 py-3 d-block text-decoration-none fw-bold">Quiero ser punto</a>
-                                <hr class="my-0">
-                                <a href="/envia" class="btn rounded-pill fw-bold fs-5 px-4 py-2 text-dark border-0 d-block text-center text-decoration-none mt-2" style="background-color: #FFE135;">Envía con PuntoPost</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </nav>
+            {% include nav.html %}
             <section class="text-white text-center rounded-bottom-4 pb-4 pt-3">
                 <h1 class="fw-bold display-5 mb-3">App Shopify</h1>
                 <p class="fs-5 mb-0">Documentación de integración</p>
@@ -150,7 +100,7 @@
                                     <li>Selecciona <em>Página</em>.</li>
                                 </ol>
                                 <div class="border rounded p-3 bg-light text-center mb-3">
-                                    <img src="/img/puntopost-shopify-1.png" alt="Configuración del carrito como Página" class="img-fluid">
+                                    <img src="/assets/img/puntopost-shopify-1.png" alt="Configuración del carrito como Página" class="img-fluid">
                                 </div>
                             </div>
 
@@ -161,15 +111,15 @@
                                 </p>
                                 <p>Ve a la personalización del tema.</p>
                                 <div class="border rounded p-3 bg-light text-center mb-3">
-                                    <img src="/img/puntopost-shopify-2.png" alt="Configuración del carrito como Página" class="img-fluid">
+                                    <img src="/assets/img/puntopost-shopify-2.png" alt="Configuración del carrito como Página" class="img-fluid">
                                 </div>
                                 <p>Selecciona la plantilla de la página del carrito desde el menú desplegable en la parte superior.</p>
                                 <div class="border rounded p-3 bg-light text-center mb-3">
-                                    <img src="/img/puntopost-shopify-3.png" alt="Configuración del carrito como Página" class="img-fluid">
+                                    <img src="/assets/img/puntopost-shopify-3.png" alt="Configuración del carrito como Página" class="img-fluid">
                                 </div>
                                 <p>Utiliza la opción <em>Plantilla » Aplicaciones » Agregar bloque</em>, selecciona <em>Apps</em> y pulsa sobre <em>Puntos recogida PuntoPost</em> para añadir el bloque del selector de puntos de recogida.</p>
                                 <div class="border rounded p-3 bg-light text-center mb-3">
-                                    <img src="/img/puntopost-shopify-4.png" alt="Configuración del carrito como Página" class="img-fluid">
+                                    <img src="/assets/img/puntopost-shopify-4.png" alt="Configuración del carrito como Página" class="img-fluid">
                                 </div>
                             </div>
                         </section>
@@ -186,7 +136,7 @@
                                 <h3 class="fw-bold mb-3">Añadir tarifa de envío</h3>
 
                                 <div class="border rounded p-3 bg-light text-center mb-3">
-                                    <img src="/img/puntopost-shopify-5.png" alt="Configuración de las tarifas de envío" class="img-fluid">
+                                    <img src="/assets/img/puntopost-shopify-5.png" alt="Configuración de las tarifas de envío" class="img-fluid">
                                 </div>
 
                                 <p class="text-body-secondary mb-3">
@@ -200,7 +150,7 @@
                                     <li>Confirma añadiendo las tarifas con el botón Guardar en la parte superior de la pantalla de Configuración</li>
                                 </ol>
                                 <div class="border rounded p-3 bg-light text-center mb-3">
-                                    <img src="/img/puntopost-shopify-6.png" alt="Configuración de las tarifas de envío" class="img-fluid">
+                                    <img src="/assets/img/puntopost-shopify-6.png" alt="Configuración de las tarifas de envío" class="img-fluid">
                                 </div>
 
                                 <h3 class="fw-bold mb-3">Asignar como tarifa de envío</h3>
@@ -208,7 +158,7 @@
                                     Una vez creada la tarifa, esta se debe asignar como tarifa de envío de PuntoPost para que aplique cuando el usuario escoja un punto de recogida.
                                 </p>
                                 <div class="border rounded p-3 bg-light text-center mb-3">
-                                    <img src="/img/puntopost-shopify-7.png" alt="Configuración de la asignación de tarifa" class="img-fluid">
+                                    <img src="/assets/img/puntopost-shopify-7.png" alt="Configuración de la asignación de tarifa" class="img-fluid">
                                 </div>
                                 <p class="text-body-secondary mb-3">
                                     Para hacerlo, ve a la sección <em>Configuración de tarifas</em> y selecciona la tarifa correspondiente, la cual se mostrará a los clientes cuando seleccionen un punto de recogida de PuntoPost..
@@ -226,19 +176,19 @@
                                 Si no dispones de estas credenciales, consulta con tu contacto de PuntoPost para recibirlas.
                             </p>
                             <div class="border rounded p-3 bg-light text-center mb-3">
-                                <img src="/img/puntopost-shopify-8.png" alt="Configuración de las credenciales" class="img-fluid">
+                                <img src="/assets/img/puntopost-shopify-8.png" alt="Configuración de las credenciales" class="img-fluid">
                             </div>
                             <p class="text-body-secondary mb-4">
                                 Introduce primero tu usuario y contraseña, junto al ID de comercio (Merchant ID), y pulsa el botón <em>Detectar tipo de comercio</em>. Dependiendo del tipo de comercio, deberás finalizar introduciendo las credenciales necesarias.
                             </p>
                             <div class="border rounded p-3 bg-light text-center mb-3">
-                                <img src="/img/puntopost-shopify-8-1.png" alt="Configuración de las credenciales B2C" class="img-fluid">
+                                <img src="/assets/img/puntopost-shopify-8-1.png" alt="Configuración de las credenciales B2C" class="img-fluid">
                             </div>
                             <p class="text-body-secondary mb-4">
                                 En el caso de que el comercio sea B2C, deberás finalizar introduciendo el punto de origen (Origin ID).
                             </p>
                             <div class="border rounded p-3 bg-light text-center mb-3">
-                                <img src="/img/puntopost-shopify-8-2.png" alt="Configuración de las credenciales C2C" class="img-fluid">
+                                <img src="/assets/img/puntopost-shopify-8-2.png" alt="Configuración de las credenciales C2C" class="img-fluid">
                             </div>
                             <p class="text-body-secondary mb-4">
                                 En el caso de que el comercio sea C2C, deberás introducir los datos del remitente para poder gestionar los pedidos con PuntoPost.
@@ -258,7 +208,7 @@
                                     Cuando el cliente añade productos y accede a la página del carrito, verá el selector de puntos de recogida de PuntoPost. Este selector aparece como un bloque en la página del carrito, permitiendo al cliente elegir dónde desea recoger su pedido antes de proceder al checkout.
                                 </p>
                                 <div class="border rounded p-3 bg-light text-center mb-3">
-                                    <img src="/img/puntopost-shopify-9.png" alt="Vista del cliente" class="img-fluid">
+                                    <img src="/assets/img/puntopost-shopify-9.png" alt="Vista del cliente" class="img-fluid">
                                 </div>
                             </div>
 
@@ -268,7 +218,7 @@
                                     Al hacer clic en el selector de puntos de recogida, se abre un mapa interactivo donde el cliente puede buscar y seleccionar el punto de recogida más conveniente. El mapa muestra todos los puntos de recogida disponibles cercanos al código postal introducido por el cliente.
                                 </p>
                                 <div class="border rounded p-3 bg-light text-center mb-3">
-                                    <img src="/img/puntopost-shopify-10.png" alt="Selector de puntos de recogida en el carrito" class="img-fluid">
+                                    <img src="/assets/img/puntopost-shopify-10.png" alt="Selector de puntos de recogida en el carrito" class="img-fluid">
                                 </div>
 
                                 <p class="text-body-secondary mb-3">
@@ -281,7 +231,7 @@
                                     <li>Seleccionar el punto de recogida deseado</li>
                                 </ul>
                                 <div class="border rounded p-3 bg-light text-center mb-3">
-                                    <img src="/img/puntopost-shopify-11.png" alt="Selector de puntos de recogida en el carrito" class="img-fluid">
+                                    <img src="/assets/img/puntopost-shopify-11.png" alt="Selector de puntos de recogida en el carrito" class="img-fluid">
                                 </div>
 
                             </div>
@@ -292,7 +242,7 @@
                                     Una vez que el cliente ha seleccionado un punto de recogida en el carrito, al proceder al checkout verá el método de envío de PuntoPost seleccionado con el coste correspondiente. El método de envío mostrará el nombre del punto de recogida seleccionado y el coste de envío configurado.
                                 </p>
                                 <div class="border rounded p-3 bg-light text-center mb-3">
-                                    <img src="/img/puntopost-shopify-12.png" alt="Método de envío en el checkout" class="img-fluid">
+                                    <img src="/assets/img/puntopost-shopify-12.png" alt="Método de envío en el checkout" class="img-fluid">
                                 </div>
                             </div>
                         </section>
@@ -310,7 +260,7 @@
                                     Los pedidos con puntos de recogida aparecen en la lista de pedidos de Shopify junto con el resto de pedidos. Se pueden identificar fácilmente ya que mostrarán la forma de entrega correspondiente.
                                 </p>
                                 <div class="border rounded p-3 bg-light text-center mb-3">
-                                <img src="/img/puntopost-shopify-13.png" alt="Método de envío en el checkout" class="img-fluid">
+                                <img src="/assets/img/puntopost-shopify-13.png" alt="Método de envío en el checkout" class="img-fluid">
                                 </div>
                             </div>
 
@@ -320,7 +270,7 @@
                                     Al abrir los detalles de un pedido que utiliza PuntoPost, se muestra toda la información del punto de recogida seleccionado por el cliente. Esta información incluye:
                                 </p>
                                 <div class="border rounded p-3 bg-light text-center mb-3">
-                                    <img src="/img/puntopost-shopify-14.png" alt="Método de envío en el checkout" class="img-fluid">
+                                    <img src="/assets/img/puntopost-shopify-14.png" alt="Método de envío en el checkout" class="img-fluid">
                                 </div>
 
                                 <ul class="text-body-secondary mb-3">
@@ -345,19 +295,19 @@
                                     <li>Una vez que el pedido esté listo para ser enviado, imprime la etiqueta con el código QR que se debe adjuntar al exterior del paquete.</li>
                                 </ol>
                                 <div class="border rounded p-3 bg-light text-center mb-3">
-                                <img src="/img/puntopost-shopify-15.png" alt="Gestión de pedidos con punto de recogida" class="img-fluid">
+                                <img src="/assets/img/puntopost-shopify-15.png" alt="Gestión de pedidos con punto de recogida" class="img-fluid">
                                 </div>
                                 <p class="text-body-secondary mb-3">
                                     Para imprimir la etiqueta, desde el pedido selecciona la opción <em>Imprimir</em> y pulsa sobre PuntoPost. Se mostrará una previsualización de la etiqueta y se podrá imprimir esta directamente desde el navegador.
                                 </p>
                                 <div class="border rounded p-3 bg-light text-center mb-3">
-                                    <img src="/img/puntopost-shopify-16.png" alt="Gestión de pedidos con punto de recogida" class="img-fluid">
+                                    <img src="/assets/img/puntopost-shopify-16.png" alt="Gestión de pedidos con punto de recogida" class="img-fluid">
                                 </div>
                                 <p class="text-body-secondary mb-3">
                                     Una vez impresa la etiqueta, se debe adjuntar al exterior del paquete.
                                 </p>
                                 <div class="border rounded p-3 bg-light text-center mb-3">
-                                    <img src="/img/puntopost-shopify-17.png" alt="Gestión de pedidos con punto de recogida" class="img-fluid">
+                                    <img src="/assets/img/puntopost-shopify-17.png" alt="Gestión de pedidos con punto de recogida" class="img-fluid">
                                 </div>
                                 <p class="text-body-secondary mb-3">
                                     En el caso de que el comercio sea B2C, se debe marcar el paquete como pendiente de recogida, pulsando el botón <em>Marcar como preparado</em>.                                    Esto indicará a PuntoPost que el paquete está listo y que debe pasar por el almacen de la tienda para recogerlo y poderlo enviar al punto de recogida.
@@ -374,18 +324,3 @@
         </section>
     </main>
 
-    <footer class="bg-primary text-white text-center rounded-bottom-4 py-4">
-        <div class="container">
-            <div class="d-flex flex-column justify-content-center align-items-center gap-2">
-                <img src="/img/logo-isotipo-verde 2.svg" alt="Pin" height="40">
-                <a href="/condiciones" class="text-white fs-7 fw-bold link-underline link-underline-opacity-0">Términos y Condiciones</a>
-                <a href="/privacidad" class="text-white fs-7 fw-bold link-underline link-underline-opacity-0">Política de privacidad</a>
-                <b class="text-white fs-7">© PuntoPost</b>
-            </div>
-        </div>
-    </footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
-</body>
-</html>

@@ -1,0 +1,9 @@
+url: "https://www.puntopost.mx"
+
+exclude:
+  - Makefile
+  - nginx.conf
+  - CLAUDE.md
+  - README.md
+  - vendor
+  - node_modules

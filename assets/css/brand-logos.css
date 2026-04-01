@@ -1,0 +1,40 @@
+.brand-logos {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.brand-logos::-webkit-scrollbar {
+    display: none;
+}
+
+@media (min-width: 992px) {
+    .brand-logos {
+        column-gap: 4rem;
+        row-gap: 4rem;
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .brand-logo {
+        height: 32px;
+    }
+
+    .ecommerce-logos {
+        column-gap: 4rem;
+        row-gap: 4rem;
+    }
+
+    .ecommerce-logos-row {
+        flex: 1 1 0;
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .ecom-logo {
+        height: 48px;
+    }
+
+    .ecom-logo-api {
+        height: 64px;
+    }
+}

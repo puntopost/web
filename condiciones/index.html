@@ -1,59 +1,10 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PuntoPost - Compra online, recoge aquí</title>
-    
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
-
-    <link href="../bootstrap.min.css" rel="stylesheet">
-    <link href="../bootstrap-icons.min.css" rel="stylesheet">
-</head>
-<body>
+---
+layout: default
+---
 
     <header class="bg-primary-subtle p-lg-3">
         <div class="bg-primary rounded-4">
-            <nav class="navbar navbar-dark">
-                <div class="container-fluid">
-                    <a class="navbar-brand" href="/">
-                        <img src="/img/logo-puntopost-amarillo.png" alt="PuntoPost Logo" style="height: 52px;">
-                    </a>
-                    
-                    <div class="d-none d-lg-flex gap-5 align-items-center">
-                        <a href="/integrations" class="nav-link text-white fw-bold fs-5">Integraciones</a>
-                        <a href="/map" class="nav-link text-white fw-bold fs-5">Mapa de puntos</a>
-                        <a href="/atrae" class="nav-link text-white fw-bold fs-5">Quiero ser punto</a>
-                        <a href="/envia" class="btn rounded-pill fw-bold fs-5 px-4 py-2 text-dark border-0" style="background-color: #FFE135;">Envía con PuntoPost</a>
-                    </div>
-                    
-                    <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    
-                    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
-                        <div class="offcanvas-header">
-                            <img src="/img/puntopost2.svg" alt="PuntoPost" class="offcanvas-title" id="offcanvasNavbarLabel" style="height: 30px;">
-                            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                        </div>
-                        <div class="offcanvas-body p-0">
-                            <div class="px-3 py-4">
-                                <a href="/integrations" class="nav-link text-dark fs-5 py-3 d-block text-decoration-none fw-bold">Integraciones</a>
-                                <hr class="my-0">
-                                <a href="/map" class="nav-link text-dark fs-5 py-3 d-block text-decoration-none fw-bold">Mapa de puntos</a>
-                                <hr class="my-0">
-                                <a href="/atrae" class="nav-link text-dark fs-5 py-3 d-block text-decoration-none fw-bold">Quiero ser punto</a>
-                                <hr class="my-0">
-                                <a href="/envia" class="btn rounded-pill fw-bold fs-5 px-4 py-2 text-dark border-0 d-block text-center text-decoration-none mt-2" style="background-color: #FFE135;">Envía con PuntoPost</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </nav>         
+            {% include nav.html %}
         </div>
     </header>
 
@@ -76,7 +27,7 @@
                 <p>Por lo anterior, el usuario se compromete a hacer uso del portal de conformidad con las siguientes condiciones de Uso:</p>
                 <ol style="list-style-type: lower-alpha;">
                     <li>Uso del sitio web de PuntoPost: El usuario se obliga a abstenerse de utilizar el sitio web con fines o efectos ilícitos, contrarios a lo establecidos en los presentes Términos y Condiciones, lesivos de los derechos, intereses y vida privada de terceros, o que de cualquier forma puedan dañar, inutilizar, sobrecargar o deteriorar el sitio web de PuntoPost o cualquiera de sus subdominios o impedir la normal utilización por parte de los demás Usuarios.</li>
-                    <li>Uso del contenido del sitio web de PuntoPost: PuntoPost se reserva el derecho de dar de baja la información proporcionada que no cumpla con los requisitos descritos en los presentes Términos y Condiciones. Asimismo, los contenidos del sitio web, tales como texto, gráficos, imágenes, logos, marcas, iconos de botón, obras audiovisuales, literarias, bases de datos y cualquier otro contenido información y material, todo lo cual se entenderá como el “contenido” o los “contenidos”, están protegidos por la legislación en materia de propiedad industrial e intelectual. El uso no autorizado del contenido puede implicar la violación de la legislación sobre propiedad intelectual o industrial y eso no será limitativo de otras leyes aplicables en materia civil, penal, etc.</li>
+                    <li>Uso del contenido del sitio web de PuntoPost: PuntoPost se reserva el derecho de dar de baja la información proporcionada que no cumpla con los requisitos descritos en los presentes Términos y Condiciones. Asimismo, los contenidos del sitio web, tales como texto, gráficos, imágenes, logos, marcas, iconos de botón, obras audiovisuales, literarias, bases de datos y cualquier otro contenido información y material, todo lo cual se entenderá como el "contenido" o los "contenidos", están protegidos por la legislación en materia de propiedad industrial e intelectual. El uso no autorizado del contenido puede implicar la violación de la legislación sobre propiedad intelectual o industrial y eso no será limitativo de otras leyes aplicables en materia civil, penal, etc.</li>
                     <li>Prohibiciones al usuario: El sitio web www.puntopost.mx. y sus subdominios sólo pueden ser utilizados para los fines señalados en los presentes Términos y Condiciones. Se prohíbe de manera explícita al Usuario y al público en general lo siguiente:</li>
                     <ol style="list-style-type: upper-roman;">
                         <li>Violar las leyes o regulaciones vigentes de cualquier tipo, incluyendo sin limitar, para almacenar o distribuir virus nocivos que afecten programas de computación.</li>
@@ -153,15 +104,3 @@
         </section>
     </main>
 
-    <footer class="bg-primary text-white text-center rounded-bottom-4 py-4">
-        <div class="container">
-            <div class="d-flex flex-column justify-content-center align-items-center gap-2">
-                <img src="/img/logo-isotipo-verde 2.svg" alt="Pin" height="40">
-                <a href="/condiciones" class="text-white fs-7 fw-bold link-underline link-underline-opacity-0">Términos y Condiciones</a>
-                <a href="/privacidad" class="text-white fs-7 fw-bold link-underline link-underline-opacity-0">Política de privacidad</a>
-                <b class="text-white fs-7">© PuntoPost</b>
-            </div>
-        </div>
-    </footer>
-</body>
-</html>
