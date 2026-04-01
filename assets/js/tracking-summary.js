@@ -25,6 +25,11 @@ const displayTrackingInfo = (data) => {
 	document.querySelector('.js-name').textContent = data.destination.name;
 	document.querySelector('.js-address').textContent = data.destination.address.address;
 	document.querySelector('.js-schedule').textContent = data.destination.schedule;
+	if (data.destination.id && data.status === 'in_destination_point') {
+		const mapLink = document.querySelector('.js-map-link');
+		mapLink.href = '/map/#' + encodeURIComponent(data.destination.id);
+		mapLink.classList.remove('d-none');
+	}
 	const returnFailOriginEntry = Array.isArray(data.status_history)
 		? data.status_history.find((item) => item.status === 'return_fail_in_origin_point')
 		: null;
