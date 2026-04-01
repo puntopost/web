@@ -1,18 +1,31 @@
 document.addEventListener('DOMContentLoaded', () => {
 	const params = new URLSearchParams(window.location.search);
 	const trackingId = params.get('trackingid');
-	if (trackingId) fetchTrackingInfo(trackingId);
+	if (trackingId) {
+		fetchTrackingInfo(trackingId);
+	} else {
+		hideLoading();
+	}
 });
 
+const hideLoading = () => {
+	const el = document.getElementById('tracking-loading');
+	if (el) el.classList.add('d-none');
+};
+
 const fetchTrackingInfo = async (trackingId) => {
-	const url = 'https://back.puntopost.mx/api/web/v1/parcels/' + encodeURIComponent(trackingId);
-	const response = await fetch(url);
-	const result = await response.json();
-	if (['NOT_FOUND', 'BAD_REQUEST'].includes(result.type)) {
-		document.getElementById('tracking-error-alert').classList.remove('d-none');
+	const url = API_BASE + '/parcels/' + encodeURIComponent(trackingId);
+	const result = await httpFetch(url);
+	hideLoading();
+	if (!result.ok) {
+		if (result.status >= 400 && result.status < 500) {
+			document.getElementById('tracking-error-alert').classList.remove('d-none');
+		} else {
+			showApiErrorToast(result.status);
+		}
 		return;
 	}
-	displayTrackingInfo(result.detail);
+	displayTrackingInfo(result.body.detail);
 };
 
 const displayTrackingInfo = (data) => {

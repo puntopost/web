@@ -2,7 +2,7 @@
 //  PuntoPost Map — spatial cache + incremental rendering
 // ---------------------------------------------------------------------------
 
-const API_URL = 'https://back.puntopost.mx/api/web/v1/pudos';
+const API_URL = API_BASE + '/pudos';
 const DEFAULT_CENTER = [19.4327402, -99.1331565];
 const DEFAULT_ZOOM = 15;
 const DEBOUNCE_MS = 350;
@@ -95,36 +95,6 @@ function uncoveredCenter(map) {
 }
 
 // ---- API ------------------------------------------------------------------
-
-const API_ERROR_MSG = 'Tuvimos un problema al cargar la información. Por favor, inténtalo de nuevo más tarde.';
-
-async function httpFetch(url) {
-	try {
-		const res = await fetch(url);
-		const body = await res.json().catch(() => null);
-		return { ok: res.ok, status: res.status, body };
-	} catch {
-		return { ok: false, status: 0, body: null };
-	}
-}
-
-function matchStatus(status, pattern) {
-	const s = String(status);
-	if (s.length !== pattern.length) return false;
-	for (let i = 0; i < s.length; i++) {
-		if (pattern[i] !== 'x' && pattern[i] !== s[i]) return false;
-	}
-	return true;
-}
-
-function showApiErrorToast(status, warnings = {}, duration = 4000) {
-	const msg = Object.entries(warnings).find(([key]) => matchStatus(status, String(key)))?.[1];
-	if (msg) {
-		showToast(msg, 'warning', duration);
-	} else {
-		showToast(API_ERROR_MSG, 'error', duration);
-	}
-}
 
 function buildListURL(lat, lng, radiusKm, cp) {
 	const params = cp
