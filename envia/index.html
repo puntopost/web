@@ -71,126 +71,111 @@ extra_head: |
         }
 
     </style>
+banner: |
+    <section class="envia-hero rounded-bottom-4 overflow-hidden d-flex align-items-center">
+        <div class="container-fluid px-4 px-lg-5">
+            <div class="envia-hero-content text-white py-4">
+                <h2 class="fw-bold mb-3">El Futuro de las Entregas y Devoluciones</h2>
+                <p class="fs-4 fw-medium mb-4">
+                    <span>Ofrece a tus clientes la mayor red de puntos de recolección de paquetes de todo México,</span><br>
+                    <span>al mejor precio, sin imprimir etiquetas. ¡Más fácil y punto!</span>
+                </p>
+                <a href="#form-ser-puntopost" class="btn btn-yellow rounded-pill fw-bold px-5 py-3 fs-4 text-dark border-0">Contáctanos</a>
+            </div>
+        </div>
+    </section>
 ---
 
-    <header class="bg-primary-subtle p-lg-3">
-        <div class="bg-primary rounded-4">
-            {% include nav.html %}
-            <section class="envia-hero rounded-bottom-4 overflow-hidden d-flex align-items-center">
-                <div class="container-fluid px-4 px-lg-5">
-                    <div class="envia-hero-content text-white py-4">
-                        <h2 class="fw-bold mb-3">El Futuro de las Entregas y Devoluciones</h2>
-                        <p class="fs-4 fw-medium mb-4">
-                            <span>Ofrece a tus clientes la mayor red de puntos de recolección de paquetes de todo México,</span><br>
-                            <span>al mejor precio, sin imprimir etiquetas. ¡Más fácil y punto!</span>
-                        </p>
-                        <a href="#form-ser-puntopost" class="btn rounded-pill fw-bold px-5 py-3 fs-4 text-dark border-0" style="background-color: #FFE135;">Contáctanos</a>
-                    </div>
-                </div>
-            </section>
+    <section class="py-5 text-center bg-light">
+        <div class="container-fluid p-lg-5 px-0">
+            <h5 class="mb-3 mb-lg-5 fw-bold d-lg-none">Los mejores ecommerce ya confían en nosotros…</h5>
+            <h3 class="mb-3 mb-lg-5 fw-bold d-none d-lg-block">Los mejores ecommerce ya confían en nosotros…</h3>
+            <div class="overflow-hidden px-4 px-lg-5">
+                {% include brand-logos.html %}
+            </div>
         </div>
-    </header>
-
-    <main>
-        <section class="py-5 text-center bg-light">
-            <div class="container-fluid p-lg-5 px-0">
-                <h5 class="mb-3 mb-lg-5 fw-bold d-lg-none">Los mejores ecommerce ya confían en nosotros…</h5>
-                <h3 class="mb-3 mb-lg-5 fw-bold d-none d-lg-block">Los mejores ecommerce ya confían en nosotros…</h3>
-                <div class="d-flex align-items-center gap-4 overflow-x-auto brand-logos px-4 px-lg-5">
-                    <img src="/assets/img/zara.png" alt="Zara" height="25" class="brand-logo">
-                    <img src="/assets/img/massimo.png" alt="Massimo Dutti" height="25" class="brand-logo">
-                    <img src="/assets/img/GOTRENDIER.svg" alt="GoTrendier" height="25" class="brand-logo">
-                    <img src="/assets/img/PLATANOMELON.svg" alt="PlatanoMelon" height="25" class="brand-logo">
-                    <img src="/assets/img/oysho.png" alt="Oysho" height="25" class="brand-logo">
-                    <img src="/assets/img/lefties.svg" alt="Lefties" height="25" class="brand-logo">
-                    <img src="/assets/img/prixz.png" alt="Prixz" height="25" class="brand-logo">
-                </div>
-            </div>
-        </section>
-        <section class="bg-secondary-subtle py-5 py-lg-5">
-            <div class="container pt-2 pb-4 pt-lg-4 pb-lg-5">
-                <h2 class="text-center mb-4 fs-3 fw-bold">¿Por qué ofrecer envío con PuntoPost en tu checkout?</h2>
-                <div class="row g-4">
-                    <div class="col-12 col-xl-3">
-                        <div class="bg-white rounded-4 border border-light-subtle p-4 text-start h-100">
-                            <div class="d-flex gap-3 mb-2">
-                                <img src="/assets/img/pp-icon-13.svg" height="70" width="70" class="align-self-center">
-                                <div class="fw-medium fs-5 align-self-sm-center d-flex flex-column gap-2">
-                                    <b class="fs-5">3,000 puntos</b>
-                                    <div class="text-black-50 fs-6">En CDMX:
-                                        <ul>
-                                            <li>1,500 PuntoPost</li>
-                                            <li>200 Estafeta</li>
-                                            <li>70 DHL</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-xl-3">
-                        <div class="bg-white rounded-4 border border-light-subtle p-4 text-start h-100">
-                            <div class="d-flex gap-3 mb-2">
-                                <img src="/assets/img/pp-icon-19.svg" height="70" width="70" class="align-self-center">
-                                <div class="fw-medium fs-5 align-self-sm-center d-flex flex-column gap-2">
-                                    <b class="fs-5">+20% conversión</b>
-                                    <div class="text-black-50 fs-6">La conversión en el checkout aumenta hasta un 20%, igual que el BUY NOW PAY LATER</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-xl-3">
-                        <div class="bg-white rounded-4 border border-light-subtle p-4 text-start h-100">
-                            <div class="d-flex gap-3 mb-2">
-                                <img src="/assets/img/pp-icon-10.svg" height="70" width="70" class="align-self-center">
-                                <div class="fw-medium fs-5 align-self-sm-center d-flex flex-column gap-2">
-                                    <b class="fs-5">Menor costo de envío</b>
-                                    <div class="text-black-50 fs-6">El costo de envío es 2-3 veces menos que Estafeta y DHL</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-xl-3">
-                        <div class="bg-white rounded-4 border border-light-subtle p-4 text-start h-100">
-                            <div class="d-flex gap-3 mb-2">
-                                <img src="/assets/img/pp-icon-08.svg" height="70" width="70" class="align-self-center">
-                                <div class="fw-medium fs-5 align-self-sm-center d-flex flex-column gap-2">
-                                    <b class="fs-5">Logística verde</b>
-                                    <div class="text-black-50 fs-6">Emites hasta un 86% menos de emisiones y apoyas el comercio local</div>
+    </section>
+    <section class="bg-secondary-subtle py-5 py-lg-5">
+        <div class="container pt-2 pb-4 pt-lg-4 pb-lg-5">
+            <h2 class="text-center mb-4 fs-3 fw-bold">¿Por qué ofrecer envío con PuntoPost en tu checkout?</h2>
+            <div class="row g-4">
+                <div class="col-12 col-xl-3">
+                    <div class="bg-white rounded-4 border border-light-subtle p-4 text-start h-100">
+                        <div class="d-flex gap-3 mb-2">
+                            <img src="/assets/img/pp-icon-13.svg" height="70" width="70" class="align-self-center">
+                            <div class="fw-medium fs-5 align-self-sm-center d-flex flex-column gap-2">
+                                <b class="fs-5">3,000 puntos</b>
+                                <div class="text-black-50 fs-6">En CDMX:
+                                    <ul>
+                                        <li>1,500 PuntoPost</li>
+                                        <li>200 Estafeta</li>
+                                        <li>70 DHL</li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
-        <section class="bg-primary py-5">
-            <div class="container">
-                <div class="d-flex flex-column flex-lg-row align-items-center justify-content-between text-white gap-4 ecommerce-logos">
-                    <div class="text-center text-lg-start">
-                        <h2 class="fw-bold mb-2">Intégrate<br>en minutos</h2>
-                    </div>
-                    <div class="d-flex align-items-center justify-content-center flex-wrap gap-4 ecommerce-logos-row">
-                        <div class="d-flex align-items-center gap-2">
-                            <img src="/assets/img/api.png" alt="API PuntoPost" height="60" class="ecom-logo ecom-logo-api">
+                <div class="col-12 col-xl-3">
+                    <div class="bg-white rounded-4 border border-light-subtle p-4 text-start h-100">
+                        <div class="d-flex gap-3 mb-2">
+                            <img src="/assets/img/pp-icon-19.svg" height="70" width="70" class="align-self-center">
+                            <div class="fw-medium fs-5 align-self-sm-center d-flex flex-column gap-2">
+                                <b class="fs-5">+20% conversión</b>
+                                <div class="text-black-50 fs-6">La conversión en el checkout aumenta hasta un 20%, igual que el BUY NOW PAY LATER</div>
+                            </div>
                         </div>
-                        <img src="/assets/img/shopify.png" alt="Shopify" height="40" class="ecom-logo">
-                        <img src="/assets/img/woocommerce.png" alt="WooCommerce" height="40" class="ecom-logo">
-                        <img src="/assets/img/vtex.png" alt="VTEX" height="40" class="ecom-logo">
+                    </div>
+                </div>
+                <div class="col-12 col-xl-3">
+                    <div class="bg-white rounded-4 border border-light-subtle p-4 text-start h-100">
+                        <div class="d-flex gap-3 mb-2">
+                            <img src="/assets/img/pp-icon-10.svg" height="70" width="70" class="align-self-center">
+                            <div class="fw-medium fs-5 align-self-sm-center d-flex flex-column gap-2">
+                                <b class="fs-5">Menor costo de envío</b>
+                                <div class="text-black-50 fs-6">El costo de envío es 2-3 veces menos que Estafeta y DHL</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-xl-3">
+                    <div class="bg-white rounded-4 border border-light-subtle p-4 text-start h-100">
+                        <div class="d-flex gap-3 mb-2">
+                            <img src="/assets/img/pp-icon-08.svg" height="70" width="70" class="align-self-center">
+                            <div class="fw-medium fs-5 align-self-sm-center d-flex flex-column gap-2">
+                                <b class="fs-5">Logística verde</b>
+                                <div class="text-black-50 fs-6">Emites hasta un 86% menos de emisiones y apoyas el comercio local</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </section>
-        <section class="bg-light" id="form-ser-puntopost">
-            <div class="container">
-                <div class="row">
-                    <div class="col-12 col-xxl-6 offset-xxl-3 text-center">
-                        <h2 class="fw-bold my-5">Regístrate y envía paquetes con nosotros</h2>
-                        <div class="pipedriveWebForms" data-pd-webforms="https://webforms.pipedrive.com/f/ckzXcmqWhxPMEaIKIVgvdZSqcd2Yp3C4Nx58p6lsR5EuyFQM8zR9O9w8tWiBiFhrZV"><script src="https://webforms.pipedrive.com/f/loader"></script></div>
+        </div>
+    </section>
+    <section class="bg-primary py-5">
+        <div class="container">
+            <div class="d-flex flex-column flex-lg-row align-items-center justify-content-between text-white gap-4 ecommerce-logos">
+                <div class="text-center text-lg-start">
+                    <h2 class="fw-bold mb-2">Intégrate<br>en minutos</h2>
+                </div>
+                <div class="d-flex align-items-center justify-content-center flex-wrap gap-4 ecommerce-logos-row">
+                    <div class="d-flex align-items-center gap-2">
+                        <img src="/assets/img/api.png" alt="API PuntoPost" height="60" class="ecom-logo ecom-logo-api">
                     </div>
+                    <img src="/assets/img/shopify.png" alt="Shopify" height="40" class="ecom-logo">
+                    <img src="/assets/img/woocommerce.png" alt="WooCommerce" height="40" class="ecom-logo">
+                    <img src="/assets/img/vtex.png" alt="VTEX" height="40" class="ecom-logo">
                 </div>
             </div>
-        </section>
-    </main>
-
-
+        </div>
+    </section>
+    <section class="bg-light" id="form-ser-puntopost">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 col-xxl-6 offset-xxl-3 text-center">
+                    <h2 class="fw-bold my-5">Regístrate y envía paquetes con nosotros</h2>
+                    <div class="pipedriveWebForms" data-pd-webforms="https://webforms.pipedrive.com/f/ckzXcmqWhxPMEaIKIVgvdZSqcd2Yp3C4Nx58p6lsR5EuyFQM8zR9O9w8tWiBiFhrZV"><script src="https://webforms.pipedrive.com/f/loader"></script></div>
+                </div>
+            </div>
+        </div>
+    </section>

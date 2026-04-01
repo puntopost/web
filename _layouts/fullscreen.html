@@ -1,0 +1,15 @@
+---
+layout: base
+body_class: "d-flex flex-column overflow-hidden fullscreen-height"
+---
+
+<header class="bg-primary-subtle flex-shrink-0">
+    <div class="bg-primary">
+        {% include nav.html extra_class=" p-0" brand_class=" p-0" %}
+        {{ page.banner }}
+    </div>
+</header>
+
+<main class="flex-grow-1 position-relative">
+{{ content }}
+</main>

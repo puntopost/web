@@ -1,0 +1,41 @@
+---
+layout: default
+---
+
+<section class="bg-primary-subtle py-4">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 d-none d-lg-block">
+                <div class="sticky-top" style="top: 20px;">
+                    <div class="bg-white rounded-3 shadow-sm p-4">
+                        <h5 class="fw-bold mb-3">Índice</h5>
+                        <nav class="nav flex-column">
+                            {% for item in page.toc %}
+                            <a class="nav-link text-dark py-2" href="#{{ item.id }}">{{ item.label }}</a>
+                            {% endfor %}
+                        </nav>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-9">
+                <div class="d-lg-none mb-4">
+                    <div class="bg-white rounded-3 shadow-sm p-3">
+                        <button class="btn btn-link text-dark text-decoration-none w-100 text-start fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#mobileTOC">
+                            <i class="bi bi-list me-2"></i>Índice
+                        </button>
+                        <div class="collapse" id="mobileTOC">
+                            <nav class="nav flex-column mt-3">
+                                {% for item in page.toc %}
+                                <a class="nav-link text-dark py-2" href="#{{ item.id }}">{{ item.label }}</a>
+                                {% endfor %}
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+
+                {{ content }}
+            </div>
+        </div>
+    </div>
+</section>

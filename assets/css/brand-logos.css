@@ -1,20 +1,22 @@
-.brand-logos {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
+.brand-logos-track {
+    display: flex;
+    align-items: center;
+    width: max-content;
+    animation: scroll-logos 20s linear infinite;
 }
 
-.brand-logos::-webkit-scrollbar {
-    display: none;
+.brand-logo {
+    flex-shrink: 0;
+    margin-right: 3rem;
+}
+
+@keyframes scroll-logos {
+    to {
+        transform: translateX(-25%);
+    }
 }
 
 @media (min-width: 992px) {
-    .brand-logos {
-        column-gap: 4rem;
-        row-gap: 4rem;
-        width: 100%;
-        justify-content: space-between;
-    }
-
     .brand-logo {
         height: 32px;
     }

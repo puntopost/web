@@ -1,0 +1,22 @@
+main {
+    flex: 1;
+}
+
+footer {
+    position: relative;
+    z-index: 1;
+}
+
+.btn-yellow {
+    background-color: #FFE135;
+}
+
+.step-number {
+    font-size: 62px;
+    line-height: 62px;
+}
+
+.fullscreen-height {
+    height: 100vh;
+    height: 100dvh;
+}
