@@ -8,71 +8,60 @@ banner: |
     </section>
 ---
 
-    <section class="px-3 mt-3 mx-auto" style="max-width: 600px;">
-        <div id="tracking-error-alert" class="d-none">
-            <div class="alert alert-danger d-flex align-items-center gap-3" role="alert">
-                <span class="bi bi-exclamation-triangle"></span>
-                <div>
-                    No se ha encontrado ningún pedido con el código de seguimiento proporcionado.
-                </div>
-            </div>
-            <div class="text-center">
-                <a href="/" class="btn btn-link text-decoration-none fw-bold text-primary">Volver</a>
-            </div>
+    <section class="px-3 mt-4 mb-5 mx-auto reveal reveal-up" style="max-width: 600px;">
+        <div id="tracking-error-alert" class="d-none text-center py-5">
+            <i class="bi bi-search text-muted" style="font-size: 3rem;"></i>
+            <p class="fs-5 text-muted mt-3 mb-2">No se ha encontrado ningún pedido con el código de seguimiento proporcionado.</p>
+            <a href="/" class="btn btn-link text-decoration-none fw-bold text-primary">Volver al inicio</a>
         </div>
-        <div id="tracking-summary-container" class="container border rounded-3 mb-5 d-none">
-            <div class="row bg-light border-bottom">
-                <div class="col-12 p-3">
-                    <span class="badge rounded-pill fw-normal mb-3 d-none text-bg-success js-status-badge-delivered">ENTREGADO</span>
-                    <span class="badge rounded-pill fw-normal mb-3 d-none text-bg-warning js-status-badge-incidence">INCIDENCIA</span>
-                    <span class="badge rounded-pill fw-normal mb-3 d-none text-bg-danger js-status-badge-cancelled">CANCELADO</span>
+        <div id="tracking-summary-container" class="shadow rounded-4 overflow-hidden bg-white d-none">
+            <div class="bg-primary text-white p-4">
+                <span class="badge rounded-pill fw-bold d-none bg-white text-success js-status-badge-delivered">ENTREGADO</span>
+                <span class="badge rounded-pill fw-bold d-none bg-white text-warning js-status-badge-incidence">INCIDENCIA</span>
+                <span class="badge rounded-pill fw-bold d-none bg-white text-danger js-status-badge-cancelled">CANCELADO</span>
+                <div class="mt-2">
+                    <span class="opacity-75">Tracking</span>
+                    <div class="fs-4 fw-bold js-tracking-id mt-1"></div>
+                </div>
+            </div>
+            <div class="p-4">
+                <div class="fw-bold fs-5 mb-3">Historial de estados</div>
+                <div class="d-flex border-bottom py-3 gap-3">
+                    <img src="/assets/img/Circle_check_ON.svg" height="32" width="32" class="align-self-center">
                     <div>
-                        <span class="text-dark-emphasis">Tracking</span> <span class="js-tracking-id"></span>
+                        <div class="fw-bold js-current-status"></div>
+                        <div class="text-muted fs-7 js-current-status-time"></div>
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-12">
-                    <div class="p-3 fw-bold">Historial de estados</div>
-                    <div class="d-flex border-bottom py-2 gap-2 fs-7">
-                        <img src="/assets/img/Circle_check_ON.svg" height="28" width="28" class="align-self-center">
-                        <div>
-                            <div class="fw-bold js-current-status"></div>
-                            <div class="text-dark-emphasis js-current-status-time"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="status-history collapse">
+            <div class="status-history collapse px-4">
                 <template id="status-history-tmpl">
-                    <div class="d-flex border-bottom py-2 gap-2 fs-7">
-                        <img src="/assets/img/Circle_check.svg" height="28" width="28" class="align-self-center">
+                    <div class="d-flex border-bottom py-3 gap-3">
+                        <img src="/assets/img/Circle_check.svg" height="32" width="32" class="align-self-center">
                         <div>
                             <div class="fw-bold js-current-status"></div>
-                            <div class="text-dark-emphasis js-current-status-time"></div>
+                            <div class="text-muted fs-7 js-current-status-time"></div>
                         </div>
                     </div>
                 </template>
             </div>
-            <div class="text-center">
+            <div class="text-center py-3">
                 <button class="btn btn-link text-decoration-none fw-bold text-primary" type="button" data-bs-toggle="collapse" data-bs-target=".status-history">Ver más</button>
             </div>
-            <div class="row">
-                <div class="col-12 d-flex flex-column gap-2 p-3">
-                    <b>Destino</b>
-                    <div class="text-dark-emphasis fs-7 mt-2">
-                        <b>Nombre</b>: <span class="js-name"></span>
-                    </div>
-                    <div class="text-dark-emphasis fs-7">
-                        <b>Dirección</b>: <span class="js-address"></span>
-                    </div>
-                    <div class="text-dark-emphasis fs-7">
-                        <b>Horario</b>: <span class="js-schedule"></span>
-                    </div>
-                    <a href="#" class="js-map-link d-none btn btn-outline-primary btn-sm mt-2 align-self-start">
-                        <span class="bi bi-geo-alt-fill me-1"></span>Ver en el mapa
-                    </a>
+            <div class="bg-light p-4">
+                <div class="fw-bold fs-5 mb-3"><i class="bi bi-geo-alt text-primary me-2"></i>Destino</div>
+                <div class="text-dark-emphasis mt-2">
+                    <b>Nombre</b>: <span class="js-name"></span>
                 </div>
+                <div class="text-dark-emphasis">
+                    <b>Dirección</b>: <span class="js-address"></span>
+                </div>
+                <div class="text-dark-emphasis">
+                    <b>Horario</b>: <span class="js-schedule"></span>
+                </div>
+                <a href="#" class="js-map-link d-none btn btn-outline-primary btn-sm mt-3">
+                    <span class="bi bi-geo-alt-fill me-1"></span>Ver en el mapa
+                </a>
             </div>
         </div>
     </section>
