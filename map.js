@@ -96,25 +96,37 @@ function uncoveredCenter(map) {
 
 // ---- API ------------------------------------------------------------------
 
-async function fetchURL(url) {
+const API_ERROR_MSG = 'Tuvimos un problema al cargar la información. Por favor, inténtalo de nuevo más tarde.';
+
+async function httpFetch(url) {
 	try {
 		const res = await fetch(url);
-		if (res.status === 404) {
-			showToast('Código postal no encontrado.', 'warning');
-			return null;
-		}
-		if (!res.ok) {
-			showToast('Error al cargar los puntos. Inténtalo más tarde.', 'error');
-			return null;
-		}
-		return await res.json();
+		const body = await res.json().catch(() => null);
+		return { ok: res.ok, status: res.status, body };
 	} catch {
-		showToast('Error de conexión. Inténtalo más tarde.', 'error');
-		return null;
+		return { ok: false, status: 0, body: null };
 	}
 }
 
-function buildFirstURL(lat, lng, radiusKm, cp) {
+function matchStatus(status, pattern) {
+	const s = String(status);
+	if (s.length !== pattern.length) return false;
+	for (let i = 0; i < s.length; i++) {
+		if (pattern[i] !== 'x' && pattern[i] !== s[i]) return false;
+	}
+	return true;
+}
+
+function showApiErrorToast(status, warnings = {}, duration = 4000) {
+	const msg = Object.entries(warnings).find(([key]) => matchStatus(status, String(key)))?.[1];
+	if (msg) {
+		showToast(msg, 'warning', duration);
+	} else {
+		showToast(API_ERROR_MSG, 'error', duration);
+	}
+}
+
+function buildListURL(lat, lng, radiusKm, cp) {
 	const params = cp
 		? { postal_code: cp, radius_km: radiusKm, cursor: '2000-0' }
 		: { latitude: lat, longitude: lng, radius_km: radiusKm, cursor: '2000-0' };
@@ -124,12 +136,14 @@ function buildFirstURL(lat, lng, radiusKm, cp) {
 async function fetchAllPages(firstURL, fetchId, onPage) {
 	let url = firstURL;
 	while (url) {
-		const data = await fetchURL(url);
-		if (fetchId !== activeFetchId || !data) return;
-		const stop = onPage(data);
-		if (stop) return;
-		url = data.next || null;
+		const result = await httpFetch(url);
+		if (fetchId !== activeFetchId) return null;
+		if (!result.ok) return result;
+		const stop = onPage(result.body);
+		if (stop) return null;
+		url = result.body.next || null;
 	}
+	return null;
 }
 
 // ---- Markers --------------------------------------------------------------
@@ -197,10 +211,10 @@ async function loadCPSearch(map, cp) {
 	showSpinner(true);
 
 	const radiusKm = viewportRadiusKm(map);
-	const url = buildFirstURL(null, null, radiusKm, cp);
+	const url = buildListURL(null, null, radiusKm, cp);
 	let handled = false;
 
-	await fetchAllPages(url, fetchId, (page) => {
+	const error = await fetchAllPages(url, fetchId, (page) => {
 		const coord = page.coordinate;
 
 		if (!handled) {
@@ -208,7 +222,6 @@ async function loadCPSearch(map, cp) {
 			hideSpinner();
 
 			if (coord) {
-				// Quitar marcador CP anterior y poner uno nuevo
 				if (cpMarker) map.removeLayer(cpMarker);
 				cpMarker = L.circleMarker(
 					[coord.latitude, coord.longitude],
@@ -230,6 +243,7 @@ async function loadCPSearch(map, cp) {
 		mergeMarkers(page);
 	});
 
+	if (error) showApiErrorToast(error.status, { 404: 'Código postal no encontrado.' });
 	if (!handled) hideSpinner();
 	cpSearchInProgress = false;
 }
@@ -253,15 +267,16 @@ async function loadViewport(map) {
 
 		registerFetchedArea(center.lat, center.lng, radiusKm);
 
-		const url = buildFirstURL(center.lat, center.lng, radiusKm, null);
+		const url = buildListURL(center.lat, center.lng, radiusKm, null);
 		let gotData = false;
 
-		await fetchAllPages(url, fetchId, (page) => {
+		const error = await fetchAllPages(url, fetchId, (page) => {
 			gotData = true;
 			mergeMarkers(page);
 			hideSpinner();
 		});
 
+		if (error) { showApiErrorToast(error.status); break; }
 		if (!gotData && fetchCount === 0) break;
 
 		fetchCount++;
@@ -409,13 +424,46 @@ function setupGeolocate(map) {
 	});
 }
 
+// ---- Deep link ------------------------------------------------------------
+
+const DEEP_LINK_UNAVAILABLE = 'Este punto ya no está disponible. En PuntoPost estamos para ayudarte, escríbenos a hola@puntopost.mx';
+
+async function resolveDeepLink() {
+	const pudoId = location.hash.slice(1);
+	if (!pudoId) return null;
+
+	showSpinner(true);
+	const result = await httpFetch(API_URL + '/' + encodeURIComponent(pudoId));
+	hideSpinner();
+
+	if (!result.ok) {
+		showApiErrorToast(result.status, { '4xx': DEEP_LINK_UNAVAILABLE }, 8000);
+		return null;
+	}
+
+	const pudo = result.body.detail;
+
+	if (!pudo.enabled) {
+		showToast(DEEP_LINK_UNAVAILABLE, 'warning', 8000);
+		return null;
+	}
+
+	return pudo;
+}
+
 // ---- Init -----------------------------------------------------------------
 
-(function init() {
+(async function init() {
+	const deepLink = await resolveDeepLink();
+
+	const center = deepLink
+		? [deepLink.address.coordinate.latitude, deepLink.address.coordinate.longitude]
+		: DEFAULT_CENTER;
+
 	const map = L.map('map', {
 		maxBounds: MEXICO_BOUNDS.pad(0.2),
 		maxBoundsViscosity: 0.8
-	}).setView(DEFAULT_CENTER, DEFAULT_ZOOM);
+	}).setView(center, DEFAULT_ZOOM);
 
 	L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}{r}.png', {
 		maxZoom: 19,
@@ -453,7 +501,19 @@ function setupGeolocate(map) {
 	});
 
 	map.on('moveend', () => scheduleViewportLoad(map));
-	loadViewport(map);
+
+	await loadViewport(map);
+
+	if (deepLink) {
+		let marker = markerCache.get(deepLink.external_id);
+		if (!marker) {
+			marker = createMarkerObj(deepLink);
+			markerCache.set(deepLink.external_id, marker);
+			clusterGroup.addLayer(marker);
+		}
+		marker.openPopup();
+	}
+
 	setupCPInput(map);
 	setupGeolocate(map);
 })();

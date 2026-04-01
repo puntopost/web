@@ -49,9 +49,9 @@
         }
     </style>
 </head>
-<body>
+<body class="d-flex flex-column overflow-hidden" style="height: 100vh; height: 100dvh;">
 
-    <header class="bg-primary-subtle">
+    <header class="bg-primary-subtle flex-shrink-0">
         <div class="bg-primary">
             <nav class="navbar navbar-dark p-0">
                 <div class="container-fluid">
@@ -106,9 +106,9 @@
         </div>
     </header>
 
-    <main>
-        <section>
-            <div id="map" class="position-absolute top-0 start-0 bottom-0 end-0 z-n1"></div>
+    <main class="flex-grow-1 position-relative">
+        <section class="h-100">
+            <div id="map" class="h-100"></div>
             <div id="map-loading" class="position-absolute top-50 start-50 translate-middle d-none">
                 <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
                     <span class="visually-hidden">Cargando puntos...</span>
