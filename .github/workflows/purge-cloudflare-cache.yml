@@ -1,20 +1,22 @@
 name: Purge Cloudflare Cache
 
 on:
-  push:
-    branches: [main]
+  workflow_run:
+    workflows: ["pages-build-deployment"]
+    types: [completed]
 
 jobs:
   purge:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     steps:
-      - name: Purge entire Cloudflare cache
+      - name: Purge Cloudflare cache for www.puntopost.mx
         run: |
           response=$(curl -s -w "\n%{http_code}" -X POST \
             "https://api.cloudflare.com/client/v4/zones/${{ secrets.CLOUDFLARE_ZONE_ID }}/purge_cache" \
             -H "Authorization: Bearer ${{ secrets.CLOUDFLARE_API_TOKEN }}" \
             -H "Content-Type: application/json" \
-            --data '{"purge_everything":true}')
+            --data '{"hosts":["www.puntopost.mx"]}')
 
           http_code=$(echo "$response" | tail -1)
           body=$(echo "$response" | head -n -1)
