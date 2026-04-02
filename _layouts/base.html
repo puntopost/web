@@ -1,13 +1,39 @@
+{% assign v = site.time | date: '%s' %}
+{% assign base_css = "/assets/css/bootstrap.min.css,/assets/css/bootstrap-icons.min.css,/assets/css/puntopost.css" | split: "," %}
+{% assign base_js = "/assets/js/reveal.js" | split: "," %}
+{% if page.css %}{% assign all_css = base_css | concat: page.css %}{% else %}{% assign all_css = base_css %}{% endif %}
+{% if page.js %}{% assign all_js = base_js | concat: page.js %}{% else %}{% assign all_js = base_js %}{% endif %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    {% include head.html %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="{{ page.viewport | default: 'width=device-width, initial-scale=1.0' }}">
+    <title>{{ page.title | default: "PuntoPost - Compra online, recoge aquí" }}</title>
+    {% if page.description %}<meta name="description" content="{{ page.description }}">{% endif %}
+    <meta property="og:title" content="{{ page.title | default: 'PuntoPost - Compra online, recoge aquí' }}">
+    {% if page.description %}<meta property="og:description" content="{{ page.description }}">{% endif %}
+    <meta property="og:type" content="website">
+    <link rel="canonical" href="https://www.puntopost.mx{{ page.url }}">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap" as="style">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
+    {% for file in all_css %}<link href="{{ file }}?v={{ v }}" rel="stylesheet">
+    {% endfor %}
     {{ page.extra_head }}
+    <script type="text/javascript">
+        (function(c,l,a,r,i,t,y){
+            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+        })(window, document, "clarity", "script", "w4wkxiou42");
+    </script>
 </head>
 <body class="{{ layout.body_class }}">
 {{ content }}
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" defer></script>
-<script src="/assets/js/reveal.js"></script>
-{{ page.scripts_after }}
+{% for file in all_js %}<script src="{{ file }}?v={{ v }}" defer></script>
+{% endfor %}
 </body>
 </html>

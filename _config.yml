@@ -1,5 +1,6 @@
 url: "https://www.puntopost.mx"
 
+
 exclude:
   - Makefile
   - nginx.conf
