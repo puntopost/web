@@ -1,5 +1,7 @@
 ---
 layout: fullscreen
+title: "PuntoPost - Mapa de puntos"
+description: "Encuentra tu PuntoPost más cercano en el mapa interactivo. Más de 1,000 ubicaciones en CDMX."
 viewport: "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
 scripts_after: |
     <script src="https://unpkg.com/imask"></script>
@@ -45,14 +47,14 @@ extra_head: |
     </style>
 banner: |
     <section class="text-white text-center rounded-bottom-4 pb-3 pb-lg-0">
-    <h2 class="fw-bold fs-3 mb-3 mb-lg-0 mt-lg-0 mt-4">Encuentra tu Puntopost</h2>
+    <h1 class="fw-bold fs-3 mb-3 mb-lg-0 mt-lg-0 mt-4">Encuentra tu PuntoPost</h1>
     <div class="container-fluid">
         <div class="row justify-content-center">
             <div class="col-md-6 col-xl-5 col-xxl-4">
                 <div class="input-group input-group-sm my-lg-3">
-                    <input type="text" id="find-pudos-input" class="form-control form-control-lg p-2" inputmode="numeric" placeholder="Código postal">
-                    <button class="btn btn-light js-geolocate" type="button"><i class="bi bi-crosshair"></i></button>
-                    <button class="btn btn-light js-find-pudos" type="button"><i class="bi bi-search"></i></button>
+                    <input type="text" id="find-pudos-input" class="form-control form-control-lg p-2" inputmode="numeric" placeholder="Código postal" aria-label="Código postal">
+                    <button class="btn btn-light js-geolocate" type="button" aria-label="Usar mi ubicación"><i class="bi bi-crosshair"></i></button>
+                    <button class="btn btn-light js-find-pudos" type="button" aria-label="Buscar por código postal"><i class="bi bi-search"></i></button>
                 </div>
             </div>
         </div>

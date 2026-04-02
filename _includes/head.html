@@ -1,6 +1,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="{{ page.viewport | default: 'width=device-width, initial-scale=1.0' }}">
 <title>{{ page.title | default: "PuntoPost - Compra online, recoge aquí" }}</title>
+{% if page.description %}<meta name="description" content="{{ page.description }}">{% endif %}
+<meta property="og:title" content="{{ page.title | default: 'PuntoPost - Compra online, recoge aquí' }}">
+{% if page.description %}<meta property="og:description" content="{{ page.description }}">{% endif %}
+<meta property="og:type" content="website">
+<link rel="canonical" href="https://www.puntopost.mx{{ page.url }}">
 <link rel="icon" type="image/x-icon" href="/favicon.ico">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

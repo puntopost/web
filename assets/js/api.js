@@ -20,10 +20,8 @@ function matchStatus(status, pattern) {
 	return true;
 }
 
-function showApiErrorToast(status, warnings, duration) {
-	warnings = warnings || {};
-	duration = duration || 4000;
-	const msg = Object.entries(warnings).find(function (entry) { return matchStatus(status, String(entry[0])); });
+function showApiErrorToast(status, warnings = {}, duration = 4000) {
+	const msg = Object.entries(warnings).find((entry) => matchStatus(status, String(entry[0])));
 	if (msg) {
 		showToast(msg[1], 'warning', duration);
 	} else {
