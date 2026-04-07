@@ -1,6 +1,9 @@
 // ---------------------------------------------------------------------------
 //  PuntoPost Map — spatial cache + incremental rendering
 // ---------------------------------------------------------------------------
+import { API_BASE, httpFetch, showApiErrorToast } from './api.js';
+import { showToast } from './toast.js';
+import { getDirectionsURL } from './directions.js';
 
 const API_URL = API_BASE + '/pudos';
 const DEFAULT_CENTER = [19.4327402, -99.1331565];

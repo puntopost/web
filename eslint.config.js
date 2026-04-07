@@ -4,6 +4,8 @@ export default [
     js.configs.recommended,
     {
         languageOptions: {
+            ecmaVersion: 2022,
+            sourceType: "module",
             globals: {
                 document: "readonly",
                 window: "readonly",
@@ -14,25 +16,11 @@ export default [
                 fetch: "readonly",
                 setTimeout: "readonly",
                 clearTimeout: "readonly",
-                Map: "readonly",
-                Set: "readonly",
-                Promise: "readonly",
                 IntersectionObserver: "readonly",
                 L: "readonly",
                 bootstrap: "readonly",
                 IMask: "readonly",
-                API_BASE: "writable",
-                API_ERROR_MSG: "writable",
-                httpFetch: "writable",
-                matchStatus: "writable",
-                showToast: "writable",
-                showApiErrorToast: "writable",
-                getDirectionsURL: "writable",
-                isIOS: "writable",
             },
-        },
-        rules: {
-            "no-unused-vars": ["error", { varsIgnorePattern: "^(API_BASE|API_ERROR_MSG|httpFetch|matchStatus|showToast|showApiErrorToast|getDirectionsURL|isIOS)$" }],
         },
     },
 ];
