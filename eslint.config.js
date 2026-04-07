@@ -31,5 +31,8 @@ export default [
                 isIOS: "writable",
             },
         },
+        rules: {
+            "no-unused-vars": ["error", { varsIgnorePattern: "^(API_BASE|API_ERROR_MSG|httpFetch|matchStatus|showToast|showApiErrorToast|getDirectionsURL|isIOS)$" }],
+        },
     },
 ];
