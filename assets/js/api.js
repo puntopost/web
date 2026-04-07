@@ -1,7 +1,9 @@
-const API_BASE = 'https://back.puntopost.mx/api/web/v1';
+import { showToast } from './toast.js';
+
+export const API_BASE = 'https://back.puntopost.mx/api/web/v1';
 const API_ERROR_MSG = 'Tuvimos un problema al cargar la información. Por favor, inténtalo de nuevo más tarde.';
 
-async function httpFetch(url) {
+export async function httpFetch(url) {
 	try {
 		const res = await fetch(url);
 		const body = await res.json().catch(() => null);
@@ -20,7 +22,7 @@ function matchStatus(status, pattern) {
 	return true;
 }
 
-function showApiErrorToast(status, warnings = {}, duration = 4000) {
+export function showApiErrorToast(status, warnings = {}, duration = 4000) {
 	const msg = Object.entries(warnings).find((entry) => matchStatus(status, String(entry[0])));
 	if (msg) {
 		showToast(msg[1], 'warning', duration);

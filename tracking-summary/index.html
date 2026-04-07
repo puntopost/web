@@ -3,8 +3,6 @@ layout: default
 title: "PuntoPost - Estado del pedido"
 description: "Consulta el estado y ubicación de tu paquete PuntoPost en tiempo real."
 js:
-    - /assets/js/toast.js
-    - /assets/js/api.js
     - /assets/js/tracking-summary.js
 banner: |
     <section class="text-white text-center rounded-bottom-4 pb-3">
@@ -55,11 +53,11 @@ banner: |
                     </div>
                 </template>
             </div>
-            <div class="text-center py-3">
+            <div class="text-center py-3 js-toggle-history">
                 <button class="btn btn-link text-decoration-none fw-bold text-primary" type="button" data-bs-toggle="collapse" data-bs-target=".status-history">Ver más</button>
             </div>
-            <div class="bg-light p-4">
-                <div class="fw-bold fs-5 mb-3"><i class="bi bi-geo-alt text-primary me-2"></i>Destino</div>
+            <div class="bg-light p-4 js-location-section d-none">
+                <div class="fw-bold fs-5 mb-3"><i class="bi bi-geo-alt text-primary me-2"></i><span class="js-location-title"></span></div>
                 <div class="text-dark-emphasis mt-2">
                     <b>Nombre</b>: <span class="js-name"></span>
                 </div>

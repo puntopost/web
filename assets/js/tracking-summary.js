@@ -1,3 +1,6 @@
+import { API_BASE, httpFetch, showApiErrorToast } from './api.js';
+import { getDirectionsURL } from './directions.js';
+
 document.addEventListener('DOMContentLoaded', () => {
 	const params = new URLSearchParams(window.location.search);
 	const trackingId = params.get('trackingid');
@@ -33,15 +36,15 @@ const displayTrackingInfo = (data) => {
 
 	setToggleCollapseText();
 
-	// Destino
 	document.querySelector('.js-tracking-id').textContent = data.tracking;
-	document.querySelector('.js-name').textContent = data.destination.name;
-	document.querySelector('.js-address').textContent = data.destination.address.address;
-	document.querySelector('.js-schedule').textContent = data.destination.schedule;
-	if (data.destination.id && data.status === 'in_destination_point') {
-		const mapLink = document.querySelector('.js-map-link');
-		mapLink.href = '/map/#' + encodeURIComponent(data.destination.id);
-		mapLink.classList.remove('d-none');
+
+	const showDestinationStatuses = ['created', 'in_origin_point', 'in_transit_depot', 'in_depot', 'in_transit_destination', 'in_destination_point', 'in_rerouted_point', 'delivered'];
+	const showOriginStatuses = ['return_in_destination_point', 'return_in_transit_depot', 'return_in_depot', 'return_in_transit_origin', 'return_in_origin_point', 'return_in_rerouted_point', 'return_delivered'];
+
+	if (showDestinationStatuses.includes(data.status)) {
+		showLocationSection('Destino', data.destination);
+	} else if (showOriginStatuses.includes(data.status)) {
+		showLocationSection('Origen', data.origin);
 	}
 	const returnFailOriginEntry = Array.isArray(data.status_history)
 		? data.status_history.find((item) => item.status === 'return_fail_in_origin_point')
@@ -92,6 +95,7 @@ const displayTrackingInfo = (data) => {
 	const sortedEvents = events.sort((a, b) => b.date - a.date); // recientes primero
 
 	let skippedCurrentStatus = false;
+	let historyCount = 0;
 	sortedEvents.forEach((event) => {
 		if (!skippedCurrentStatus && event.type === 'status' && event.status === data.status) {
 			skippedCurrentStatus = true;
@@ -101,10 +105,29 @@ const displayTrackingInfo = (data) => {
 		tmpl.querySelector('.js-current-status').textContent = event.label;
 		tmpl.querySelector('.js-current-status-time').textContent = formatApiDate(event.rawDate);
 		historyContainer.appendChild(tmpl);
+		historyCount++;
 	});
+	if (historyCount === 0) {
+		document.querySelector('.js-toggle-history').classList.add('d-none');
+	}
 
 	// Mostrar contenedor
 	document.getElementById('tracking-summary-container').classList.remove('d-none');
+};
+
+const showLocationSection = (title, location) => {
+	document.querySelector('.js-location-title').textContent = title;
+	document.querySelector('.js-name').textContent = location.name;
+	document.querySelector('.js-address').textContent = location.address.address;
+	document.querySelector('.js-schedule').textContent = location.schedule;
+	document.querySelector('.js-location-section').classList.remove('d-none');
+	if (location.address?.coordinate) {
+		const mapLink = document.querySelector('.js-map-link');
+		mapLink.href = getDirectionsURL(location.address.address, location.address.coordinate);
+		mapLink.target = '_blank';
+		mapLink.rel = 'noopener noreferrer';
+		mapLink.classList.remove('d-none');
+	}
 };
 
 const setToggleCollapseText = () => {
