@@ -1,4 +1,4 @@
-name: CI
+name: ✅ CI
 
 on:
   pull_request:
@@ -6,9 +6,39 @@ on:
 
 jobs:
   build:
+    name: 🏗️ Jekyll Build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Build Jekyll site
+      - name: 🔨 Build site
         uses: actions/jekyll-build-pages@v1
+
+      - name: 📤 Upload site
+        uses: actions/upload-artifact@v4
+        with:
+          name: site
+          path: ./_site
+
+  html:
+    name: 📄 HTML Lint
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Download site
+        uses: actions/download-artifact@v4
+        with:
+          name: site
+          path: _site
+
+      - name: 🔍 Run HTMLHint
+        run: npx htmlhint@latest "_site/**/*.html"
+
+  eslint:
+    name: 📜 JS Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 🔍 Run ESLint
+        run: npx eslint@9 --no-eslintrc -c eslint.config.js assets/js/
