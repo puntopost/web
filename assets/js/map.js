@@ -138,7 +138,7 @@ function mergeMarkers(pudos) {
 }
 
 function buildPopupHTML(pudo) {
-	const { name, external_id, address: { address }, schedule } = pudo;
+	const { name, external_id, address: { address, coordinate }, schedule } = pudo;
 	return `<div class="d-flex flex-column gap-3">
 		<div class="d-flex flex-column gap-0">
 			<b class="fs-6">${name}</b>
@@ -161,7 +161,7 @@ function buildPopupHTML(pudo) {
 			<b class="text-body-tertiary fs-7">${schedule}</b>
 		</div>
 		<div class="d-flex justify-content-end align-items-center">
-			<a href="${getDirectionsURL(address)}" target="_blank" class="btn btn-outline-primary text-primary bg-light rounded-pill">
+			<a href="${getDirectionsURL(address, coordinate)}" target="_blank" class="btn btn-outline-primary text-primary bg-light rounded-pill">
 				Cómo llegar
 				<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none">
 					<path d="M9 5.45654L15.6464 12.103C15.8417 12.2983 15.8417 12.6148 15.6464 12.8101L9 19.4565" stroke="#13A590" stroke-linecap="round"/>
@@ -271,17 +271,6 @@ function scheduleViewportLoad(map) {
 
 // ---- Utilities ------------------------------------------------------------
 
-function getDirectionsURL(address) {
-	const encoded = encodeURIComponent(address);
-	if (isIOS()) return `https://maps.apple.com/?daddr=${encoded}&dirflg=d`;
-	return `https://www.google.com/maps/dir/?api=1&destination=${encoded}&dir_action=navigate`;
-}
-
-function isIOS() {
-	return ['iPad Simulator', 'iPhone Simulator', 'iPod Simulator', 'iPad', 'iPhone', 'iPod']
-		.includes(navigator.platform)
-		|| (navigator.userAgent.includes('Mac') && 'ontouchend' in document);
-}
 
 // ---- Input ----------------------------------------------------------------
 

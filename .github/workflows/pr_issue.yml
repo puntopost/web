@@ -1,0 +1,38 @@
+
+name: 🔗 PR Link Issue
+
+on:
+  pull_request:
+    types: [opened]
+
+permissions:
+  pull-requests: write
+
+jobs:
+  link-issue-in-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Linking issue
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const branch = context.payload.pull_request.head.ref;
+            const m = branch.match(/^issue-(\d+)$/);
+            if (!m) {
+              return;
+            }
+            const issueNum = m[1];
+            const closing = `closes #${issueNum}`;
+            let body = context.payload.pull_request.body ?? "";
+            const alreadyCloses = new RegExp(`closes\\s*#\\s*${issueNum}\\b`, "i");
+            if (alreadyCloses.test(body)) {
+              return;
+            }
+            const trimmed = body.trim();
+            const newBody = trimmed === "" ? closing : `${trimmed}\n\n${closing}`;
+            await github.rest.pulls.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.pull_request.number,
+              body: newBody,
+            });
