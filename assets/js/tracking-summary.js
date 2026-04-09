@@ -334,7 +334,7 @@ const getStatusText = (status) => {
 		case 'created':
 			return 'QR generado para tu envío';
 		case 'in_origin_point':
-			return 'Recolectado';
+			return 'Recibido en punto de origen';
 		case 'in_transit_depot':
 			return 'En camino al almacén';
 		case 'in_depot':
