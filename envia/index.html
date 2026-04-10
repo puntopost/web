@@ -176,7 +176,16 @@ banner: |
             <div class="row">
                 <div class="col-12 col-xxl-6 offset-xxl-3 text-center">
                     <h2 class="fw-bold my-5 reveal reveal-up">Regístrate y envía paquetes con nosotros</h2>
-                    <div class="pipedriveWebForms" data-pd-webforms="https://webforms.pipedrive.com/f/ckzXcmqWhxPMEaIKIVgvdZSqcd2Yp3C4Nx58p6lsR5EuyFQM8zR9O9w8tWiBiFhrZV"><script src="https://webforms.pipedrive.com/f/loader"></script></div>
+                    <div id="hubspot-form-envia"></div>
+                    <script charset="utf-8" type="text/javascript" src="https://js.hsforms.net/forms/embed/v2.js"></script>
+                    <script>
+                        hbspt.forms.create({
+                            region: "na1",
+                            portalId: "YOUR_PORTAL_ID",
+                            formId: "YOUR_FORM_ID",
+                            target: "#hubspot-form-envia"
+                        });
+                    </script>
                 </div>
             </div>
         </div>
