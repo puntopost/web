@@ -2,6 +2,8 @@
 layout: default
 title: "PuntoPost - Compra guías (autoservicio)"
 description: "Compra guías de PuntoPost de una en una o por lote. Sin integraciones, sin contratos, paga solo por lo que envías. Envíos punto a punto."
+js:
+    - /assets/js/packs.js
 extra_head: |
     <style>
         .envia-hero {
@@ -25,6 +27,18 @@ extra_head: |
         .envia-hero-content p {
             max-width: 760px;
             line-height: 1.35;
+        }
+
+        .packs-gallery {
+            justify-content: safe center;
+            scroll-snap-type: x proximity;
+        }
+
+        .pack-card {
+            flex: 0 0 auto;
+            width: 200px;
+            max-width: 100%;
+            scroll-snap-align: center;
         }
 
         @media (max-width: 767.98px) {
@@ -170,131 +184,18 @@ banner: |
                 </p>
             </div>
 
-            <div class="row g-3 g-lg-4 align-items-stretch justify-content-center">
-
-                <div class="col-12 col-sm-6 col-lg-4 col-xl reveal reveal-up">
-                    <div class="bg-white rounded-4 border border-light-subtle p-4 h-100 d-flex flex-column text-start">
-                        <div class="mb-3">
-                            <span class="fw-bold fs-5">1 guía</span>
-                        </div>
-                        <div class="mb-1 lh-1">
-                            <span class="fw-bold display-6 text-primary">$89</span>
-                            <span class="fs-6 fw-medium text-black-50">MXN</span>
-                        </div>
-                        <div class="fs-7 fw-medium text-black-50 mb-3">$89 por guía</div>
-                        <ul class="list-unstyled d-flex flex-column gap-2 fs-6 fw-medium mb-4">
-                            <li class="d-flex align-items-start gap-2">
-                                <i class="bi bi-check-circle-fill text-primary lh-1 mt-1"></i>
-                                <span>Envío puntual sin compromiso</span>
-                            </li>
-                            <li class="d-flex align-items-start gap-2">
-                                <i class="bi bi-check-circle-fill text-primary lh-1 mt-1"></i>
-                                <span>Punto a punto en toda la red</span>
-                            </li>
-                        </ul>
-                        <button type="button" class="btn btn-outline-primary rounded-pill fw-bold py-2 mt-auto">Comprar</button>
+            <div id="packs-list" class="packs-gallery d-flex flex-nowrap overflow-x-auto gap-3 gap-lg-4 pt-4 pb-3">
+                <div id="packs-loading" class="w-100 text-center py-4">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Cargando precios…</span>
                     </div>
                 </div>
-
-                <div class="col-12 col-sm-6 col-lg-4 col-xl reveal reveal-up reveal-delay-1">
-                    <div class="bg-white rounded-4 border border-light-subtle p-4 h-100 d-flex flex-column text-start">
-                        <div class="mb-3">
-                            <span class="fw-bold fs-5">10 guías</span>
-                        </div>
-                        <div class="mb-1 lh-1">
-                            <span class="fw-bold display-6 text-primary">$790</span>
-                            <span class="fs-6 fw-medium text-black-50">MXN</span>
-                        </div>
-                        <div class="fs-7 fw-medium text-black-50 mb-3">$79 por guía</div>
-                        <ul class="list-unstyled d-flex flex-column gap-2 fs-6 fw-medium mb-4">
-                            <li class="d-flex align-items-start gap-2">
-                                <i class="bi bi-check-circle-fill text-primary lh-1 mt-1"></i>
-                                <span>Ahorras $100 vs. compra individual</span>
-                            </li>
-                            <li class="d-flex align-items-start gap-2">
-                                <i class="bi bi-check-circle-fill text-primary lh-1 mt-1"></i>
-                                <span>Saldo sin caducidad</span>
-                            </li>
-                        </ul>
-                        <button type="button" class="btn btn-outline-primary rounded-pill fw-bold py-2 mt-auto">Comprar</button>
-                    </div>
+                <div id="packs-error" class="w-100 text-center d-none">
+                    <p class="fs-5 fw-medium text-black-50 mb-0">
+                        <i class="bi bi-exclamation-circle me-1"></i>
+                        No pudimos cargar los precios. Inténtalo de nuevo más tarde.
+                    </p>
                 </div>
-
-                <div class="col-12 col-sm-6 col-lg-4 col-xl reveal reveal-up reveal-delay-2">
-                    <div class="bg-primary text-white rounded-4 border border-primary p-4 h-100 d-flex flex-column text-start position-relative shadow">
-                        <span class="badge text-bg-secondary text-dark fw-bold rounded-pill position-absolute top-0 start-50 translate-middle px-3 py-2">
-                            MÁS POPULAR
-                        </span>
-                        <div class="mb-3">
-                            <span class="fw-bold fs-5">50 guías</span>
-                        </div>
-                        <div class="mb-1 lh-1">
-                            <span class="fw-bold display-6">$3,750</span>
-                            <span class="fs-6 fw-medium opacity-75">MXN</span>
-                        </div>
-                        <div class="fs-7 fw-medium opacity-75 mb-3">$75 por guía</div>
-                        <ul class="list-unstyled d-flex flex-column gap-2 fs-6 fw-medium mb-4">
-                            <li class="d-flex align-items-start gap-2">
-                                <i class="bi bi-check-circle-fill lh-1 mt-1"></i>
-                                <span>Ahorras $700 vs. compra individual</span>
-                            </li>
-                            <li class="d-flex align-items-start gap-2">
-                                <i class="bi bi-check-circle-fill lh-1 mt-1"></i>
-                                <span>Reportes de envíos</span>
-                            </li>
-                        </ul>
-                        <button type="button" class="btn btn-secondary rounded-pill fw-bold py-2 mt-auto text-dark border-0">Comprar</button>
-                    </div>
-                </div>
-
-                <div class="col-12 col-sm-6 col-lg-4 col-xl reveal reveal-up reveal-delay-3">
-                    <div class="bg-white rounded-4 border border-light-subtle p-4 h-100 d-flex flex-column text-start">
-                        <div class="mb-3">
-                            <span class="fw-bold fs-5">100 guías</span>
-                        </div>
-                        <div class="mb-1 lh-1">
-                            <span class="fw-bold display-6 text-primary">$7,200</span>
-                            <span class="fs-6 fw-medium text-black-50">MXN</span>
-                        </div>
-                        <div class="fs-7 fw-medium text-black-50 mb-3">$72 por guía</div>
-                        <ul class="list-unstyled d-flex flex-column gap-2 fs-6 fw-medium mb-4">
-                            <li class="d-flex align-items-start gap-2">
-                                <i class="bi bi-check-circle-fill text-primary lh-1 mt-1"></i>
-                                <span>Ahorras $1,700 vs. compra individual</span>
-                            </li>
-                            <li class="d-flex align-items-start gap-2">
-                                <i class="bi bi-check-circle-fill text-primary lh-1 mt-1"></i>
-                                <span>Soporte prioritario</span>
-                            </li>
-                        </ul>
-                        <button type="button" class="btn btn-outline-primary rounded-pill fw-bold py-2 mt-auto">Comprar</button>
-                    </div>
-                </div>
-
-                <div class="col-12 col-sm-6 col-lg-4 col-xl reveal reveal-up">
-                    <div class="bg-white rounded-4 border border-light-subtle p-4 h-100 d-flex flex-column text-start">
-                        <div class="mb-3">
-                            <span class="fw-bold fs-5">300 guías</span>
-                        </div>
-                        <div class="mb-1 lh-1">
-                            <span class="fw-bold display-6 text-primary">$20,700</span>
-                            <span class="fs-6 fw-medium text-black-50">MXN</span>
-                        </div>
-                        <div class="fs-7 fw-medium text-black-50 mb-3">$69 por guía</div>
-                        <ul class="list-unstyled d-flex flex-column gap-2 fs-6 fw-medium mb-4">
-                            <li class="d-flex align-items-start gap-2">
-                                <i class="bi bi-check-circle-fill text-primary lh-1 mt-1"></i>
-                                <span>Mejor precio por guía</span>
-                            </li>
-                            <li class="d-flex align-items-start gap-2">
-                                <i class="bi bi-check-circle-fill text-primary lh-1 mt-1"></i>
-                                <span>Gestor de cuenta dedicado</span>
-                            </li>
-                        </ul>
-                        <button type="button" class="btn btn-outline-primary rounded-pill fw-bold py-2 mt-auto">Comprar</button>
-                    </div>
-                </div>
-
             </div>
 
             <p class="text-center fs-6 fw-medium text-black-50 mt-4 mb-0 reveal reveal-up">
