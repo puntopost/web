@@ -388,7 +388,7 @@ function setupGeolocate(map) {
 
 // ---- Deep link ------------------------------------------------------------
 
-const DEEP_LINK_UNAVAILABLE = 'Lo sentimos, este punto de entrega no está disponible. Por favor contáctanos en <a href="mailto:hola@puntopost.mx" class="text-white fw-bold text-decoration-none">hola@puntopost.mx</a> y te ayudaremos a resolverlo lo antes posible.';
+const DEEP_LINK_UNAVAILABLE = 'Lo sentimos, este punto de entrega no está disponible. Por favor contáctanos por <a href="https://api.whatsapp.com/send/?phone=525528795640&text=Hola,+tengo+una+consulta%3A&type=phone_number&app_absent=0" target="_blank" rel="noopener noreferrer" class="text-white fw-bold text-decoration-none">WhatsApp</a> y te ayudaremos a resolverlo lo antes posible.';
 
 async function resolveDeepLink() {
 	const pudoId = location.hash.slice(1);
