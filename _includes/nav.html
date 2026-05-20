@@ -1,7 +1,8 @@
+{% assign whatsapp_url = "https://wa.me/1234567890?text=Hola%2C%20tengo%20un%20problema%20con%20la%20APP%20de%20gu%C3%ADas" %}
 <nav class="navbar navbar-dark{{ include.extra_class }}">
     <div class="{{ include.container_class | default: 'container-fluid' }}">
         <a class="navbar-brand{{ include.brand_class }}" href="/">
-            <img src="/assets/img/logo-puntopost-amarillo.webp" alt="PuntoPost Logo" style="height: 52px;">
+            <img src="/assets/img/logo-puntopost-amarillo.webp" alt="PuntoPost Logo" class="puntopost-navbar-logo">
         </a>
 
         <div class="d-none d-lg-flex gap-5 align-items-center">
@@ -9,11 +10,16 @@
             <a href="/map" class="nav-link text-white fw-bold fs-5">Mapa de puntos</a>
             <a href="/atrae" class="nav-link text-white fw-bold fs-5">Quiero ser punto</a>
             <a href="/envia" class="btn btn-yellow rounded-pill fw-bold fs-5 px-4 py-2 text-dark border-0">Envía con PuntoPost</a>
+            <a href="{{ whatsapp_url }}" target="_blank" rel="noopener noreferrer" aria-label="Abrir WhatsApp de atención al cliente" class="btn btn-whatsapp-help rounded-pill fw-bold fs-5 px-3 py-2 border-0 d-inline-flex align-items-center justify-content-center">
+                <i class="bi bi-whatsapp" aria-hidden="true"></i>
+            </a>
         </div>
 
-        <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Abrir menú">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+        <div class="d-flex d-lg-none align-items-center ms-auto">
+            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Abrir menú">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
 
         <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
             <div class="offcanvas-header">
@@ -29,6 +35,10 @@
                     <a href="/atrae" class="nav-link text-dark fs-5 py-3 d-block text-decoration-none fw-bold">Quiero ser punto</a>
                     <hr class="my-0">
                     <a href="/envia" class="btn btn-yellow rounded-pill fw-bold fs-5 px-4 py-2 text-dark border-0 d-block text-center text-decoration-none mt-2">Envía con PuntoPost</a>
+                    <a href="{{ whatsapp_url }}" target="_blank" rel="noopener noreferrer" aria-label="Abrir WhatsApp de atención al cliente" class="btn btn-whatsapp-help rounded-pill fw-bold fs-5 px-4 py-2 border-0 d-flex align-items-center justify-content-center gap-2 text-decoration-none mt-3">
+                        <i class="bi bi-whatsapp" aria-hidden="true"></i>
+                        <span>Contáctanos</span>
+                    </a>
                 </div>
             </div>
         </div>
