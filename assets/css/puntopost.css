@@ -19,6 +19,34 @@ footer {
     background-color: #FFE135;
 }
 
+.puntopost-navbar-logo {
+    height: 52px;
+}
+
+.btn-whatsapp-help {
+    background-color: #25D366;
+    color: #fff;
+    white-space: nowrap;
+}
+
+.btn-whatsapp-help:hover,
+.btn-whatsapp-help:focus,
+.btn-whatsapp-help:active {
+    background-color: #20bd5a !important;
+    color: #fff !important;
+}
+
+.btn-whatsapp-help .bi {
+    font-size: 1.25rem;
+    line-height: 1;
+}
+
+.btn-whatsapp-help-mobile {
+    padding: 0.75rem 1.5rem;
+    font-size: 1.25rem;
+    line-height: 1.2;
+}
+
 .step-number {
     font-size: 62px;
     line-height: 62px;
@@ -64,6 +92,21 @@ footer {
 @media (min-width: 1400px) {
     .display-xxl-6 {
         font-size: 2.5rem;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .puntopost-navbar-logo {
+        height: 40px;
+    }
+
+    .btn-whatsapp-help-mobile {
+        padding: 0.625rem 1rem;
+        font-size: 1rem;
+    }
+
+    .btn-whatsapp-help-mobile .bi {
+        font-size: 1.1rem;
     }
 }
 
