@@ -32,8 +32,8 @@ footer {
 .btn-whatsapp-help:hover,
 .btn-whatsapp-help:focus,
 .btn-whatsapp-help:active {
-    background-color: #20bd5a !important;
-    color: #fff !important;
+    background-color: #20bd5a;
+    color: #fff;
 }
 
 .btn-whatsapp-help .bi {
