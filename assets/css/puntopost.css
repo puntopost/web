@@ -46,12 +46,6 @@ footer {
     line-height: 1;
 }
 
-.btn-whatsapp-help-mobile {
-    padding: 0.75rem 1.5rem;
-    font-size: 1.25rem;
-    line-height: 1.2;
-}
-
 .step-number {
     font-size: 62px;
     line-height: 62px;
@@ -103,15 +97,6 @@ footer {
 @media (max-width: 575.98px) {
     .puntopost-navbar-logo {
         height: 40px;
-    }
-
-    .btn-whatsapp-help-mobile {
-        padding: 0.625rem 1rem;
-        font-size: 1rem;
-    }
-
-    .btn-whatsapp-help-mobile .bi {
-        font-size: 1.1rem;
     }
 }
 
