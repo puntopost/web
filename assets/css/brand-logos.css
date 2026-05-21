@@ -2,7 +2,7 @@
     display: flex;
     align-items: center;
     width: max-content;
-    animation: scroll-logos 20s linear infinite;
+    animation: scroll-logos 35s linear infinite;
 }
 
 .brand-logo {
