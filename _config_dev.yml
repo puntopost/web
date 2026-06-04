@@ -1,0 +1,3 @@
+# Local-only overrides. Applied via `make server`, never deployed.
+# Points the merchant registration embed at the local Vite dev server.
+embed_url: "http://localhost:5173/embed.js"

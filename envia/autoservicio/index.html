@@ -84,7 +84,7 @@ banner: |
                 <p class="fs-4 fw-medium mb-4">
                     Compra guías de una en una o por lote. Sin integraciones, sin contratos, paga solo por lo que envías. Modelo <b>punto a punto</b>: tú dejas el paquete en un PUDO y tu cliente lo recoge en otro. Ideal para vendedores pequeños, ventas en redes sociales o envíos puntuales.
                 </p>
-                <button type="button" class="btn btn-yellow rounded-pill fw-bold px-5 py-3 fs-4 text-dark border-0">Empieza a enviar</button>
+                <button type="button" class="btn btn-yellow rounded-pill fw-bold px-5 py-3 fs-4 text-dark border-0 js-cta-registro">Empieza a enviar</button>
             </div>
         </div>
     </section>
@@ -204,10 +204,13 @@ banner: |
             </p>
 
             <div class="text-center mt-5 mt-lg-5 reveal reveal-up">
-                <button type="button" class="btn btn-primary rounded-pill fw-bold px-5 py-3 fs-4 border-0">
+                <button type="button" class="btn btn-primary rounded-pill fw-bold px-5 py-3 fs-4 border-0 js-cta-registro">
                     Empieza a enviar
                 </button>
             </div>
 
         </div>
     </section>
+
+    <!-- Embed de registro: abre el iframe en modal desde los botones .js-cta-registro -->
+    <script src="{{ site.embed_url }}" data-trigger=".js-cta-registro"></script>
