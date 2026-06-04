@@ -1,5 +1,8 @@
 url: "https://www.puntopost.mx"
 
+# URL del script de embed del registro de merchants (producción).
+# Override local en _config_dev.yml (ver `make server`).
+embed_url: "https://merchant.puntopost.mx/embed.js"
 
 exclude:
   - Makefile
@@ -8,3 +11,4 @@ exclude:
   - README.md
   - vendor
   - node_modules
+  - _config_dev.yml

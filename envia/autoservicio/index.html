@@ -1,0 +1,216 @@
+---
+layout: default
+title: "PuntoPost - Compra guías (autoservicio)"
+description: "Compra guías de PuntoPost de una en una o por lote. Sin integraciones, sin contratos, paga solo por lo que envías. Envíos punto a punto."
+js:
+    - /assets/js/packs.js
+extra_head: |
+    <style>
+        .envia-hero {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)),
+                url("/assets/img/autoservicio-hero.webp");
+            background-size: cover;
+            background-position: center;
+            min-height: 380px;
+            position: relative;
+        }
+
+        .envia-hero-content {
+            max-width: 900px;
+        }
+
+        .envia-hero-content h2 {
+            font-size: clamp(1.9rem, 3.2vw, 3rem);
+            line-height: 1.12;
+        }
+
+        .envia-hero-content p {
+            max-width: 760px;
+            line-height: 1.35;
+        }
+
+        .packs-gallery {
+            justify-content: safe center;
+            scroll-snap-type: x proximity;
+        }
+
+        .pack-card {
+            flex: 0 0 auto;
+            width: 200px;
+            max-width: 100%;
+            scroll-snap-align: center;
+        }
+
+        @media (max-width: 767.98px) {
+            .envia-hero {
+                min-height: 300px;
+                background-position: 62% center;
+            }
+
+            .envia-hero-content {
+                display: block;
+                max-width: 280px;
+                padding-top: 0.5rem;
+            }
+
+            .envia-hero-content h2 {
+                font-size: 1.55rem;
+                line-height: 1.15;
+                margin-bottom: 0.5rem !important;
+            }
+
+            .envia-hero-content p {
+                font-size: 1.05rem !important;
+                line-height: 1.28;
+                margin-bottom: 0.9rem !important;
+            }
+
+            .envia-hero-content p br {
+                display: none;
+            }
+
+            .envia-hero-content .btn {
+                font-size: 1.2rem !important;
+                padding: 0.55rem 1.6rem !important;
+            }
+        }
+
+    </style>
+banner: |
+    <section class="envia-hero rounded-bottom-4 overflow-hidden d-flex align-items-center">
+        <div class="container-fluid px-4 px-lg-5">
+            <div class="envia-hero-content text-white py-4">
+                <h1 class="fw-bold display-5 mb-3">Compra guías de PuntoPost</h1>
+                <p class="fs-4 fw-medium mb-4">
+                    Compra guías de una en una o por lote. Sin integraciones, sin contratos, paga solo por lo que envías. Modelo <b>punto a punto</b>: tú dejas el paquete en un PUDO y tu cliente lo recoge en otro. Ideal para vendedores pequeños, ventas en redes sociales o envíos puntuales.
+                </p>
+                <button type="button" class="btn btn-yellow rounded-pill fw-bold px-5 py-3 fs-4 text-dark border-0 js-cta-registro">Empieza a enviar</button>
+            </div>
+        </div>
+    </section>
+---
+
+    <section class="bg-light py-5 py-lg-5">
+        <div class="container py-2 py-lg-4">
+
+            <div class="row g-4 g-lg-5 mb-5 mb-lg-5">
+
+                <div class="col-12 col-md-4 reveal reveal-up reveal-delay-1">
+                    <div class="bg-white rounded-4 border border-light-subtle p-4 p-lg-5 h-100 text-start d-flex flex-column">
+                        <div class="step-number fw-bold text-primary mb-3 lh-1">1</div>
+                        <h2 class="fw-bold fs-3 mb-2">Regístrate</h2>
+                        <p class="fs-5 fw-medium text-black-50 mb-0">
+                            Crea tu cuenta gratis en menos de un minuto. Sin tarjeta, sin compromiso.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-4 reveal reveal-up reveal-delay-2">
+                    <div class="bg-white rounded-4 border border-light-subtle p-4 p-lg-5 h-100 text-start d-flex flex-column">
+                        <div class="step-number fw-bold text-primary mb-3 lh-1">2</div>
+                        <h2 class="fw-bold fs-3 mb-2">Compra tus guías</h2>
+                        <p class="fs-5 fw-medium text-black-50 mb-0">
+                            Una o varias, paga en línea y descarga las etiquetas listas para imprimir.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-4 reveal reveal-up reveal-delay-3">
+                    <div class="bg-white rounded-4 border border-light-subtle p-4 p-lg-5 h-100 text-start d-flex flex-column">
+                        <div class="step-number fw-bold text-primary mb-3 lh-1">3</div>
+                        <h2 class="fw-bold fs-3 mb-2">Lleva tu paquete a un PUDO</h2>
+                        <p class="fs-5 fw-medium text-black-50 mb-0">
+                            Déjalo en cualquier PuntoPost. Tu cliente lo recoge en el PUDO que eligió. Sin paso por casa.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row g-4 text-center justify-content-center reveal reveal-up">
+
+                <div class="col-6 col-md-3">
+                    <div class="d-flex flex-column align-items-center gap-2">
+                        <div class="bg-primary-subtle text-primary rounded-circle d-flex align-items-center justify-content-center p-3 mb-2">
+                            <i class="bi bi-cash-coin fs-2 lh-1"></i>
+                        </div>
+                        <b class="fs-5">Sin mensualidad</b>
+                        <span class="fs-6 fw-medium text-black-50">Paga solo por las guías que uses.</span>
+                    </div>
+                </div>
+
+                <div class="col-6 col-md-3">
+                    <div class="d-flex flex-column align-items-center gap-2">
+                        <div class="bg-primary-subtle text-primary rounded-circle d-flex align-items-center justify-content-center p-3 mb-2">
+                            <i class="bi bi-receipt fs-2 lh-1"></i>
+                        </div>
+                        <b class="fs-5">Tarifas claras</b>
+                        <span class="fs-6 fw-medium text-black-50">Precio fijo por zona, sin sorpresas.</span>
+                    </div>
+                </div>
+
+                <div class="col-6 col-md-3">
+                    <div class="d-flex flex-column align-items-center gap-2">
+                        <div class="bg-primary-subtle text-primary rounded-circle d-flex align-items-center justify-content-center p-3 mb-2">
+                            <i class="bi bi-geo-alt-fill fs-2 lh-1"></i>
+                        </div>
+                        <b class="fs-5">PUDOs en todo México</b>
+                        <span class="fs-6 fw-medium text-black-50">Más de 3,000 puntos cerca de ti.</span>
+                    </div>
+                </div>
+
+                <div class="col-6 col-md-3">
+                    <div class="d-flex flex-column align-items-center gap-2">
+                        <div class="bg-primary-subtle text-primary rounded-circle d-flex align-items-center justify-content-center p-3 mb-2">
+                            <i class="bi bi-bell-fill fs-2 lh-1"></i>
+                        </div>
+                        <b class="fs-5">Seguimiento automático</b>
+                        <span class="fs-6 fw-medium text-black-50">Notificaciones para ti y tu cliente.</span>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <section class="bg-secondary-subtle py-5 py-lg-5">
+        <div class="container py-2 py-lg-4">
+
+            <div class="text-center mx-auto mb-5 reveal reveal-up">
+                <h2 class="fw-bold display-6 mb-3">Compra una guía o ahorra por lote</h2>
+                <p class="fs-4 fw-medium text-black-50 mb-0 mx-auto col-12 col-lg-10 col-xl-8">
+                    Precio fijo por guía, envío punto a punto en toda la red PuntoPost. Cuantas más compres, menor el precio por guía.
+                </p>
+            </div>
+
+            <div id="packs-list" class="packs-gallery d-flex flex-nowrap overflow-x-auto gap-3 gap-lg-4 pt-4 pb-3">
+                <div id="packs-loading" class="w-100 text-center py-4">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Cargando precios…</span>
+                    </div>
+                </div>
+                <div id="packs-error" class="w-100 text-center d-none">
+                    <p class="fs-5 fw-medium text-black-50 mb-0">
+                        <i class="bi bi-exclamation-circle me-1"></i>
+                        No pudimos cargar los precios. Inténtalo de nuevo más tarde.
+                    </p>
+                </div>
+            </div>
+
+            <p class="text-center fs-6 fw-medium text-black-50 mt-4 mb-0 reveal reveal-up">
+                <i class="bi bi-info-circle me-1"></i>
+                Precios en MXN, IVA incluido. Aplica a paquetes hasta 5 kg en envíos punto a punto dentro de la red PuntoPost.
+            </p>
+
+            <div class="text-center mt-5 mt-lg-5 reveal reveal-up">
+                <button type="button" class="btn btn-primary rounded-pill fw-bold px-5 py-3 fs-4 border-0 js-cta-registro">
+                    Empieza a enviar
+                </button>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Embed de registro: abre el iframe en modal desde los botones .js-cta-registro -->
+    <script src="{{ site.embed_url }}" data-trigger=".js-cta-registro"></script>
