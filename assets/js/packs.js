@@ -20,11 +20,10 @@ const loadPacks = async () => {
 		return;
 	}
 
-	const popularIndex = Math.floor(items.length / 2);
 	const referenceUnitPrice = items[0].price / items[0].credits;
 
 	const cards = items
-		.map((pack, index) => renderPack(pack, index, popularIndex, referenceUnitPrice))
+		.map((pack, index) => renderPack(pack, index, referenceUnitPrice))
 		.join('');
 	list.insertAdjacentHTML('beforeend', cards);
 };
@@ -56,7 +55,7 @@ const packBullet = (pack, index, referenceUnitPrice) => {
 	return 'Ahorras $' + formatNumber(saving) + ' vs. compra individual';
 };
 
-const renderPack = (pack, index, popularIndex, referenceUnitPrice) => {
+const renderPack = (pack, index, referenceUnitPrice) => {
 	const name = escapeHtml(pack.name);
 	const currency = escapeHtml(pack.currency);
 	const guides = guidesLabel(pack.credits);
@@ -64,7 +63,7 @@ const renderPack = (pack, index, popularIndex, referenceUnitPrice) => {
 	const perUnit = perUnitLabel(pack);
 	const bullet = escapeHtml(packBullet(pack, index, referenceUnitPrice));
 
-	if (index === popularIndex) {
+	if (pack.popular) {
 		return `
 			<div class="pack-card bg-primary text-white rounded-4 border border-primary p-4 d-flex flex-column text-start position-relative shadow">
 				<span class="badge text-bg-secondary text-dark fw-bold rounded-pill position-absolute top-0 start-50 translate-middle px-3 py-2">MÁS POPULAR</span>
