@@ -39,8 +39,6 @@ const escapeHtml = (value) =>
 		"'": '&#39;',
 	})[char]);
 
-const guidesLabel = (credits) => (credits === 1 ? '1 guía' : formatNumber(credits) + ' guías');
-
 const perUnitLabel = (pack) => {
 	const unit = pack.price / pack.credits;
 	const rounded = Number.isInteger(unit) ? unit : Number(unit.toFixed(2));
@@ -58,7 +56,6 @@ const packBullet = (pack, index, referenceUnitPrice) => {
 const renderPack = (pack, index, referenceUnitPrice) => {
 	const name = escapeHtml(pack.name);
 	const currency = escapeHtml(pack.currency);
-	const guides = guidesLabel(pack.credits);
 	const price = formatNumber(pack.price);
 	const perUnit = perUnitLabel(pack);
 	const bullet = escapeHtml(packBullet(pack, index, referenceUnitPrice));
@@ -67,10 +64,9 @@ const renderPack = (pack, index, referenceUnitPrice) => {
 		return `
 			<div class="pack-card bg-primary text-white rounded-4 border border-primary p-4 d-flex flex-column text-start position-relative shadow">
 				<span class="badge text-bg-secondary text-dark fw-bold rounded-pill position-absolute top-0 start-50 translate-middle px-3 py-2">MÁS POPULAR</span>
-				<div class="mb-1">
+				<div class="mb-3">
 					<span class="fw-bold fs-5">${name}</span>
 				</div>
-				<div class="fs-6 fw-medium opacity-75 mb-3">${guides}</div>
 				<div class="mb-1 lh-1">
 					<span class="fw-bold display-6">$${price}</span>
 					<span class="fs-6 fw-medium opacity-75">${currency}</span>
@@ -87,10 +83,9 @@ const renderPack = (pack, index, referenceUnitPrice) => {
 
 	return `
 		<div class="pack-card bg-white rounded-4 border border-light-subtle p-4 d-flex flex-column text-start">
-			<div class="mb-1">
+			<div class="mb-3">
 				<span class="fw-bold fs-5">${name}</span>
 			</div>
-			<div class="fs-6 fw-medium text-black-50 mb-3">${guides}</div>
 			<div class="mb-1 lh-1">
 				<span class="fw-bold display-6 text-primary">$${price}</span>
 				<span class="fs-6 fw-medium text-black-50">${currency}</span>
