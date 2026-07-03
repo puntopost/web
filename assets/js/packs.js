@@ -20,11 +20,12 @@ const loadPacks = async () => {
 		return;
 	}
 
-	const popularIndex = Math.floor(items.length / 2);
+	const popularIndex = items.findIndex((pack) => pack.credits === 50);
+	const selectedPopularIndex = popularIndex >= 0 ? popularIndex : Math.floor(items.length / 2);
 	const referenceUnitPrice = items[0].price / items[0].credits;
 
 	const cards = items
-		.map((pack, index) => renderPack(pack, index, popularIndex, referenceUnitPrice))
+		.map((pack, index) => renderPack(pack, index, selectedPopularIndex, referenceUnitPrice))
 		.join('');
 	list.insertAdjacentHTML('beforeend', cards);
 };
@@ -39,8 +40,6 @@ const escapeHtml = (value) =>
 		'"': '&quot;',
 		"'": '&#39;',
 	})[char]);
-
-const guidesLabel = (credits) => (credits === 1 ? '1 guía' : formatNumber(credits) + ' guías');
 
 const perUnitLabel = (pack) => {
 	const unit = pack.price / pack.credits;
@@ -59,7 +58,6 @@ const packBullet = (pack, index, referenceUnitPrice) => {
 const renderPack = (pack, index, popularIndex, referenceUnitPrice) => {
 	const name = escapeHtml(pack.name);
 	const currency = escapeHtml(pack.currency);
-	const guides = guidesLabel(pack.credits);
 	const price = formatNumber(pack.price);
 	const perUnit = perUnitLabel(pack);
 	const bullet = escapeHtml(packBullet(pack, index, referenceUnitPrice));
@@ -71,7 +69,6 @@ const renderPack = (pack, index, popularIndex, referenceUnitPrice) => {
 				<div class="mb-1">
 					<span class="fw-bold fs-5">${name}</span>
 				</div>
-				<div class="fs-6 fw-medium opacity-75 mb-3">${guides}</div>
 				<div class="mb-1 lh-1">
 					<span class="fw-bold display-6">$${price}</span>
 					<span class="fs-6 fw-medium opacity-75">${currency}</span>
@@ -91,7 +88,6 @@ const renderPack = (pack, index, popularIndex, referenceUnitPrice) => {
 			<div class="mb-1">
 				<span class="fw-bold fs-5">${name}</span>
 			</div>
-			<div class="fs-6 fw-medium text-black-50 mb-3">${guides}</div>
 			<div class="mb-1 lh-1">
 				<span class="fw-bold display-6 text-primary">$${price}</span>
 				<span class="fs-6 fw-medium text-black-50">${currency}</span>
