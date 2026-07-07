@@ -180,46 +180,34 @@ banner: |
                 <div class="text-center mb-4">
                     <h2 class="fw-bold mb-0">Si vas a recoger, esto te sirve</h2>
                 </div>
-                <div class="accordion home-faq d-flex flex-column gap-3" id="homeFaq">
-                    <div class="accordion-item border overflow-hidden home-faq-item is-open" style="border-color: #13A590 !important; border-radius: 14px;">
+                <div class="accordion d-flex flex-column gap-3" id="homeFaq">
+                    <div class="accordion-item border overflow-hidden rounded-4">
                         <h3 class="accordion-header">
-                            <button class="accordion-button shadow-none fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#home-faq-1" aria-expanded="true" aria-controls="home-faq-1" style="border-radius: 14px;">
-                                ¿Qué pasa si no recojo en 7 días?
-                                <span class="ms-auto d-inline-flex align-items-center justify-content-center faq-icon-box">+</span>
-                            </button>
+                            <button class="accordion-button shadow-none fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#home-faq-1" aria-expanded="true" aria-controls="home-faq-1">¿Qué pasa si no recojo en 7 días?</button>
                         </h3>
                         <div id="home-faq-1" class="accordion-collapse collapse show" data-bs-parent="#homeFaq">
                             <div class="accordion-body text-body-secondary">Te avisamos por correo antes de que se cumpla el plazo. Si no recoges en 7 días laborables, el paquete regresa con quien te lo envió.</div>
                         </div>
                     </div>
-                    <div class="accordion-item border overflow-hidden home-faq-item" style="border-color: #e9ecef !important; border-radius: 14px;">
+                    <div class="accordion-item border overflow-hidden rounded-4">
                         <h3 class="accordion-header">
-                            <button class="accordion-button collapsed shadow-none fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#home-faq-2" aria-expanded="false" aria-controls="home-faq-2" style="border-radius: 14px;">
-                                ¿Necesito traer identificación?
-                                <span class="ms-auto d-inline-flex align-items-center justify-content-center faq-icon-box">+</span>
-                            </button>
+                            <button class="accordion-button collapsed shadow-none fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#home-faq-2" aria-expanded="false" aria-controls="home-faq-2">¿Necesito traer identificación?</button>
                         </h3>
                         <div id="home-faq-2" class="accordion-collapse collapse" data-bs-parent="#homeFaq">
                             <div class="accordion-body text-body-secondary">Con tu código QR es suficiente. Si ha de recogerlo otra persona, solo comparte tu código QR con quien quieras que recoja. Quien llegue con el código válido puede llevarse el paquete.</div>
                         </div>
                     </div>
-                    <div class="accordion-item border overflow-hidden home-faq-item" style="border-color: #e9ecef !important; border-radius: 14px;">
+                    <div class="accordion-item border overflow-hidden rounded-4">
                         <h3 class="accordion-header">
-                            <button class="accordion-button collapsed shadow-none fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#home-faq-3" aria-expanded="false" aria-controls="home-faq-3" style="border-radius: 14px;">
-                                ¿Cómo cambio el PuntoPost si elegí mal?
-                                <span class="ms-auto d-inline-flex align-items-center justify-content-center faq-icon-box">+</span>
-                            </button>
+                            <button class="accordion-button collapsed shadow-none fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#home-faq-3" aria-expanded="false" aria-controls="home-faq-3">¿Cómo cambio el PuntoPost si elegí mal?</button>
                         </h3>
                         <div id="home-faq-3" class="accordion-collapse collapse" data-bs-parent="#homeFaq">
                             <div class="accordion-body text-body-secondary">Mientras tu paquete no haya llegado al punto, escríbenos por WhatsApp y lo movemos.</div>
                         </div>
                     </div>
-                    <div class="accordion-item border overflow-hidden home-faq-item" style="border-color: #e9ecef !important; border-radius: 14px;">
+                    <div class="accordion-item border overflow-hidden rounded-4">
                         <h3 class="accordion-header">
-                            <button class="accordion-button collapsed shadow-none fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#home-faq-4" aria-expanded="false" aria-controls="home-faq-4" style="border-radius: 14px;">
-                                ¿Qué hago si llego y el punto está cerrado?
-                                <span class="ms-auto d-inline-flex align-items-center justify-content-center faq-icon-box">+</span>
-                            </button>
+                            <button class="accordion-button collapsed shadow-none fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#home-faq-4" aria-expanded="false" aria-controls="home-faq-4">¿Qué hago si llego y el punto está cerrado?</button>
                         </h3>
                         <div id="home-faq-4" class="accordion-collapse collapse" data-bs-parent="#homeFaq">
                             <div class="accordion-body text-body-secondary">En el mapa ves el horario de cada punto antes de ir. Si llegas y está cerrado, tu plazo de 7 días no corre ese día: tienes margen de sobra para volver.</div>
@@ -245,59 +233,4 @@ banner: |
             });
         })();
 
-        (function () {
-            const faq = document.getElementById('homeFaq');
-            if (!faq) return;
-            const items = faq.querySelectorAll('.home-faq-item');
-            faq.addEventListener('shown.bs.collapse', function (event) {
-                const current = event.target.closest('.home-faq-item');
-                if (!current) return;
-                current.classList.add('is-open');
-                current.style.borderColor = '#13A590';
-            });
-            faq.addEventListener('hidden.bs.collapse', function (event) {
-                const current = event.target.closest('.home-faq-item');
-                if (!current) return;
-                current.classList.remove('is-open');
-                current.style.borderColor = '#e9ecef';
-            });
-            items.forEach((item) => {
-                if (!item.classList.contains('is-open')) {
-                    item.style.borderColor = '#e9ecef';
-                }
-            });
-        })();
     </script>
-
-    <style>
-        .home-faq .accordion-button::after {
-            display: none;
-        }
-
-        .home-faq .accordion-button {
-            background: #fff;
-            color: #212529;
-            box-shadow: none;
-            padding: 1rem 1.25rem;
-        }
-
-        .home-faq .accordion-button:not(.collapsed) {
-            background: #fff;
-            color: #212529;
-        }
-
-        .home-faq .faq-icon-box {
-            width: 28px;
-            height: 28px;
-            border-radius: 8px;
-            border: 1px solid #dce3e8;
-            color: #13A590;
-            font-size: 1.1rem;
-            line-height: 1;
-            transition: transform 0.2s ease;
-        }
-
-        .home-faq .accordion-button:not(.collapsed) .faq-icon-box {
-            transform: rotate(45deg);
-        }
-    </style>
