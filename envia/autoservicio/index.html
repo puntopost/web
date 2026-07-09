@@ -32,25 +32,28 @@ extra_head: |
         .packs-gallery {
             justify-content: safe center;
             scroll-snap-type: x proximity;
+            flex-wrap: wrap;
         }
 
         .pack-card {
             flex: 0 0 auto;
-            width: 200px;
-            max-width: 100%;
+            width: 100%;
             scroll-snap-align: center;
         }
 
-        @media (max-width: 767.98px) {
+        @media (min-width: 768px) {
             .packs-gallery {
-                flex-wrap: wrap;
-                overflow-x: visible;
+                flex-wrap: nowrap;
+                overflow-x: auto;
             }
 
             .pack-card {
-                width: 100%;
+                width: 200px;
+                max-width: 100%;
             }
+        }
 
+        @media (max-width: 767.98px) {
             .envia-hero {
                 min-height: 300px;
                 background-position: 62% center;
@@ -228,7 +231,7 @@ banner: |
                 </p>
             </div>
 
-            <div id="packs-list" class="packs-gallery d-flex flex-nowrap overflow-x-auto gap-3 gap-lg-4 pt-4 pb-3">
+            <div id="packs-list" class="packs-gallery d-flex gap-3 gap-lg-4 pt-4 pb-3">
                 <div id="packs-loading" class="w-100 text-center py-4">
                     <div class="spinner-border text-primary" role="status">
                         <span class="visually-hidden">Cargando precios…</span>
