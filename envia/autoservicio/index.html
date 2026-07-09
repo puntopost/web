@@ -32,13 +32,25 @@ extra_head: |
         .packs-gallery {
             justify-content: safe center;
             scroll-snap-type: x proximity;
+            flex-wrap: wrap;
         }
 
         .pack-card {
             flex: 0 0 auto;
-            width: 200px;
-            max-width: 100%;
+            width: 100%;
             scroll-snap-align: center;
+        }
+
+        @media (min-width: 768px) {
+            .packs-gallery {
+                flex-wrap: nowrap;
+                overflow-x: auto;
+            }
+
+            .pack-card {
+                width: 200px;
+                max-width: 100%;
+            }
         }
 
         @media (max-width: 767.98px) {
@@ -182,7 +194,7 @@ banner: |
                         <h2 class="fw-bold fs-2 mb-1 text-primary-emphasis">Tiempos de entrega</h2>
                         <p class="fs-6 fw-medium text-black-50 mb-0">Envíos punto a punto en la red PuntoPost.</p>
                     </div>
-                    <div class="col-6 col-lg-4">
+                    <div class="col-12 col-lg-4">
                         <div class="bg-white rounded-4 border border-light-subtle p-4 h-100 d-flex align-items-center gap-3">
                             <div class="bg-primary-subtle text-primary rounded-circle d-inline-flex align-items-center justify-content-center p-3 flex-shrink-0"><i class="bi bi-pin-map-fill fs-3 lh-1"></i></div>
                             <div>
@@ -191,7 +203,7 @@ banner: |
                             </div>
                         </div>
                     </div>
-                    <div class="col-6 col-lg-4">
+                    <div class="col-12 col-lg-4">
                         <div class="bg-white rounded-4 border border-light-subtle p-4 h-100 d-flex align-items-center gap-3">
                             <div class="bg-primary-subtle text-primary rounded-circle d-inline-flex align-items-center justify-content-center p-3 flex-shrink-0"><i class="bi bi-signpost-split-fill fs-3 lh-1"></i></div>
                             <div>
@@ -219,7 +231,7 @@ banner: |
                 </p>
             </div>
 
-            <div id="packs-list" class="packs-gallery d-flex flex-nowrap overflow-x-auto gap-3 gap-lg-4 pt-4 pb-3">
+            <div id="packs-list" class="packs-gallery d-flex gap-3 gap-lg-4 pt-4 pb-3">
                 <div id="packs-loading" class="w-100 text-center py-4">
                     <div class="spinner-border text-primary" role="status">
                         <span class="visually-hidden">Cargando precios…</span>
