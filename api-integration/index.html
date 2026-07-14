@@ -51,7 +51,7 @@ toc:
     <ul class="text-body-secondary mb-4">
         <li class="mb-2">Contactar con PuntoPost para dar de alta tu comercio en la plataforma.</li>
         <li class="mb-2">Recibir tu <em>Merchant ID</em> y las credenciales del usuario merchant que utilizarás para autenticarte.</li>
-        <li class="mb-2">Confirmar con tu contacto de PuntoPost el tipo o tipos de envío que utilizará tu comercio (B2C, C2C, C2B, C2F o F2C) para que queden habilitados.</li>
+        <li class="mb-2">Confirmar con tu contacto de PuntoPost el tipo o tipos de envío que utilizará tu comercio (B2C, C2C o C2B) para que queden habilitados.</li>
         <li>Definir la URL pública de tu webhook si vas a recibir eventos de cambios de estado.</li>
     </ul>
     <p class="text-body-secondary mb-0">
@@ -115,7 +115,7 @@ toc:
 <section id="paso-3-envio" class="bg-white rounded-3 shadow-sm p-4 p-lg-5 mb-4">
     <h2 class="fw-bold mb-4">3. Crear un envío</h2>
     <p class="text-body-secondary mb-3">
-        Con el punto elegido y los datos del pedido, ya puedes crear el envío en PuntoPost. Ofrecemos cinco tipos de envío según el origen y el destino. Utiliza el que corresponda a tu flujo de negocio:
+        Con el punto elegido y los datos del pedido, ya puedes crear el envío en PuntoPost. Ofrecemos tres tipos de envío según el origen y el destino. Utiliza el que corresponda a tu flujo de negocio:
     </p>
     <div class="table-responsive mb-4">
         <table class="table table-bordered align-middle">
@@ -141,16 +141,6 @@ toc:
                     <td><strong>C2B</strong></td>
                     <td>Cliente que deja en un punto → comercio (devoluciones).</td>
                     <td><code>POST /api/merchant/v1/{merchantId}/parcels/c2b</code></td>
-                </tr>
-                <tr>
-                    <td><strong>C2F</strong></td>
-                    <td>Cliente que deja en un punto → almacén / instalación del comercio.</td>
-                    <td><code>POST /api/merchant/v1/{merchantId}/parcels/c2f</code></td>
-                </tr>
-                <tr>
-                    <td><strong>F2C</strong></td>
-                    <td>Almacén / instalación del comercio → cliente que recoge en un punto.</td>
-                    <td><code>POST /api/merchant/v1/{merchantId}/parcels/f2c</code></td>
                 </tr>
             </tbody>
         </table>
@@ -189,7 +179,7 @@ toc:
     <h3 class="fw-bold h5 mb-3">Transiciones que puedes ejecutar</h3>
     <ul class="text-body-secondary mb-0">
         <li class="mb-2"><code>PUT /api/merchant/v1/parcels/{identifier}/ready</code> — marca el envío como listo en el punto de origen. Se usa cuando el paquete ya ha sido depositado y comienza el tránsito.</li>
-        <li class="mb-2"><code>PUT /api/merchant/v1/parcels/{identifier}/deliver</code> — marca un envío como entregado en destino. Aplica a flujos C2B y C2F donde el destino es tu comercio o almacén.</li>
+        <li class="mb-2"><code>PUT /api/merchant/v1/parcels/{identifier}/deliver</code> — marca un envío como entregado en destino. Aplica al flujo C2B, cuando el destino es tu comercio.</li>
         <li><code>DELETE /api/merchant/v1/parcels/{identifier}</code> — cancela un envío. Solo es posible mientras el envío esté en estado <code>CREATED</code>.</li>
     </ul>
 </section>
