@@ -179,7 +179,6 @@ toc:
     <h3 class="fw-bold h5 mb-3">Transiciones que puedes ejecutar</h3>
     <ul class="text-body-secondary mb-0">
         <li class="mb-2"><code>PUT /api/merchant/v1/parcels/{identifier}/ready</code> — marca el envío como listo en el punto de origen. Se usa cuando el paquete ya ha sido depositado y comienza el tránsito.</li>
-        <li class="mb-2"><code>PUT /api/merchant/v1/parcels/{identifier}/deliver</code> — marca un envío como entregado en destino. Aplica al flujo C2B, cuando el destino es tu comercio.</li>
         <li><code>DELETE /api/merchant/v1/parcels/{identifier}</code> — cancela un envío. Solo es posible mientras el envío esté en estado <code>CREATED</code>.</li>
     </ul>
 </section>
