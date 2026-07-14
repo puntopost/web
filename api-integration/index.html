@@ -22,10 +22,8 @@ toc:
       label: 3. Crear un envío
     - id: paso-4-gestion
       label: 4. Marcar como listo o cancelar
-    - id: paso-5-etiqueta
-      label: 5. Descargar la etiqueta
-    - id: paso-6-webhooks
-      label: 6. Recibir eventos por webhook
+    - id: paso-5-webhooks
+      label: 5. Recibir eventos por webhook
     - id: documentacion
       label: Documentación completa
 ---
@@ -154,13 +152,10 @@ toc:
     <p class="text-body-secondary mb-3">
         Como respuesta recibirás el envío creado con su código de rastreo y dos códigos QR con usos distintos:
     </p>
-    <ul class="text-body-secondary mb-3">
+    <ul class="text-body-secondary mb-0">
         <li class="mb-2"><strong><code>qr_tracking</code></strong> — es el QR que tienes que compartir con tu cliente (por correo, WhatsApp o dentro de tu propia app). Le sirve para mostrarlo en el punto cuando vaya a dejar o recoger el paquete. <strong>No hace falta imprimirlo</strong>: basta con que lo enseñe desde el móvil.</li>
         <li><strong><code>qr_label</code></strong> — es la etiqueta que va pegada al paquete. <strong>Solo aplica al flujo B2C</strong>, en el que el paquete sale de tu almacén: en ese caso <strong>tienes que imprimirla y adherirla al exterior del paquete</strong> antes de entregarlo al operador o dejarlo en el punto de origen. En los flujos C2C y C2B es el propio cliente quien deposita el paquete en el punto usando su <code>qr_tracking</code>, y no necesitas imprimir nada.</li>
     </ul>
-    <p class="text-body-secondary mb-0">
-        Puedes descargar la etiqueta también más adelante desde el endpoint del <a href="#paso-5-etiqueta">paso 5</a>.
-    </p>
 </section>
 
 <section id="paso-4-gestion" class="bg-white rounded-3 shadow-sm p-4 p-lg-5 mb-4">
@@ -174,21 +169,8 @@ toc:
     </ul>
 </section>
 
-<section id="paso-5-etiqueta" class="bg-white rounded-3 shadow-sm p-4 p-lg-5 mb-4">
-    <h2 class="fw-bold mb-4">5. Descargar la etiqueta</h2>
-    <p class="text-body-secondary mb-3">
-        Para preparar el paquete físicamente necesitas la etiqueta de PuntoPost. Puedes descargarla en cualquier momento después de crear el envío.
-    </p>
-    <ul class="text-body-secondary mb-4">
-        <li><code>GET /api/merchant/v1/parcels/{identifier}/label</code> — devuelve la etiqueta en formato PDF o PNG, según el formato configurado para tu comercio.</li>
-    </ul>
-    <p class="text-body-secondary mb-0">
-        Imprime la etiqueta y adhiérela al exterior del paquete antes de depositarlo en el punto de origen o entregarlo a nuestro operador.
-    </p>
-</section>
-
-<section id="paso-6-webhooks" class="bg-white rounded-3 shadow-sm p-4 p-lg-5 mb-4">
-    <h2 class="fw-bold mb-4">6. Recibir eventos por webhook</h2>
+<section id="paso-5-webhooks" class="bg-white rounded-3 shadow-sm p-4 p-lg-5 mb-4">
+    <h2 class="fw-bold mb-4">5. Recibir eventos por webhook</h2>
     <p class="text-body-secondary mb-3">
         Para mantener tu plataforma sincronizada sin necesidad de hacer <em>polling</em> continuo, PuntoPost envía notificaciones a la URL de webhook que hayas configurado en tu comercio cada vez que ocurre un evento relevante.
     </p>
