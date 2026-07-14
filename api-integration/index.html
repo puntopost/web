@@ -1,0 +1,244 @@
+---
+layout: documentation
+title: "PuntoPost - Integración vía API - Documentación"
+description: "Guía paso a paso para integrar tu ecommerce con PuntoPost directamente vía nuestra API de merchant."
+banner: |
+    <section class="text-white text-center rounded-bottom-4 pb-4 pt-3">
+    <h1 class="fw-bold display-5 mb-3">Integración vía API</h1>
+    <p class="fs-5 mb-0">Guía de integración para ecommerce</p>
+    </section>
+toc:
+    - id: introduccion
+      label: Introducción
+    - id: requisitos
+      label: Requisitos previos
+    - id: autenticacion
+      label: Autenticación
+    - id: paso-1-cobertura
+      label: 1. Validar cobertura
+    - id: paso-2-puntos
+      label: 2. Obtener puntos de recogida
+    - id: paso-3-envio
+      label: 3. Crear un envío
+    - id: paso-4-gestion
+      label: 4. Consultar y gestionar envíos
+    - id: paso-5-etiqueta
+      label: 5. Descargar la etiqueta
+    - id: paso-6-webhooks
+      label: 6. Recibir eventos por webhook
+    - id: documentacion
+      label: Documentación completa
+---
+
+<section id="introduccion" class="bg-white rounded-3 shadow-sm p-4 p-lg-5 mb-4">
+    <h2 class="fw-bold mb-4">Introducción</h2>
+    <p class="text-body-secondary">
+        Esta guía describe cómo integrar tu ecommerce directamente con PuntoPost a través de nuestra API de merchant. Está pensada para comercios que gestionan su propia plataforma o que no utilizan Shopify o WooCommerce (para los que ofrecemos <a href="/shopify-app">plugin de Shopify</a> y <a href="/woocommerce-plugin">plugin de WooCommerce</a>).
+    </p>
+    <p class="text-body-secondary mb-4">
+        La integración se organiza en unos pocos pasos secuenciales que cubren todo el ciclo de vida de un envío: validar cobertura, mostrar los puntos disponibles a tu cliente, crear el envío, gestionarlo y recibir actualizaciones automáticas de estado.
+    </p>
+    <p class="text-body-secondary mb-0">
+        Todos los ejemplos concretos de request y response, así como el listado completo de campos, se encuentran en la <a href="https://back.puntopost.mx/api/doc/merchant" target="_blank" rel="noopener noreferrer">documentación técnica de la API</a>. Esta guía te acompaña en el orden en el que tienes que utilizarlos.
+    </p>
+</section>
+
+<section id="requisitos" class="bg-white rounded-3 shadow-sm p-4 p-lg-5 mb-4">
+    <h2 class="fw-bold mb-4">Requisitos previos</h2>
+    <p class="text-body-secondary mb-3">
+        Antes de comenzar la integración necesitas:
+    </p>
+    <ul class="text-body-secondary mb-4">
+        <li class="mb-2">Contactar con PuntoPost para dar de alta tu comercio en la plataforma.</li>
+        <li class="mb-2">Recibir tu <em>Merchant ID</em> y las credenciales del usuario merchant que utilizarás para autenticarte.</li>
+        <li class="mb-2">Confirmar con tu contacto de PuntoPost el tipo o tipos de envío que utilizará tu comercio (B2C, C2C, C2B, C2F o F2C) para que queden habilitados.</li>
+        <li>Definir la URL pública de tu webhook si vas a recibir eventos de cambios de estado.</li>
+    </ul>
+    <p class="text-body-secondary mb-0">
+        Si aún no dispones de credenciales, escríbenos a <a href="mailto:hola@puntopost.mx">hola@puntopost.mx</a> y te acompañamos en el proceso de alta.
+    </p>
+</section>
+
+<section id="autenticacion" class="bg-white rounded-3 shadow-sm p-4 p-lg-5 mb-4">
+    <h2 class="fw-bold mb-4">Autenticación</h2>
+    <p class="text-body-secondary mb-3">
+        Todas las llamadas a la API se autentican mediante un token JWT que se envía en la cabecera <code>Authorization</code> como <code>Bearer</code>. El token se obtiene iniciando sesión con las credenciales del usuario merchant.
+    </p>
+    <p class="text-body-secondary mb-3">
+        Endpoints implicados:
+    </p>
+    <ul class="text-body-secondary mb-4">
+        <li class="mb-2"><code>POST /api/auth/v1/users/merchant</code> — alta de usuario merchant (solo la primera vez).</li>
+        <li><code>POST /api/v1/auth/login</code> — obtención del token de acceso.</li>
+    </ul>
+    <p class="text-body-secondary mb-0">
+        Guarda el token de forma segura y rótalo de acuerdo con tus políticas internas. El rol necesario para operar con la API de merchant es <code>ROLE_MERCHANT</code>.
+    </p>
+</section>
+
+<section id="paso-1-cobertura" class="bg-white rounded-3 shadow-sm p-4 p-lg-5 mb-4">
+    <h2 class="fw-bold mb-4">1. Validar cobertura</h2>
+    <p class="text-body-secondary mb-3">
+        Antes de ofrecer PuntoPost como opción de envío en tu checkout, comprueba que el código postal del cliente está dentro de nuestra red. Consideramos que un código postal tiene cobertura cuando existe un punto de recogida a menos de 3 km.
+    </p>
+    <p class="text-body-secondary mb-3">
+        Tienes dos formas de trabajar con la cobertura:
+    </p>
+    <ul class="text-body-secondary mb-4">
+        <li class="mb-2"><strong>Consulta puntual:</strong> <code>GET /api/merchant/v1/coverage/{postalCode}</code> — devuelve si un código postal concreto tiene o no cobertura. Recomendado para validar en tiempo real durante el checkout.</li>
+        <li><strong>Descarga completa:</strong> <code>GET /api/merchant/v1/coverage</code> — devuelve el listado completo de códigos postales cubiertos. Útil si prefieres cachearlo en tu plataforma y validar en local.</li>
+    </ul>
+    <p class="text-body-secondary mb-0">
+        Si el código postal no tiene cobertura, oculta la opción de envío a PuntoPost en tu checkout.
+    </p>
+</section>
+
+<section id="paso-2-puntos" class="bg-white rounded-3 shadow-sm p-4 p-lg-5 mb-4">
+    <h2 class="fw-bold mb-4">2. Obtener puntos de recogida</h2>
+    <p class="text-body-secondary mb-3">
+        Una vez confirmado que hay cobertura, muestra a tu cliente los puntos de recogida cercanos a su dirección para que elija uno.
+    </p>
+    <p class="text-body-secondary mb-3">
+        Endpoint:
+    </p>
+    <ul class="text-body-secondary mb-4">
+        <li><code>GET /api/merchant/v1/pudos</code> — devuelve la lista de puntos de recogida (PUDOs) filtrada por coordenadas o código postal, con paginación.</li>
+    </ul>
+    <p class="text-body-secondary mb-3">
+        Cada punto de recogida incluye su nombre, dirección completa, horarios de atención y datos de contacto. Con esta información puedes construir tu propio selector visual (mapa, lista, buscador…) o mostrar directamente el listado a tu cliente.
+    </p>
+    <p class="text-body-secondary mb-0">
+        Al finalizar este paso, tu cliente habrá elegido un punto de recogida y tu plataforma tendrá guardado el <code>id</code> del punto seleccionado para usarlo en el siguiente paso.
+    </p>
+</section>
+
+<section id="paso-3-envio" class="bg-white rounded-3 shadow-sm p-4 p-lg-5 mb-4">
+    <h2 class="fw-bold mb-4">3. Crear un envío</h2>
+    <p class="text-body-secondary mb-3">
+        Con el punto elegido y los datos del pedido, ya puedes crear el envío en PuntoPost. Ofrecemos cinco tipos de envío según el origen y el destino. Utiliza el que corresponda a tu flujo de negocio:
+    </p>
+    <div class="table-responsive mb-4">
+        <table class="table table-bordered align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th style="width: 90px;">Tipo</th>
+                    <th>Flujo</th>
+                    <th>Endpoint</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>B2C</strong></td>
+                    <td>Comercio → cliente que recoge en un punto. Es el flujo más habitual para un ecommerce.</td>
+                    <td><code>POST /api/merchant/v1/{merchantId}/parcels/b2c</code></td>
+                </tr>
+                <tr>
+                    <td><strong>C2C</strong></td>
+                    <td>Cliente que deja en un punto → cliente que recoge en otro punto.</td>
+                    <td><code>POST /api/merchant/v1/{merchantId}/parcels</code></td>
+                </tr>
+                <tr>
+                    <td><strong>C2B</strong></td>
+                    <td>Cliente que deja en un punto → comercio (devoluciones).</td>
+                    <td><code>POST /api/merchant/v1/{merchantId}/parcels/c2b</code></td>
+                </tr>
+                <tr>
+                    <td><strong>C2F</strong></td>
+                    <td>Cliente que deja en un punto → almacén / instalación del comercio.</td>
+                    <td><code>POST /api/merchant/v1/{merchantId}/parcels/c2f</code></td>
+                </tr>
+                <tr>
+                    <td><strong>F2C</strong></td>
+                    <td>Almacén / instalación del comercio → cliente que recoge en un punto.</td>
+                    <td><code>POST /api/merchant/v1/{merchantId}/parcels/f2c</code></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <p class="text-body-secondary mb-3">
+        En la llamada de creación tendrás que enviar los datos del contenido, los datos de contacto (según el tipo, remitente y/o destinatario) y los identificadores de origen y destino. Puedes incluir opcionalmente una <code>merchant_reference</code> con tu propio identificador de pedido, lo que te permitirá consultar el envío después usando tu referencia interna y evitar duplicados.
+    </p>
+    <p class="text-body-secondary mb-0">
+        Como respuesta recibirás el envío creado con su código de rastreo, el QR de la etiqueta y el QR de seguimiento, listos para adjuntarlos al paquete o compartirlos con tu cliente.
+    </p>
+</section>
+
+<section id="paso-4-gestion" class="bg-white rounded-3 shadow-sm p-4 p-lg-5 mb-4">
+    <h2 class="fw-bold mb-4">4. Consultar y gestionar envíos</h2>
+    <p class="text-body-secondary mb-3">
+        Una vez creado un envío, puedes consultar su estado actual, listar tus envíos con filtros y cambiar su estado cuando sea necesario.
+    </p>
+
+    <h3 class="fw-bold h5 mb-3">Consultar un envío</h3>
+    <ul class="text-body-secondary mb-4">
+        <li class="mb-2"><code>GET /api/merchant/v1/parcels/{identifier}</code> — el identificador puede ser el <code>id</code> del envío, su código de rastreo, el código de la etiqueta o la <code>merchant_reference</code> que hayas asignado tú.</li>
+        <li><code>GET /api/merchant/v1/merchants/{merchantId}/parcels</code> — listado de envíos del comercio con filtros por rango de fechas, estado y búsqueda de texto.</li>
+    </ul>
+
+    <h3 class="fw-bold h5 mb-3">Ciclo de vida de un envío</h3>
+    <p class="text-body-secondary mb-3">
+        Un envío pasa por los siguientes estados:
+    </p>
+    <p class="text-body-secondary mb-3">
+        <code>CREATED</code> → <code>IN_ORIGIN_POINT</code> → <code>IN_TRANSIT</code> → <code>IN_DESTINATION_POINT</code> → <code>DELIVERED</code>
+    </p>
+    <p class="text-body-secondary mb-4">
+        Alternativamente, un envío puede terminar en <code>CANCELLED</code> o <code>LOST</code>.
+    </p>
+
+    <h3 class="fw-bold h5 mb-3">Transiciones que puedes ejecutar</h3>
+    <ul class="text-body-secondary mb-0">
+        <li class="mb-2"><code>PUT /api/merchant/v1/parcels/{identifier}/ready</code> — marca el envío como listo en el punto de origen. Se usa cuando el paquete ya ha sido depositado y comienza el tránsito.</li>
+        <li class="mb-2"><code>PUT /api/merchant/v1/parcels/{identifier}/deliver</code> — marca un envío como entregado en destino. Aplica a flujos C2B y C2F donde el destino es tu comercio o almacén.</li>
+        <li><code>DELETE /api/merchant/v1/parcels/{identifier}</code> — cancela un envío. Solo es posible mientras el envío esté en estado <code>CREATED</code>.</li>
+    </ul>
+</section>
+
+<section id="paso-5-etiqueta" class="bg-white rounded-3 shadow-sm p-4 p-lg-5 mb-4">
+    <h2 class="fw-bold mb-4">5. Descargar la etiqueta</h2>
+    <p class="text-body-secondary mb-3">
+        Para preparar el paquete físicamente necesitas la etiqueta de PuntoPost. Puedes descargarla en cualquier momento después de crear el envío.
+    </p>
+    <ul class="text-body-secondary mb-4">
+        <li><code>GET /api/merchant/v1/parcels/{identifier}/label</code> — devuelve la etiqueta en formato PDF o PNG, según el formato configurado para tu comercio.</li>
+    </ul>
+    <p class="text-body-secondary mb-0">
+        Imprime la etiqueta y adhiérela al exterior del paquete antes de depositarlo en el punto de origen o entregarlo a nuestro operador.
+    </p>
+</section>
+
+<section id="paso-6-webhooks" class="bg-white rounded-3 shadow-sm p-4 p-lg-5 mb-4">
+    <h2 class="fw-bold mb-4">6. Recibir eventos por webhook</h2>
+    <p class="text-body-secondary mb-3">
+        Para mantener tu plataforma sincronizada sin necesidad de hacer <em>polling</em> continuo, PuntoPost envía notificaciones a la URL de webhook que hayas configurado en tu comercio cada vez que ocurre un evento relevante.
+    </p>
+    <p class="text-body-secondary mb-3">
+        Eventos disponibles:
+    </p>
+    <ul class="text-body-secondary mb-4">
+        <li class="mb-2"><code>parcel_status_changed</code> — el envío cambia de estado (llegó al punto, sale a tránsito, es entregado, etc.).</li>
+        <li class="mb-2"><code>parcel_origin_changed</code> — cambia el punto de origen del envío.</li>
+        <li><code>parcel_destination_changed</code> — cambia el punto de destino del envío (por ejemplo, cuando el cliente pide cambio de punto).</li>
+    </ul>
+    <p class="text-body-secondary mb-3">
+        Tu endpoint debe responder con un código HTTP <code>2xx</code> para confirmar la recepción. Si respondes con un error, se reintentará automáticamente.
+    </p>
+    <p class="text-body-secondary mb-0">
+        Recomendamos que tu procesamiento sea idempotente: podrías recibir el mismo evento más de una vez ante reintentos por red.
+    </p>
+</section>
+
+<section id="documentacion" class="bg-white rounded-3 shadow-sm p-4 p-lg-5 mb-4">
+    <h2 class="fw-bold mb-4">Documentación completa</h2>
+    <p class="text-body-secondary mb-4">
+        En esta guía hemos cubierto los pasos y los endpoints principales que necesitas para integrar tu ecommerce con PuntoPost. Para consultar el detalle completo de cada endpoint (parámetros, campos de request y response, códigos de error y ejemplos) accede a la documentación técnica interactiva:
+    </p>
+    <p class="text-center mb-4">
+        <a href="https://back.puntopost.mx/api/doc/merchant" target="_blank" rel="noopener noreferrer" class="btn btn-primary px-4 py-2 fw-medium text-white rounded-pill">
+            <i class="bi bi-book me-2"></i>Ver documentación técnica de la API
+        </a>
+    </p>
+    <p class="text-body-secondary mb-0">
+        Si tienes cualquier duda durante la integración, escríbenos a <a href="mailto:hola@puntopost.mx">hola@puntopost.mx</a> y te ayudamos.
+    </p>
+</section>
