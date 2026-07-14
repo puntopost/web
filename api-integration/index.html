@@ -88,6 +88,9 @@ toc:
         <li class="mb-2"><strong>Consulta puntual:</strong> <code>GET /api/merchant/v1/coverage/{postalCode}</code> — devuelve si un código postal concreto tiene o no cobertura. Recomendado para validar en tiempo real durante el checkout.</li>
         <li><strong>Descarga completa:</strong> <code>GET /api/merchant/v1/coverage</code> — devuelve el listado completo de códigos postales cubiertos. Útil si prefieres cachearlo en tu plataforma y validar en local.</li>
     </ul>
+    <p class="text-body-secondary mb-3">
+        Si eliges la descarga completa, <strong>actualiza tu base local al menos una vez al día</strong>. Nuestra red se amplía continuamente y los códigos postales cubiertos pueden cambiar de un día para otro. Refrescar el listado diariamente garantiza que tus clientes no pierdan la opción de envío a PuntoPost cuando incorporamos su zona.
+    </p>
     <p class="text-body-secondary mb-0">
         Si el código postal no tiene cobertura, oculta la opción de envío a PuntoPost en tu checkout.
     </p>
