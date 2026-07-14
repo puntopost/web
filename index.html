@@ -180,135 +180,171 @@ banner: |
                 <div class="text-center mb-4">
                     <h2 class="fw-bold mb-0">Preguntas frecuentes sobre PuntoPost</h2>
                 </div>
-                <div class="accordion d-flex flex-column gap-3" id="homeFaq">
-                    <div class="accordion-item border overflow-hidden rounded-4">
-                        <h3 class="accordion-header">
-                            <button class="accordion-button shadow-none fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#home-faq-1" aria-expanded="true" aria-controls="home-faq-1">¿Dónde está mi paquete?</button>
-                        </h3>
-                        <div id="home-faq-1" class="accordion-collapse collapse show" data-bs-parent="#homeFaq">
-                            <div class="accordion-body text-body-secondary">Ingresa en “Rastrea tu paquete” e introduce tu número de rastreo (empieza por MX) para ver el estado en tiempo real. Además, te avisamos por correo en cada paso importante: cuando tu paquete llega al PuntoPost, un recordatorio unos días después y cuando lo recoges.</div>
+                <div class="d-flex flex-column gap-4">
+
+                    <!-- A. ¿Dónde está mi paquete? -->
+                    <div>
+                        <h3 class="fw-semibold fs-6 text-uppercase text-primary mb-2 px-1">📦 ¿Dónde está mi paquete?</h3>
+                        <div class="accordion d-flex flex-column gap-3" id="homeFaqA">
+                            <div class="accordion-item border overflow-hidden rounded-4">
+                                <h4 class="accordion-header">
+                                    <button class="accordion-button shadow-none fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#home-faq-1" aria-expanded="true" aria-controls="home-faq-1">¿Cómo rastro mi paquete?</button>
+                                </h4>
+                                <div id="home-faq-1" class="accordion-collapse collapse show" data-bs-parent="#homeFaqA">
+                                    <div class="accordion-body text-body-secondary">Ingresa en "Rastrea tu paquete" e introduce tu número de rastreo (empieza por MX) para ver el estado en tiempo real. Además, te avisamos por correo en cada paso importante: cuando tu paquete llega al PuntoPost, un recordatorio unos días después y cuando lo recoges.</div>
+                                </div>
+                            </div>
+                            <div class="accordion-item border overflow-hidden rounded-4">
+                                <h4 class="accordion-header">
+                                    <button class="accordion-button collapsed shadow-none fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#home-faq-2" aria-expanded="false" aria-controls="home-faq-2">¿Cuándo me avisan que llegó?</button>
+                                </h4>
+                                <div id="home-faq-2" class="accordion-collapse collapse" data-bs-parent="#homeFaqA">
+                                    <div class="accordion-body text-body-secondary">Cuando tu paquete llegue al PuntoPost te enviamos un aviso por correo y por WhatsApp. Espera esa confirmación antes de ir para evitar una vuelta en falso.</div>
+                                </div>
+                            </div>
+                            <div class="accordion-item border overflow-hidden rounded-4">
+                                <h4 class="accordion-header">
+                                    <button class="accordion-button collapsed shadow-none fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#home-faq-3" aria-expanded="false" aria-controls="home-faq-3">¿Cuánto tardará en llegar?</button>
+                                </h4>
+                                <div id="home-faq-3" class="accordion-collapse collapse" data-bs-parent="#homeFaqA">
+                                    <div class="accordion-body text-body-secondary">Depende del origen, pero la mayoría de paquetes llegan a tu PuntoPost en 2 a 5 días hábiles. Si tu paquete lleva más tiempo sin moverse, contáctanos con tu número de rastreo y lo revisamos al momento.</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="accordion-item border overflow-hidden rounded-4">
-                        <h3 class="accordion-header">
-                            <button class="accordion-button collapsed shadow-none fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#home-faq-2" aria-expanded="false" aria-controls="home-faq-2">¿Cuándo puedo ir a recoger mi paquete?</button>
-                        </h3>
-                        <div id="home-faq-2" class="accordion-collapse collapse" data-bs-parent="#homeFaq">
-                            <div class="accordion-body text-body-secondary">Cuando recibas el aviso de PuntoPost por correo o WA diciendo “tu paquete está listo para recoger”. Si no lo recibiste aún, espera la confirmación antes de ir para evitar una vuelta en falso.</div>
+
+                    <!-- B. Voy a dejar un paquete -->
+                    <div>
+                        <h3 class="fw-semibold fs-6 text-uppercase text-primary mb-2 px-1">🚚 Voy a dejar un paquete</h3>
+                        <div class="accordion d-flex flex-column gap-3" id="homeFaqB">
+                            <div class="accordion-item border overflow-hidden rounded-4">
+                                <h4 class="accordion-header">
+                                    <button class="accordion-button collapsed shadow-none fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#home-faq-4" aria-expanded="false" aria-controls="home-faq-4">¿Cómo dejo un paquete en un PuntoPost?</button>
+                                </h4>
+                                <div id="home-faq-4" class="accordion-collapse collapse" data-bs-parent="#homeFaqB">
+                                    <div class="accordion-body text-body-secondary">Solo muestra tu código QR en el PuntoPost y listo, no necesitas identificación ni imprimir nada. Encontrarás tu QR en el correo electrónico o WA enviado por PuntoPost, o bien en la aplicación de la tienda en línea donde compraste.</div>
+                                </div>
+                            </div>
+                            <div class="accordion-item border overflow-hidden rounded-4">
+                                <h4 class="accordion-header">
+                                    <button class="accordion-button collapsed shadow-none fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#home-faq-5" aria-expanded="false" aria-controls="home-faq-5">¿En qué ciudades hay PuntoPost?</button>
+                                </h4>
+                                <div id="home-faq-5" class="accordion-collapse collapse" data-bs-parent="#homeFaqB">
+                                    <div class="accordion-body text-body-secondary">Tenemos más de 3,000 puntos en 12 estados, con la red más grande en CDMX y zona metropolitana. Estamos creciendo constantemente: revisa el mapa para ver los puntos activos cerca de ti.</div>
+                                </div>
+                            </div>
+                            <div class="accordion-item border overflow-hidden rounded-4">
+                                <h4 class="accordion-header">
+                                    <button class="accordion-button collapsed shadow-none fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#home-faq-6" aria-expanded="false" aria-controls="home-faq-6">¿Necesito imprimir una guía o etiqueta?</button>
+                                </h4>
+                                <div id="home-faq-6" class="accordion-collapse collapse" data-bs-parent="#homeFaqB">
+                                    <div class="accordion-body text-body-secondary">No. Con el código QR que te generamos es suficiente: lo muestras al dejar tu paquete en el punto y queda registrado.</div>
+                                </div>
+                            </div>
+                            <div class="accordion-item border overflow-hidden rounded-4">
+                                <h4 class="accordion-header">
+                                    <button class="accordion-button collapsed shadow-none fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#home-faq-7" aria-expanded="false" aria-controls="home-faq-7">¿Puedo comprar guías para enviar de un punto a otro?</button>
+                                </h4>
+                                <div id="home-faq-7" class="accordion-collapse collapse" data-bs-parent="#homeFaqB">
+                                    <div class="accordion-body text-body-secondary">Sí, puedes comprar guías individuales en puntopost.mx y enviar paquetes de un PuntoPost a otro por toda la República Mexicana desde solo $60. Sin contratos y sin volumen mínimo. ¡Pagas solo por lo que envías!</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="accordion-item border overflow-hidden rounded-4">
-                        <h3 class="accordion-header">
-                            <button class="accordion-button collapsed shadow-none fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#home-faq-3" aria-expanded="false" aria-controls="home-faq-3">¿Cuánto tardará en llegar?</button>
-                        </h3>
-                        <div id="home-faq-3" class="accordion-collapse collapse" data-bs-parent="#homeFaq">
-                            <div class="accordion-body text-body-secondary">Depende del origen, pero la mayoría de paquetes llegan a tu PuntoPost en 2 a 5 días hábiles. Si tu paquete lleva más tiempo sin moverse, contáctanos con tu número de rastreo y lo revisamos al momento.</div>
+
+                    <!-- C. Voy a recoger mi paquete -->
+                    <div>
+                        <h3 class="fw-semibold fs-6 text-uppercase text-primary mb-2 px-1">🏪 Voy a recoger mi paquete</h3>
+                        <div class="accordion d-flex flex-column gap-3" id="homeFaqC">
+                            <div class="accordion-item border overflow-hidden rounded-4">
+                                <h4 class="accordion-header">
+                                    <button class="accordion-button collapsed shadow-none fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#home-faq-8" aria-expanded="false" aria-controls="home-faq-8">¿Cómo recojo mi paquete?</button>
+                                </h4>
+                                <div id="home-faq-8" class="accordion-collapse collapse" data-bs-parent="#homeFaqC">
+                                    <div class="accordion-body text-body-secondary">Solo muestra tu código QR en el PuntoPost y listo, no necesitas identificación ni imprimir nada. Encontrarás tu QR en el correo electrónico enviado por PuntoPost, o bien en la aplicación de la tienda en línea donde compraste.</div>
+                                </div>
+                            </div>
+                            <div class="accordion-item border overflow-hidden rounded-4">
+                                <h4 class="accordion-header">
+                                    <button class="accordion-button collapsed shadow-none fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#home-faq-9" aria-expanded="false" aria-controls="home-faq-9">¿Puede recoger alguien más por mí?</button>
+                                </h4>
+                                <div id="home-faq-9" class="accordion-collapse collapse" data-bs-parent="#homeFaqC">
+                                    <div class="accordion-body text-body-secondary">Sí. Comparte tu código QR con la persona que quieras que recoja. Quien llegue con el código válido puede llevarse el paquete, así que compártelo solo con alguien de confianza.</div>
+                                </div>
+                            </div>
+                            <div class="accordion-item border overflow-hidden rounded-4">
+                                <h4 class="accordion-header">
+                                    <button class="accordion-button collapsed shadow-none fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#home-faq-10" aria-expanded="false" aria-controls="home-faq-10">¿Qué pasa si no recojo en 7 días?</button>
+                                </h4>
+                                <div id="home-faq-10" class="accordion-collapse collapse" data-bs-parent="#homeFaqC">
+                                    <div class="accordion-body text-body-secondary">Te avisamos por correo y WhatsApp antes de que se cumpla el plazo. Si no recoges en 7 días laborables, el paquete regresa a quien te lo envió.</div>
+                                </div>
+                            </div>
+                            <div class="accordion-item border overflow-hidden rounded-4">
+                                <h4 class="accordion-header">
+                                    <button class="accordion-button collapsed shadow-none fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#home-faq-11" aria-expanded="false" aria-controls="home-faq-11">¿Qué hago si llego y el punto está cerrado?</button>
+                                </h4>
+                                <div id="home-faq-11" class="accordion-collapse collapse" data-bs-parent="#homeFaqC">
+                                    <div class="accordion-body text-body-secondary">En el mapa puedes ver el horario de cada punto antes de ir. Si llegas y está cerrado, ese día no cuenta dentro de tu plazo de 7 días: tienes margen de sobra para volver.</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="accordion-item border overflow-hidden rounded-4">
-                        <h3 class="accordion-header">
-                            <button class="accordion-button collapsed shadow-none fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#home-faq-4" aria-expanded="false" aria-controls="home-faq-4">¿Cómo dejo un paquete en un PuntoPost?</button>
-                        </h3>
-                        <div id="home-faq-4" class="accordion-collapse collapse" data-bs-parent="#homeFaq">
-                            <div class="accordion-body text-body-secondary">Solo muestra tu código QR en el PuntoPost y listo, no necesitas identificación ni imprimir nada. Encontrarás tu QR en el correo electrónico o WA enviado por PuntoPost, o bien en la aplicación de la tienda en línea donde compraste.</div>
+
+                    <!-- D. ¿Se complicó algo? -->
+                    <div>
+                        <h3 class="fw-semibold fs-6 text-uppercase text-primary mb-2 px-1">⚠️ ¿Se complicó algo?</h3>
+                        <div class="accordion d-flex flex-column gap-3" id="homeFaqD">
+                            <div class="accordion-item border overflow-hidden rounded-4">
+                                <h4 class="accordion-header">
+                                    <button class="accordion-button collapsed shadow-none fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#home-faq-12" aria-expanded="false" aria-controls="home-faq-12">No encuentro el PuntoPost, ¿y si la dirección está mal?</button>
+                                </h4>
+                                <div id="home-faq-12" class="accordion-collapse collapse" data-bs-parent="#homeFaqD">
+                                    <div class="accordion-body text-body-secondary">Repórtalo por el chat indicando el nombre del punto: corregimos la información en el mapa y te decimos el punto correcto para tu paquete. ¡Tu reporte nos ayuda a mejorar a todos!</div>
+                                </div>
+                            </div>
+                            <div class="accordion-item border overflow-hidden rounded-4">
+                                <h4 class="accordion-header">
+                                    <button class="accordion-button collapsed shadow-none fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#home-faq-13" aria-expanded="false" aria-controls="home-faq-13">Elegí mal el PuntoPost, ¿puedo cambiar de punto?</button>
+                                </h4>
+                                <div id="home-faq-13" class="accordion-collapse collapse" data-bs-parent="#homeFaqD">
+                                    <div class="accordion-body text-body-secondary">Mientras tu paquete no haya llegado al punto destino, escríbenos por WhatsApp y lo movemos a otro punto de tu elección dentro de la misma ciudad. ¡Sin costo adicional!</div>
+                                </div>
+                            </div>
+                            <div class="accordion-item border overflow-hidden rounded-4">
+                                <h4 class="accordion-header">
+                                    <button class="accordion-button collapsed shadow-none fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#home-faq-14" aria-expanded="false" aria-controls="home-faq-14">Llegué al punto y mi paquete no está, ¿qué hago?</button>
+                                </h4>
+                                <div id="home-faq-14" class="accordion-collapse collapse" data-bs-parent="#homeFaqD">
+                                    <div class="accordion-body text-body-secondary">Primero verifica que hayas recibido el correo o WhatsApp "Tu paquete llegó al PuntoPost". Si ya lo recibiste y el punto no lo encuentra, escríbenos y lo arreglamos juntos en el momento.</div>
+                                </div>
+                            </div>
+                            <div class="accordion-item border overflow-hidden rounded-4">
+                                <h4 class="accordion-header">
+                                    <button class="accordion-button collapsed shadow-none fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#home-faq-15" aria-expanded="false" aria-controls="home-faq-15">Mi paquete se retrasó o no se mueve</button>
+                                </h4>
+                                <div id="home-faq-15" class="accordion-collapse collapse" data-bs-parent="#homeFaqD">
+                                    <div class="accordion-body text-body-secondary">Escríbenos por el chat con tu número de rastreo. Revisamos el estado con el operador, te explicamos el motivo y acordamos contigo la mejor solución, incluyendo cambiar el punto si lo necesitas.</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="accordion-item border overflow-hidden rounded-4">
-                        <h3 class="accordion-header">
-                            <button class="accordion-button collapsed shadow-none fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#home-faq-5" aria-expanded="false" aria-controls="home-faq-5">¿En qué ciudades hay PuntoPost?</button>
-                        </h3>
-                        <div id="home-faq-5" class="accordion-collapse collapse" data-bs-parent="#homeFaq">
-                            <div class="accordion-body text-body-secondary">Tenemos más de 3,000 puntos en 12 estados, con la red más grande en CDMX y zona metropolitana. Estamos creciendo constantemente: revisa el mapa para ver los puntos activos cerca de ti.</div>
+
+                    <!-- E. Contáctanos -->
+                    <div>
+                        <h3 class="fw-semibold fs-6 text-uppercase text-primary mb-2 px-1">💬 Contáctanos</h3>
+                        <div class="accordion d-flex flex-column gap-3" id="homeFaqE">
+                            <div class="accordion-item border overflow-hidden rounded-4">
+                                <h4 class="accordion-header">
+                                    <button class="accordion-button collapsed shadow-none fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#home-faq-16" aria-expanded="false" aria-controls="home-faq-16">¿Cómo contacto a PuntoPost?</button>
+                                </h4>
+                                <div id="home-faq-16" class="accordion-collapse collapse" data-bs-parent="#homeFaqE">
+                                    <div class="accordion-body text-body-secondary">Puedes escribirnos al WhatsApp <a href="https://wa.me/5215528795640" class="text-decoration-none">+52 55 2879 5640</a> o al correo <a href="mailto:hola@puntopost.mx" class="text-decoration-none">hola@puntopost.mx</a>. Recuerda tener a la mano tu número de rastreo para ayudarte más rápido. ¡Estamos para apoyarte!</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="accordion-item border overflow-hidden rounded-4">
-                        <h3 class="accordion-header">
-                            <button class="accordion-button collapsed shadow-none fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#home-faq-6" aria-expanded="false" aria-controls="home-faq-6">¿Necesito imprimir una guía o etiqueta?</button>
-                        </h3>
-                        <div id="home-faq-6" class="accordion-collapse collapse" data-bs-parent="#homeFaq">
-                            <div class="accordion-body text-body-secondary">No. Con el código QR que te generamos es suficiente: lo muestras al dejar tu paquete en el punto y queda registrado.</div>
-                        </div>
-                    </div>
-                    <div class="accordion-item border overflow-hidden rounded-4">
-                        <h3 class="accordion-header">
-                            <button class="accordion-button collapsed shadow-none fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#home-faq-7" aria-expanded="false" aria-controls="home-faq-7">¿Puedo comprar guías para enviar de un punto a otro?</button>
-                        </h3>
-                        <div id="home-faq-7" class="accordion-collapse collapse" data-bs-parent="#homeFaq">
-                            <div class="accordion-body text-body-secondary">Sí, puedes comprar guías individuales en puntopost.mx y enviar paquetes de un PuntoPost a otro por toda la República Mexicana desde solo $60. Sin contratos y sin volumen mínimo. ¡Pagas solo por lo que envías!</div>
-                        </div>
-                    </div>
-                    <div class="accordion-item border overflow-hidden rounded-4">
-                        <h3 class="accordion-header">
-                            <button class="accordion-button collapsed shadow-none fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#home-faq-8" aria-expanded="false" aria-controls="home-faq-8">¿Cómo recojo mi paquete?</button>
-                        </h3>
-                        <div id="home-faq-8" class="accordion-collapse collapse" data-bs-parent="#homeFaq">
-                            <div class="accordion-body text-body-secondary">Solo muestra tu código QR en el PuntoPost y listo, no necesitas identificación ni imprimir nada. Encontrarás tu QR en el correo electrónico enviado por PuntoPost, o bien en la aplicación de la tienda en línea donde compraste.</div>
-                        </div>
-                    </div>
-                    <div class="accordion-item border overflow-hidden rounded-4">
-                        <h3 class="accordion-header">
-                            <button class="accordion-button collapsed shadow-none fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#home-faq-9" aria-expanded="false" aria-controls="home-faq-9">¿Puede recoger alguien más por mí?</button>
-                        </h3>
-                        <div id="home-faq-9" class="accordion-collapse collapse" data-bs-parent="#homeFaq">
-                            <div class="accordion-body text-body-secondary">Sí. Comparte tu código QR con la persona que quieras que recoja. Quien llegue con el código válido puede llevarse el paquete, así que compártelo solo con alguien de confianza.</div>
-                        </div>
-                    </div>
-                    <div class="accordion-item border overflow-hidden rounded-4">
-                        <h3 class="accordion-header">
-                            <button class="accordion-button collapsed shadow-none fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#home-faq-10" aria-expanded="false" aria-controls="home-faq-10">¿Qué pasa si no recojo en 7 días?</button>
-                        </h3>
-                        <div id="home-faq-10" class="accordion-collapse collapse" data-bs-parent="#homeFaq">
-                            <div class="accordion-body text-body-secondary">Te avisamos por correo y WA antes de que se cumpla el plazo. Si no recoges en 7 días laborables, el paquete regresa a quien te lo envió.</div>
-                        </div>
-                    </div>
-                    <div class="accordion-item border overflow-hidden rounded-4">
-                        <h3 class="accordion-header">
-                            <button class="accordion-button collapsed shadow-none fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#home-faq-11" aria-expanded="false" aria-controls="home-faq-11">¿Qué hago si llego y el punto está cerrado?</button>
-                        </h3>
-                        <div id="home-faq-11" class="accordion-collapse collapse" data-bs-parent="#homeFaq">
-                            <div class="accordion-body text-body-secondary">En el mapa puedes ver el horario de cada punto antes de ir. Si llegas y está cerrado, ese día no cuenta dentro de tu plazo de 7 días: tienes margen de sobra para volver.</div>
-                        </div>
-                    </div>
-                    <div class="accordion-item border overflow-hidden rounded-4">
-                        <h3 class="accordion-header">
-                            <button class="accordion-button collapsed shadow-none fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#home-faq-12" aria-expanded="false" aria-controls="home-faq-12">No encuentro el PuntoPost, ¿y si la dirección está mal?</button>
-                        </h3>
-                        <div id="home-faq-12" class="accordion-collapse collapse" data-bs-parent="#homeFaq">
-                            <div class="accordion-body text-body-secondary">Repórtalo por el chat indicando el nombre del punto: corregimos la información en el mapa y te decimos el punto correcto para tu paquete. ¡Tu reporte nos ayuda a mejorar a todos!</div>
-                        </div>
-                    </div>
-                    <div class="accordion-item border overflow-hidden rounded-4">
-                        <h3 class="accordion-header">
-                            <button class="accordion-button collapsed shadow-none fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#home-faq-13" aria-expanded="false" aria-controls="home-faq-13">Elegí mal el PuntoPost, ¿puedo cambiar de punto?</button>
-                        </h3>
-                        <div id="home-faq-13" class="accordion-collapse collapse" data-bs-parent="#homeFaq">
-                            <div class="accordion-body text-body-secondary">Mientras tu paquete no haya llegado al punto destino, escríbenos por WhatsApp y lo movemos a otro punto de tu elección dentro de la misma ciudad. ¡Sin costo adicional!</div>
-                        </div>
-                    </div>
-                    <div class="accordion-item border overflow-hidden rounded-4">
-                        <h3 class="accordion-header">
-                            <button class="accordion-button collapsed shadow-none fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#home-faq-14" aria-expanded="false" aria-controls="home-faq-14">Llegué al punto y mi paquete no está, ¿qué hago?</button>
-                        </h3>
-                        <div id="home-faq-14" class="accordion-collapse collapse" data-bs-parent="#homeFaq">
-                            <div class="accordion-body text-body-secondary">Primero verifica que hayas recibido el correo o WhatsApp “Tu paquete llegó al PuntoPost”. Si ya lo recibiste y el punto no lo encuentra, escríbenos y lo arreglamos juntos en el momento.</div>
-                        </div>
-                    </div>
-                    <div class="accordion-item border overflow-hidden rounded-4">
-                        <h3 class="accordion-header">
-                            <button class="accordion-button collapsed shadow-none fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#home-faq-15" aria-expanded="false" aria-controls="home-faq-15">Mi paquete se retrasó o no se mueve</button>
-                        </h3>
-                        <div id="home-faq-15" class="accordion-collapse collapse" data-bs-parent="#homeFaq">
-                            <div class="accordion-body text-body-secondary">Escríbenos por el chat con tu número de rastreo. Revisamos el estado con el operador, te explicamos el motivo y acordamos contigo la mejor solución, incluyendo cambiar el punto si lo necesitas.</div>
-                        </div>
-                    </div>
-                    <div class="accordion-item border overflow-hidden rounded-4">
-                        <h3 class="accordion-header">
-                            <button class="accordion-button collapsed shadow-none fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#home-faq-16" aria-expanded="false" aria-controls="home-faq-16">¿Cómo contacto a PuntoPost?</button>
-                        </h3>
-                        <div id="home-faq-16" class="accordion-collapse collapse" data-bs-parent="#homeFaq">
-                            <div class="accordion-body text-body-secondary">Puedes escribirnos al WhatsApp +52 5528795640 o al correo hola@puntopost.mx. Recuerda tener a la mano tu número de rastreo para ayudarte más rápido. ¡Estamos para apoyarte!</div>
-                        </div>
-                    </div>
+
                 </div>
             </div>
         </div>
