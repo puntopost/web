@@ -132,7 +132,7 @@ toc:
             <tbody>
                 <tr>
                     <td><strong>B2C</strong></td>
-                    <td>Comercio → cliente que recoge en un punto. Es el flujo más habitual para un ecommerce.</td>
+                    <td>Almacén desde el que sale el paquete → cliente que recoge en un punto. Es el flujo más habitual para un ecommerce.</td>
                     <td><code>POST /api/merchant/v1/{merchantId}/parcels/b2c</code></td>
                 </tr>
                 <tr>
@@ -142,7 +142,7 @@ toc:
                 </tr>
                 <tr>
                     <td><strong>C2B</strong></td>
-                    <td>Cliente que deja en un punto → comercio (devoluciones).</td>
+                    <td>Cliente que deja en un punto → almacén donde llega el paquete (devoluciones).</td>
                     <td><code>POST /api/merchant/v1/{merchantId}/parcels/c2b</code></td>
                 </tr>
             </tbody>
@@ -151,8 +151,15 @@ toc:
     <p class="text-body-secondary mb-3">
         En la llamada de creación tendrás que enviar los datos del contenido, los datos de contacto (según el tipo, remitente y/o destinatario) y los identificadores de origen y destino. Puedes incluir opcionalmente una <code>merchant_reference</code> con tu propio identificador de pedido, lo que te permitirá consultar el envío después usando tu referencia interna y evitar duplicados.
     </p>
+    <p class="text-body-secondary mb-3">
+        Como respuesta recibirás el envío creado con su código de rastreo y dos códigos QR con usos distintos:
+    </p>
+    <ul class="text-body-secondary mb-3">
+        <li class="mb-2"><strong><code>qr_tracking</code></strong> — es el QR que tienes que compartir con tu cliente (por correo, WhatsApp o dentro de tu propia app). Le sirve para mostrarlo en el punto cuando vaya a dejar o recoger el paquete. <strong>No hace falta imprimirlo</strong>: basta con que lo enseñe desde el móvil.</li>
+        <li><strong><code>qr_label</code></strong> — es la etiqueta que va pegada al paquete. <strong>Solo aplica al flujo B2C</strong>, en el que el paquete sale de tu almacén: en ese caso <strong>tienes que imprimirla y adherirla al exterior del paquete</strong> antes de entregarlo al operador o dejarlo en el punto de origen. En los flujos C2C y C2B es el propio cliente quien deposita el paquete en el punto usando su <code>qr_tracking</code>, y no necesitas imprimir nada.</li>
+    </ul>
     <p class="text-body-secondary mb-0">
-        Como respuesta recibirás el envío creado con su código de rastreo, el QR de la etiqueta y el QR de seguimiento, listos para adjuntarlos al paquete o compartirlos con tu cliente.
+        Puedes descargar la etiqueta también más adelante desde el endpoint del <a href="#paso-5-etiqueta">paso 5</a>.
     </p>
 </section>
 
