@@ -1,0 +1,217 @@
+---
+layout: documentation
+title: "PuntoPost - Integración vía API - Documentación"
+description: "Guía paso a paso para integrar PuntoPost vía API directa."
+banner: |
+    <section class="text-white text-center rounded-bottom-4 pb-4 pt-3">
+    <h1 class="fw-bold display-5 mb-3">Integración vía API</h1>
+    <p class="fs-5 mb-0">Documentación paso a paso</p>
+    </section>
+toc:
+    - id: introduccion
+      label: 1. Introducción
+    - id: requisitos-previos
+      label: 2. Requisitos previos
+    - id: autenticacion
+      label: 3. Autenticación
+    - id: validacion-cobertura
+      label: 4. Validación de cobertura
+    - id: puntos-disponibles
+      label: 5. Obtener PUDOs
+    - id: crear-envio
+      label: 6. Crear un envío
+    - id: consultar-envios
+      label: 7. Consultar envíos
+    - id: transiciones-estado
+      label: 8. Transiciones de estado
+    - id: descargar-etiqueta
+      label: 9. Descargar etiqueta
+    - id: webhooks
+      label: 10. Webhooks
+    - id: errores-buenas-practicas
+      label: 11. Errores y buenas prácticas
+    - id: recursos
+      label: 12. Recursos
+---
+
+<section id="introduccion" class="bg-white rounded-3 shadow-sm p-4 p-lg-5 mb-4">
+    <h2 class="fw-bold mb-4">1. Introducción</h2>
+    <p class="text-body-secondary">
+        La API de merchant de PuntoPost permite integrar de forma directa la validación de cobertura, selección de puntos de recogida y creación de envíos desde tu sistema.
+        Esta opción es ideal si no usas Shopify ni WooCommerce o si necesitas un flujo personalizado.
+    </p>
+    <p class="text-body-secondary mb-0">
+        El flujo recomendado se divide en 3 fases: <strong>validación de cobertura</strong>, <strong>obtención de puntos disponibles</strong> y <strong>creación/gestión del envío + webhooks</strong>.
+        Consulta la documentación OpenAPI completa en
+        <a href="https://back.puntopost.mx/api/doc/merchant" target="_blank" rel="noopener noreferrer">https://back.puntopost.mx/api/doc/merchant</a>.
+    </p>
+</section>
+
+<section id="requisitos-previos" class="bg-white rounded-3 shadow-sm p-4 p-lg-5 mb-4">
+    <h2 class="fw-bold mb-4">2. Requisitos previos</h2>
+    <ul class="text-body-secondary mb-0">
+        <li>Contactar con PuntoPost para dar de alta el comercio y recibir credenciales.</li>
+        <li>Recibir <code>merchant_id</code> y credenciales del usuario merchant.</li>
+        <li>Configurar el tipo de comercio: B2C, C2C, C2B, C2F o F2C según tu flujo de negocio.</li>
+    </ul>
+</section>
+
+<section id="autenticacion" class="bg-white rounded-3 shadow-sm p-4 p-lg-5 mb-4">
+    <h2 class="fw-bold mb-4">3. Autenticación</h2>
+    <p class="text-body-secondary">
+        Usa autenticación JWT en el header <code>Authorization</code> enviando un token de acceso válido para merchant. El rol requerido para operar es <code>ROLE_MERCHANT</code>.
+    </p>
+    <ul class="text-body-secondary">
+        <li><code>POST /api/auth/v1/users/merchant</code> (registro)</li>
+        <li><code>POST /api/v1/auth/login</code> (login)</li>
+    </ul>
+<pre class="bg-light rounded p-3 mb-0"><code>curl -X POST "https://back.puntopost.mx/api/v1/auth/login" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "username": "merchant_user",
+    "password": "tu_password"
+  }'</code></pre>
+</section>
+
+<section id="validacion-cobertura" class="bg-white rounded-3 shadow-sm p-4 p-lg-5 mb-4">
+    <h2 class="fw-bold mb-4">4. Validación de cobertura</h2>
+    <ul class="text-body-secondary">
+        <li><code>GET /api/merchant/v1/coverage/{postalCode}</code> devuelve <code>{ "covered": true/false }</code>.</li>
+        <li><code>GET /api/merchant/v1/coverage</code> devuelve el listado completo de códigos postales cubiertos.</li>
+    </ul>
+    <p class="text-body-secondary">Un código postal se considera cubierto cuando el PUDO más cercano está a menos de 3 km.</p>
+<pre class="bg-light rounded p-3 mb-0"><code>{
+  "covered": true
+}</code></pre>
+</section>
+
+<section id="puntos-disponibles" class="bg-white rounded-3 shadow-sm p-4 p-lg-5 mb-4">
+    <h2 class="fw-bold mb-4">5. Obtener puntos de recogida (PUDOs) disponibles</h2>
+    <p class="text-body-secondary">
+        Endpoint: <code>GET /api/merchant/v1/pudos</code>
+    </p>
+    <p class="text-body-secondary">
+        Query params: <code>latitude</code>, <code>longitude</code>, <code>postal_code</code>, <code>radius_km</code>, <code>cursor</code> (paginación).
+    </p>
+<pre class="bg-light rounded p-3"><code>GET /api/merchant/v1/pudos?postal_code=11560&amp;radius_km=5</code></pre>
+<pre class="bg-light rounded p-3 mb-0"><code>{
+  "items": [
+    {
+      "id": "pudo_123",
+      "name": "PuntoPost Polanco",
+      "address": "Av. Ejército Nacional 100, Miguel Hidalgo, CDMX",
+      "phone": "+52 55 0000 0000",
+      "opening_hours": "L-V 09:00-19:00"
+    }
+  ],
+  "next_cursor": "eyJwYWdlIjoyfQ=="
+}</code></pre>
+</section>
+
+<section id="crear-envio" class="bg-white rounded-3 shadow-sm p-4 p-lg-5 mb-4">
+    <h2 class="fw-bold mb-4">6. Crear un envío</h2>
+    <div class="table-responsive mb-4">
+        <table class="table table-bordered align-middle mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>Tipo</th>
+                    <th>Endpoint</th>
+                    <th>Uso</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>C2C</td><td><code>POST /api/merchant/v1/{merchantId}/parcels</code></td><td>Cliente → cliente (ambos en PUDO)</td></tr>
+                <tr><td>B2C</td><td><code>POST /api/merchant/v1/{merchantId}/parcels/b2c</code></td><td>Comercio → cliente en PUDO</td></tr>
+                <tr><td>C2B</td><td><code>POST /api/merchant/v1/{merchantId}/parcels/c2b</code></td><td>Cliente en PUDO → comercio (devoluciones)</td></tr>
+                <tr><td>C2F</td><td><code>POST /api/merchant/v1/{merchantId}/parcels/c2f</code></td><td>Cliente en PUDO → almacén (retornos)</td></tr>
+                <tr><td>F2C</td><td><code>POST /api/merchant/v1/{merchantId}/parcels/f2c</code></td><td>Almacén → cliente en PUDO</td></tr>
+            </tbody>
+        </table>
+    </div>
+    <p class="text-body-secondary">Campos comunes: <code>content</code>, <code>sender</code>, <code>receiver</code>, <code>origin_id</code>, <code>destination_id</code>, <code>merchant_reference</code> (opcional, recomendado para idempotencia).</p>
+<pre class="bg-light rounded p-3 mb-3"><code>{
+  "content": "Playera talla M",
+  "sender": { "name": "Tienda Demo" },
+  "receiver": { "name": "María Pérez", "phone": "+525511112222" },
+  "origin_id": "pudo_origen",
+  "destination_id": "pudo_destino",
+  "merchant_reference": "ORDER-10001"
+}</code></pre>
+<pre class="bg-light rounded p-3 mb-0"><code>{
+  "detail": { "id": "parcel_123", "tracking": "PPMX123456" },
+  "qr": "base64_or_url_qr_tracking",
+  "qr_label": "base64_or_url_qr_etiqueta"
+}</code></pre>
+    <p class="text-body-secondary mt-3 mb-0">Errores frecuentes: <code>400</code> (validación), <code>403</code> (permisos), <code>404</code> (no encontrado), <code>409</code> (tipo no configurado).</p>
+</section>
+
+<section id="consultar-envios" class="bg-white rounded-3 shadow-sm p-4 p-lg-5 mb-4">
+    <h2 class="fw-bold mb-4">7. Consultar envíos</h2>
+    <ul class="text-body-secondary mb-0">
+        <li><code>GET /api/merchant/v1/parcels/{identifier}</code> — <code>identifier</code> puede ser id, tracking, label o <code>merchant_reference</code>.</li>
+        <li><code>GET /api/merchant/v1/merchants/{merchantId}/parcels</code> — filtros: <code>date_min</code>, <code>date_max</code>, <code>status[]</code>, <code>query</code>, <code>limit</code>, <code>offset</code>.</li>
+    </ul>
+</section>
+
+<section id="transiciones-estado" class="bg-white rounded-3 shadow-sm p-4 p-lg-5 mb-4">
+    <h2 class="fw-bold mb-4">8. Transiciones de estado</h2>
+    <ul class="text-body-secondary">
+        <li><code>PUT /api/merchant/v1/parcels/{identifier}/ready</code> — marca listo en origen (CREATED → IN_ORIGIN_POINT).</li>
+        <li><code>PUT /api/merchant/v1/parcels/{identifier}/deliver</code> — marca como entregado (solo C2B / C2F).</li>
+        <li><code>DELETE /api/merchant/v1/parcels/{identifier}</code> — cancela el envío (solo si está en CREATED).</li>
+    </ul>
+<pre class="bg-light rounded p-3 mb-0"><code>CREATED → IN_ORIGIN_POINT → IN_TRANSIT → IN_DESTINATION_POINT → DELIVERED
+Alternativas: CANCELLED, LOST</code></pre>
+</section>
+
+<section id="descargar-etiqueta" class="bg-white rounded-3 shadow-sm p-4 p-lg-5 mb-4">
+    <h2 class="fw-bold mb-4">9. Descargar etiqueta</h2>
+    <p class="text-body-secondary mb-0">
+        <code>GET /api/merchant/v1/parcels/{identifier}/label</code> devuelve la etiqueta en PDF o PNG según la configuración del comercio.
+    </p>
+</section>
+
+<section id="webhooks" class="bg-white rounded-3 shadow-sm p-4 p-lg-5 mb-4">
+    <h2 class="fw-bold mb-4">10. Webhooks (recepción de eventos)</h2>
+    <p class="text-body-secondary">Configura la URL de webhook en la configuración de tu comercio.</p>
+    <ul class="text-body-secondary">
+        <li><code>parcel_status_changed</code> (incluye <code>status_history</code> completo)</li>
+        <li><code>parcel_origin_changed</code></li>
+        <li><code>parcel_destination_changed</code></li>
+    </ul>
+<pre class="bg-light rounded p-3 mb-0"><code>{
+  "event": "parcel_status_changed",
+  "data": {
+    "id": "parcel_123",
+    "tracking": "PPMX123456",
+    "status": "IN_TRANSIT",
+    "status_history": [
+      { "status": "CREATED", "date": "2026-07-14T09:00:00Z" },
+      { "status": "IN_ORIGIN_POINT", "date": "2026-07-14T10:00:00Z" },
+      { "status": "IN_TRANSIT", "date": "2026-07-14T12:00:00Z" }
+    ]
+  }
+}</code></pre>
+    <p class="text-body-secondary mt-3 mb-0">Buenas prácticas: responder HTTP 2xx rápido, procesar de forma idempotente y aplicar reintentos con backoff ante fallos temporales.</p>
+</section>
+
+<section id="errores-buenas-practicas" class="bg-white rounded-3 shadow-sm p-4 p-lg-5 mb-4">
+    <h2 class="fw-bold mb-4">11. Errores comunes y buenas prácticas</h2>
+    <ul class="text-body-secondary mb-0">
+        <li>Usa <code>merchant_reference</code> para idempotencia y evitar duplicados.</li>
+        <li>Rota periódicamente el JWT y controla su expiración.</li>
+        <li>Maneja paginación incremental con <code>cursor</code> en listados de PUDOs.</li>
+        <li>Valida con soporte el entorno de sandbox vs producción antes de salir a producción.</li>
+    </ul>
+</section>
+
+<section id="recursos" class="bg-white rounded-3 shadow-sm p-4 p-lg-5 mb-4">
+    <h2 class="fw-bold mb-4">12. Recursos</h2>
+    <ul class="text-body-secondary mb-0">
+        <li>
+            OpenAPI completa:
+            <a href="https://back.puntopost.mx/api/doc/merchant" target="_blank" rel="noopener noreferrer">https://back.puntopost.mx/api/doc/merchant</a>
+        </li>
+        <li>Soporte técnico: contacta a tu ejecutivo de PuntoPost para credenciales, configuración de tipos de comercio y webhook.</li>
+    </ul>
+</section>
