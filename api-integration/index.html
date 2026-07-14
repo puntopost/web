@@ -21,7 +21,7 @@ toc:
     - id: paso-3-envio
       label: 3. Crear un envío
     - id: paso-4-gestion
-      label: 4. Consultar y gestionar envíos
+      label: 4. Marcar como listo o cancelar
     - id: paso-5-etiqueta
       label: 5. Descargar la etiqueta
     - id: paso-6-webhooks
@@ -164,32 +164,13 @@ toc:
 </section>
 
 <section id="paso-4-gestion" class="bg-white rounded-3 shadow-sm p-4 p-lg-5 mb-4">
-    <h2 class="fw-bold mb-4">4. Consultar y gestionar envíos</h2>
+    <h2 class="fw-bold mb-4">4. Marcar como listo o cancelar</h2>
     <p class="text-body-secondary mb-3">
-        Una vez creado un envío, puedes consultar su estado actual, listar tus envíos con filtros y cambiar su estado cuando sea necesario.
+        Después de crear un envío, hay dos acciones que puedes ejecutar sobre él desde tu plataforma:
     </p>
-
-    <h3 class="fw-bold h5 mb-3">Consultar un envío</h3>
-    <ul class="text-body-secondary mb-4">
-        <li class="mb-2"><code>GET /api/merchant/v1/parcels/{identifier}</code> — el identificador puede ser el <code>id</code> del envío, su código de rastreo, el código de la etiqueta o la <code>merchant_reference</code> que hayas asignado tú.</li>
-        <li><code>GET /api/merchant/v1/merchants/{merchantId}/parcels</code> — listado de envíos del comercio con filtros por rango de fechas, estado y búsqueda de texto.</li>
-    </ul>
-
-    <h3 class="fw-bold h5 mb-3">Ciclo de vida de un envío</h3>
-    <p class="text-body-secondary mb-3">
-        Un envío pasa por los siguientes estados:
-    </p>
-    <p class="text-body-secondary mb-3">
-        <code>CREATED</code> → <code>IN_ORIGIN_POINT</code> → <code>IN_TRANSIT</code> → <code>IN_DESTINATION_POINT</code> → <code>DELIVERED</code>
-    </p>
-    <p class="text-body-secondary mb-4">
-        Alternativamente, un envío puede terminar en <code>CANCELLED</code> o <code>LOST</code>.
-    </p>
-
-    <h3 class="fw-bold h5 mb-3">Transiciones que puedes ejecutar</h3>
     <ul class="text-body-secondary mb-0">
-        <li class="mb-2"><code>PUT /api/merchant/v1/parcels/{identifier}/ready</code> — marca el envío como listo en el punto de origen. Se usa cuando el paquete ya ha sido depositado y comienza el tránsito.</li>
-        <li><code>DELETE /api/merchant/v1/parcels/{identifier}</code> — cancela un envío. Solo es posible mientras el envío esté en estado <code>CREATED</code>.</li>
+        <li class="mb-2"><code>PUT /api/merchant/v1/parcels/{identifier}/ready</code> — marca el envío como listo para que nuestro operador pase a recogerlo por tu almacén. <strong>Solo aplica al flujo B2C</strong>: es la señal de que ya tienes el paquete preparado con su etiqueta. En los flujos C2C y C2B no se utiliza porque el paquete lo deposita directamente el cliente en un punto de recogida.</li>
+        <li><code>DELETE /api/merchant/v1/parcels/{identifier}</code> — cancela un envío. Solo es posible mientras el envío no haya iniciado el tránsito.</li>
     </ul>
 </section>
 
