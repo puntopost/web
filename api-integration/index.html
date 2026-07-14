@@ -21,11 +21,9 @@ toc:
     - id: paso-3-envio
       label: 3. Crear un envío
     - id: paso-4-gestion
-      label: 4. Consultar y gestionar envíos
-    - id: paso-5-etiqueta
-      label: 5. Descargar la etiqueta
-    - id: paso-6-webhooks
-      label: 6. Recibir eventos por webhook
+      label: 4. Marcar como listo o cancelar
+    - id: paso-5-webhooks
+      label: 5. Recibir eventos por webhook
     - id: documentacion
       label: Documentación completa
 ---
@@ -87,6 +85,9 @@ toc:
         <li class="mb-2"><strong>Consulta puntual:</strong> <code>GET /api/merchant/v1/coverage/{postalCode}</code> — devuelve si un código postal concreto tiene o no cobertura. Recomendado para validar en tiempo real durante el checkout.</li>
         <li><strong>Descarga completa:</strong> <code>GET /api/merchant/v1/coverage</code> — devuelve el listado completo de códigos postales cubiertos. Útil si prefieres cachearlo en tu plataforma y validar en local.</li>
     </ul>
+    <p class="text-body-secondary mb-3">
+        Si eliges la descarga completa, <strong>actualiza tu base local al menos una vez al día</strong>. Nuestra red se amplía continuamente y los códigos postales cubiertos pueden cambiar de un día para otro. Refrescar el listado diariamente garantiza que tus clientes no pierdan la opción de envío a PuntoPost cuando incorporamos su zona.
+    </p>
     <p class="text-body-secondary mb-0">
         Si el código postal no tiene cobertura, oculta la opción de envío a PuntoPost en tu checkout.
     </p>
@@ -128,7 +129,7 @@ toc:
             <tbody>
                 <tr>
                     <td><strong>B2C</strong></td>
-                    <td>Comercio → cliente que recoge en un punto. Es el flujo más habitual para un ecommerce.</td>
+                    <td>Almacén desde el que sale el paquete → cliente que recoge en un punto. Es el flujo más habitual para un ecommerce.</td>
                     <td><code>POST /api/merchant/v1/{merchantId}/parcels/b2c</code></td>
                 </tr>
                 <tr>
@@ -138,7 +139,7 @@ toc:
                 </tr>
                 <tr>
                     <td><strong>C2B</strong></td>
-                    <td>Cliente que deja en un punto → comercio (devoluciones).</td>
+                    <td>Cliente que deja en un punto → almacén donde llega el paquete (devoluciones).</td>
                     <td><code>POST /api/merchant/v1/{merchantId}/parcels/c2b</code></td>
                 </tr>
             </tbody>
@@ -147,56 +148,28 @@ toc:
     <p class="text-body-secondary mb-3">
         En la llamada de creación tendrás que enviar los datos del contenido, los datos de contacto (según el tipo, remitente y/o destinatario) y los identificadores de origen y destino. Puedes incluir opcionalmente una <code>merchant_reference</code> con tu propio identificador de pedido, lo que te permitirá consultar el envío después usando tu referencia interna y evitar duplicados.
     </p>
-    <p class="text-body-secondary mb-0">
-        Como respuesta recibirás el envío creado con su código de rastreo, el QR de la etiqueta y el QR de seguimiento, listos para adjuntarlos al paquete o compartirlos con tu cliente.
+    <p class="text-body-secondary mb-3">
+        Como respuesta recibirás el envío creado con su código de rastreo y dos códigos QR con usos distintos:
     </p>
+    <ul class="text-body-secondary mb-0">
+        <li class="mb-2"><strong><code>qr_tracking</code></strong> — es el QR que tienes que compartir con tu cliente (por correo, WhatsApp o dentro de tu propia app). Le sirve para mostrarlo en el punto cuando vaya a dejar o recoger el paquete. <strong>No hace falta imprimirlo</strong>: basta con que lo enseñe desde el móvil.</li>
+        <li><strong><code>qr_label</code></strong> — es la etiqueta que va pegada al paquete. <strong>Solo aplica al flujo B2C</strong>, en el que el paquete sale de tu almacén: en ese caso <strong>tienes que imprimirla y adherirla al exterior del paquete</strong> antes de entregarlo al operador o dejarlo en el punto de origen. En los flujos C2C y C2B es el propio cliente quien deposita el paquete en el punto usando su <code>qr_tracking</code>, y no necesitas imprimir nada.</li>
+    </ul>
 </section>
 
 <section id="paso-4-gestion" class="bg-white rounded-3 shadow-sm p-4 p-lg-5 mb-4">
-    <h2 class="fw-bold mb-4">4. Consultar y gestionar envíos</h2>
+    <h2 class="fw-bold mb-4">4. Marcar como listo o cancelar</h2>
     <p class="text-body-secondary mb-3">
-        Una vez creado un envío, puedes consultar su estado actual, listar tus envíos con filtros y cambiar su estado cuando sea necesario.
+        Después de crear un envío, hay dos acciones que puedes ejecutar sobre él desde tu plataforma:
     </p>
-
-    <h3 class="fw-bold h5 mb-3">Consultar un envío</h3>
-    <ul class="text-body-secondary mb-4">
-        <li class="mb-2"><code>GET /api/merchant/v1/parcels/{identifier}</code> — el identificador puede ser el <code>id</code> del envío, su código de rastreo, el código de la etiqueta o la <code>merchant_reference</code> que hayas asignado tú.</li>
-        <li><code>GET /api/merchant/v1/merchants/{merchantId}/parcels</code> — listado de envíos del comercio con filtros por rango de fechas, estado y búsqueda de texto.</li>
-    </ul>
-
-    <h3 class="fw-bold h5 mb-3">Ciclo de vida de un envío</h3>
-    <p class="text-body-secondary mb-3">
-        Un envío pasa por los siguientes estados:
-    </p>
-    <p class="text-body-secondary mb-3">
-        <code>CREATED</code> → <code>IN_ORIGIN_POINT</code> → <code>IN_TRANSIT</code> → <code>IN_DESTINATION_POINT</code> → <code>DELIVERED</code>
-    </p>
-    <p class="text-body-secondary mb-4">
-        Alternativamente, un envío puede terminar en <code>CANCELLED</code> o <code>LOST</code>.
-    </p>
-
-    <h3 class="fw-bold h5 mb-3">Transiciones que puedes ejecutar</h3>
     <ul class="text-body-secondary mb-0">
-        <li class="mb-2"><code>PUT /api/merchant/v1/parcels/{identifier}/ready</code> — marca el envío como listo en el punto de origen. Se usa cuando el paquete ya ha sido depositado y comienza el tránsito.</li>
-        <li><code>DELETE /api/merchant/v1/parcels/{identifier}</code> — cancela un envío. Solo es posible mientras el envío esté en estado <code>CREATED</code>.</li>
+        <li class="mb-2"><code>PUT /api/merchant/v1/parcels/{identifier}/ready</code> — marca el envío como listo para que nuestro operador pase a recogerlo por tu almacén. <strong>Solo aplica al flujo B2C</strong>: es la señal de que ya tienes el paquete preparado con su etiqueta. En los flujos C2C y C2B no se utiliza porque el paquete lo deposita directamente el cliente en un punto de recogida.</li>
+        <li><code>DELETE /api/merchant/v1/parcels/{identifier}</code> — cancela un envío. Solo es posible mientras el envío no haya iniciado el tránsito.</li>
     </ul>
 </section>
 
-<section id="paso-5-etiqueta" class="bg-white rounded-3 shadow-sm p-4 p-lg-5 mb-4">
-    <h2 class="fw-bold mb-4">5. Descargar la etiqueta</h2>
-    <p class="text-body-secondary mb-3">
-        Para preparar el paquete físicamente necesitas la etiqueta de PuntoPost. Puedes descargarla en cualquier momento después de crear el envío.
-    </p>
-    <ul class="text-body-secondary mb-4">
-        <li><code>GET /api/merchant/v1/parcels/{identifier}/label</code> — devuelve la etiqueta en formato PDF o PNG, según el formato configurado para tu comercio.</li>
-    </ul>
-    <p class="text-body-secondary mb-0">
-        Imprime la etiqueta y adhiérela al exterior del paquete antes de depositarlo en el punto de origen o entregarlo a nuestro operador.
-    </p>
-</section>
-
-<section id="paso-6-webhooks" class="bg-white rounded-3 shadow-sm p-4 p-lg-5 mb-4">
-    <h2 class="fw-bold mb-4">6. Recibir eventos por webhook</h2>
+<section id="paso-5-webhooks" class="bg-white rounded-3 shadow-sm p-4 p-lg-5 mb-4">
+    <h2 class="fw-bold mb-4">5. Recibir eventos por webhook</h2>
     <p class="text-body-secondary mb-3">
         Para mantener tu plataforma sincronizada sin necesidad de hacer <em>polling</em> continuo, PuntoPost envía notificaciones a la URL de webhook que hayas configurado en tu comercio cada vez que ocurre un evento relevante.
     </p>
