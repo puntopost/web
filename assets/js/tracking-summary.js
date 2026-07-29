@@ -28,15 +28,15 @@ const fetchTrackingInfo = async (trackingId) => {
 		}
 		return;
 	}
-	displayTrackingInfo(result.body.detail);
+	displayTrackingInfo(result.body.detail, trackingId);
 };
 
-const displayTrackingInfo = (data) => {
+const displayTrackingInfo = (data, trackingId) => {
 	showStatusBadge(data.status);
 
 	setToggleCollapseText();
 
-	document.querySelector('.js-tracking-id').textContent = data.tracking;
+	document.querySelector('.js-tracking-id').textContent = trackingId.toUpperCase();
 
 	const showDestinationStatuses = ['created', 'in_origin_point', 'in_transit_depot', 'in_depot', 'in_transit_destination', 'in_destination_point', 'in_rerouted_point', 'delivered'];
 	const showOriginStatuses = ['return_in_destination_point', 'return_in_transit_depot', 'return_in_depot', 'return_in_transit_origin', 'return_in_origin_point', 'return_in_rerouted_point', 'return_delivered'];
