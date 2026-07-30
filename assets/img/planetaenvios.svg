@@ -2,10 +2,13 @@
   <title>PlanetaEnvíos</title>
   <!-- Circle background -->
   <circle cx="50" cy="50" r="47" fill="#000"/>
-  <!-- Arrow pointing upper-right -->
-  <path d="M 22.5,70.5 L 50.3,42.6 L 45.4,37.7 L 74.0,26.0 L 62.3,54.6 L 57.4,49.7 L 29.5,77.5 Z" fill="#fff"/>
-  <!-- Arrow pointing lower-left -->
-  <path d="M 77.5,29.5 L 49.7,57.4 L 54.6,62.3 L 26.0,74.0 L 37.7,45.4 L 42.6,50.3 L 70.5,22.5 Z" fill="#fff"/>
+  <!-- Inner flat-top hexagon border -->
+  <polygon points="50,13 80.5,31 80.5,69 50,87 19.5,69 19.5,31"
+           fill="none" stroke="#fff" stroke-width="5.5"/>
+  <!-- Stylised circular-arrow "e" mark (upper-right arrow) -->
+  <path d="M 55,22 L 64,29 L 57,29 L 57,49 L 37,49 L 37,43 L 51,43 L 51,29 L 44,29 Z" fill="#fff"/>
+  <!-- Lower-left return arc of the "e" mark -->
+  <path d="M 37,51 L 43,51 L 43,65 L 63,65 L 63,57 L 69,57 L 69,71 L 37,71 Z" fill="#fff"/>
   <!-- Brand name -->
   <text x="115" y="76"
         font-family="Nunito,'Arial Black',Arial,sans-serif"
