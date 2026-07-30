@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 100" role="img" aria-label="PlanetaEnvíos">
+  <title>PlanetaEnvíos</title>
+  <!-- Circle background -->
+  <circle cx="50" cy="50" r="47" fill="#000"/>
+  <!-- Arrow pointing upper-right -->
+  <path d="M 22.5,70.5 L 50.3,42.6 L 45.4,37.7 L 74.0,26.0 L 62.3,54.6 L 57.4,49.7 L 29.5,77.5 Z" fill="#fff"/>
+  <!-- Arrow pointing lower-left -->
+  <path d="M 77.5,29.5 L 49.7,57.4 L 54.6,62.3 L 26.0,74.0 L 37.7,45.4 L 42.6,50.3 L 70.5,22.5 Z" fill="#fff"/>
+  <!-- Brand name -->
+  <text x="115" y="76"
+        font-family="Nunito,'Arial Black',Arial,sans-serif"
+        font-size="68"
+        font-weight="800"
+        fill="#000">planetaenv&#237;os</text>
+</svg>
