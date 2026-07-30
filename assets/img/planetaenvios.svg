@@ -2,15 +2,16 @@
   <title>PlanetaEnvíos</title>
   <!-- Outer black circle -->
   <circle cx="50" cy="50" r="48" fill="#000"/>
-  <!-- White flat-top hexagon (solid white, creates the frame) -->
-  <polygon points="31.5,18 68.5,18 87,50 68.5,82 31.5,82 13,50" fill="#fff"/>
-  <!-- Circular-arrow "e" icon (annular arc 270° CW, from 3 o'clock to 12 o'clock) -->
-  <!-- Outer r=21, inner r=12, center (50,52) -->
-  <path d="M 71,52 A 21,21 0 1 1 50,31 L 50,40 A 12,12 0 1 0 62,52 Z" fill="#000"/>
-  <!-- Arrowhead at 12 o'clock, pointing right (clockwise direction) -->
-  <polygon points="57,31 49,25 49,37" fill="#000"/>
+  <!-- White flat-top hexagon -->
+  <polygon points="70,15 90,50 70,85 30,85 10,50 30,15" fill="#fff"/>
+  <!-- Circular-arrow "e" icon: 270° ring sector, CW from 4:30 (θ=45°) to 1:30 (θ=315°) -->
+  <!-- Gap on right side between θ=315° and θ=45° — outer r=36, inner r=21 -->
+  <path d="M 75.5,75.5 A 36,36 0 1 1 75.5,24.5 L 64.8,35.2 A 21,21 0 1 0 64.8,64.8 Z"
+        fill="#000" fill-rule="evenodd"/>
   <!-- Crossbar — middle bar of the "e" -->
-  <rect x="28" y="47" width="42" height="9" fill="#000"/>
+  <rect x="14" y="46" width="58" height="8" fill="#000"/>
+  <!-- Arrowhead pointing NE at upper-right end of arc -->
+  <polygon points="76,30 73.2,38.5 67.5,32.8" fill="#000"/>
   <!-- Wordmark -->
   <text x="115" y="74"
         font-family="Nunito,'Arial Rounded MT Bold',Arial,sans-serif"
