@@ -24,6 +24,7 @@ const markerCache = new Map();
 const loadedCells = new Set();
 let clusterGroup = null;
 let cpMarker = null;
+let cpPolygon = null;
 let debounceTimer = null;
 let spinnerTimer = null;
 let activeFetchId = 0;
@@ -106,6 +107,13 @@ function buildListURL(lat, lng, radiusKm, cp) {
 	return API_URL + '?' + new URLSearchParams(params);
 }
 
+// Falla en silencio: sin geometría no se dibuja nada ni se avisa al usuario
+async function fetchCPGeometry(cp) {
+	const result = await httpFetch(API_BASE + '/postal-codes/' + encodeURIComponent(cp) + '/geometry');
+	if (!result.ok || !result.body || !result.body.geometry) return null;
+	return result.body.geometry;
+}
+
 async function fetchAllPages(firstURL, fetchId, onPage) {
 	let url = firstURL;
 	while (url) {
@@ -183,6 +191,9 @@ async function loadCPSearch(map, cp) {
 	const fetchId = ++activeFetchId;
 	showSpinner(true);
 
+	if (cpPolygon) { map.removeLayer(cpPolygon); cpPolygon = null; }
+	const geometryPromise = fetchCPGeometry(cp);
+
 	const radiusKm = viewportRadiusKm(map);
 	const url = buildListURL(null, null, radiusKm, cp);
 	let handled = false;
@@ -208,7 +219,19 @@ async function loadCPSearch(map, cp) {
 					registerFetchedArea(coord.latitude, coord.longitude, radiusKm);
 				}
 
-				map.flyTo([coord.latitude, coord.longitude], DEFAULT_ZOOM, { animate: true, duration: 0.75 });
+				geometryPromise.then(geometry => {
+					if (fetchId !== activeFetchId) return;
+					if (geometry) {
+						cpPolygon = L.geoJSON(geometry, {
+							interactive: false,
+							style: { color: '#13A590', weight: 2, fillColor: '#13A590', fillOpacity: 0.12 }
+						}).addTo(map);
+						cpPolygon.bringToBack();
+						map.flyToBounds(cpPolygon.getBounds(), { animate: true, duration: 0.75, maxZoom: DEFAULT_ZOOM });
+					} else {
+						map.flyTo([coord.latitude, coord.longitude], DEFAULT_ZOOM, { animate: true, duration: 0.75 });
+					}
+				});
 				if (alreadyCovered) return true;
 			}
 		}
