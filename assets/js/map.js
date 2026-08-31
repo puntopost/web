@@ -14,6 +14,11 @@ const COVERAGE_MARGIN = 1.3;
 const CELL_SIZE = 0.05;                 // ~5.5 km per grid cell
 const MIN_FETCH_RADIUS_KM = Math.ceil(CELL_SIZE * 111 * 1.5);
 const MEXICO_BOUNDS = L.latLngBounds([14.5, -118.5], [32.8, -86.5]);
+const BASEMAP_KEY = 'cb1_2lxa_1_a28c77940e0ca9f641eb3947';
+const BASEMAP_URL = 'https://basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png?key=' + BASEMAP_KEY;
+const BASEMAP_ATTRIBUTION =
+	'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors '
+	+ '&copy; <a href="https://carto.com/attributions">CARTO</a>';
 
 const markerIcon = L.icon({ iconUrl: '/assets/img/PING1.svg', iconSize: [49, 54], iconAnchor: [24, 43], popupAnchor: [0, -38] });
 const markerIconSelected = L.icon({ iconUrl: '/assets/img/PING2.svg', iconSize: [63, 70], iconAnchor: [32, 58], popupAnchor: [0, -50] });
@@ -450,10 +455,10 @@ async function resolveDeepLink() {
 		maxBoundsViscosity: 0.8
 	}).setView(center, DEFAULT_ZOOM);
 
-	L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}{r}.png', {
+	L.tileLayer(BASEMAP_URL, {
 		maxZoom: 19,
 		minZoom: 6,
-		attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+		attribution: BASEMAP_ATTRIBUTION
 	}).addTo(map);
 
 	clusterGroup = L.markerClusterGroup({
