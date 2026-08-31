@@ -15,7 +15,17 @@ const CELL_SIZE = 0.05;                 // ~5.5 km per grid cell
 const MIN_FETCH_RADIUS_KM = Math.ceil(CELL_SIZE * 111 * 1.5);
 const MEXICO_BOUNDS = L.latLngBounds([14.5, -118.5], [32.8, -86.5]);
 const BASEMAP_KEY = 'cb1_2lxa_1_a28c77940e0ca9f641eb3947';
-const BASEMAP_URL = 'https://basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png?key=' + BASEMAP_KEY;
+const BASEMAP_STYLE = 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json?key=' + BASEMAP_KEY;
+const MIN_ZOOM = 6;
+const MAX_ZOOM = 19;
+
+// The style pulls its tiles from tiles-a..d.basemaps.cartocdn.com and its
+// glyphs and sprite from tiles.basemaps.cartocdn.com, so the key has to be
+// attached to every request MapLibre makes, not just to the style URL above.
+const addBasemapKey = (url) =>
+	url.includes('cartocdn.com') && !url.includes('key=')
+		? { url: url + (url.includes('?') ? '&' : '?') + 'key=' + BASEMAP_KEY }
+		: { url };
 const BASEMAP_ATTRIBUTION =
 	'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors '
 	+ '&copy; <a href="https://carto.com/attributions">CARTO</a>';
@@ -452,12 +462,15 @@ async function resolveDeepLink() {
 
 	const map = L.map('map', {
 		maxBounds: MEXICO_BOUNDS.pad(0.2),
-		maxBoundsViscosity: 0.8
+		maxBoundsViscosity: 0.8,
+		minZoom: MIN_ZOOM,
+		maxZoom: MAX_ZOOM
 	}).setView(center, DEFAULT_ZOOM);
 
-	L.tileLayer(BASEMAP_URL, {
-		maxZoom: 19,
-		minZoom: 6,
+	L.maplibreGL({
+		style: BASEMAP_STYLE,
+		transformRequest: addBasemapKey,
+		attributionControl: false,   // Leaflet already renders the attribution
 		attribution: BASEMAP_ATTRIBUTION
 	}).addTo(map);
 
