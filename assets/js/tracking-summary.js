@@ -38,8 +38,10 @@ const displayTrackingInfo = (data, trackingId) => {
 
 	document.querySelector('.js-tracking-id').textContent = trackingId.toUpperCase();
 
-	const showDestinationStatuses = ['created', 'in_origin_point', 'in_transit_depot', 'in_depot', 'in_transit_destination', 'in_destination_point', 'in_rerouted_point', 'delivered'];
-	const showOriginStatuses = ['return_in_destination_point', 'return_in_transit_depot', 'return_in_depot', 'return_in_transit_origin', 'return_in_origin_point', 'return_in_rerouted_point', 'return_delivered'];
+	// Solo mostramos la ubicación cuando el paquete ya va camino de su destino final,
+	// para no inducir al cliente a ir al punto antes de tiempo.
+	const showDestinationStatuses = ['in_transit_destination', 'in_destination_point', 'in_rerouted_point', 'delivered'];
+	const showOriginStatuses = ['return_in_transit_origin', 'return_in_origin_point', 'return_in_rerouted_point', 'return_delivered'];
 
 	if (showDestinationStatuses.includes(data.status)) {
 		showLocationSection('Destino', data.destination);
@@ -116,6 +118,9 @@ const displayTrackingInfo = (data, trackingId) => {
 };
 
 const showLocationSection = (title, location) => {
+	// Los almacenes (propios o del comercio) no son direcciones a las que el cliente pueda ir.
+	if (location?.type !== 'pudo') return;
+
 	document.querySelector('.js-location-title').textContent = title;
 	document.querySelector('.js-name').textContent = location.name;
 	document.querySelector('.js-address').textContent = location.address.address;
@@ -332,9 +337,11 @@ const getMovementText = (movement, isReturn, originRole, destinationRole) => {
 const getStatusText = (status) => {
 	switch (status) {
 		case 'created':
-			return 'QR generado para tu envío';
+			return 'Guía generada';
 		case 'in_origin_point':
-			return 'Recibido en punto de origen';
+			return 'Tu envío se ha puesto en marcha';
+		case 'in_rerouted_point':
+			return 'Redirigiendo tu envío a otro PuntoPost';
 		case 'in_transit_depot':
 			return 'En camino al almacén';
 		case 'in_depot':
