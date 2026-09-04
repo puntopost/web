@@ -1,15 +1,47 @@
 import { API_BASE, httpFetch, showApiErrorToast } from './api.js';
 import { getDirectionsURL } from './directions.js';
 
+// El identificador viaja en el fragmento: /tracking-summary/#MX0000000000
+// Sin identificador se muestra el formulario para introducirlo.
 document.addEventListener('DOMContentLoaded', () => {
-	const params = new URLSearchParams(window.location.search);
-	const trackingId = params.get('trackingid');
+	const trackingId = getTrackingIdFromHash();
 	if (trackingId) {
 		fetchTrackingInfo(trackingId);
 	} else {
 		hideLoading();
+		showTrackingForm('');
 	}
+	// Cualquier cambio del fragmento (formulario, botón atrás, edición manual)
+	// recarga la página para partir de un estado limpio.
+	window.addEventListener('hashchange', () => window.location.reload());
 });
+
+// Muestra el formulario de búsqueda con `value` precargado en el input.
+const showTrackingForm = (value) => {
+	const container = document.getElementById('tracking-form-container');
+	const form = document.getElementById('tracking-form');
+	const input = document.getElementById('tracking-input');
+	if (!container || !form || !input) return;
+	input.value = value;
+	container.classList.remove('d-none');
+	input.focus();
+	form.addEventListener('submit', (event) => {
+		event.preventDefault();
+		const next = (input.value || '').trim();
+		if (!next) return;
+		window.location.hash = encodeURIComponent(next);
+	});
+};
+
+const getTrackingIdFromHash = () => {
+	const raw = window.location.hash.slice(1).trim();
+	if (!raw) return '';
+	try {
+		return decodeURIComponent(raw);
+	} catch {
+		return raw;
+	}
+};
 
 const hideLoading = () => {
 	const el = document.getElementById('tracking-loading');
@@ -23,6 +55,7 @@ const fetchTrackingInfo = async (trackingId) => {
 	if (!result.ok) {
 		if (result.status >= 400 && result.status < 500) {
 			document.getElementById('tracking-error-alert').classList.remove('d-none');
+			showTrackingForm(trackingId);
 		} else {
 			showApiErrorToast(result.status);
 		}

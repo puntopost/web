@@ -361,7 +361,7 @@ banner: |
                 const value = (input.value || '').trim();
                 if (!value) return;
                 const tracking = encodeURIComponent(value);
-                window.location.href = '/tracking-summary/' + tracking;
+                window.location.href = '/tracking-summary/#' + tracking;
             });
         })();
 

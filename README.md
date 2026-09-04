@@ -38,6 +38,24 @@ make server PORT=4001
 
 The server watches for file changes and rebuilds automatically.
 
+### Linting and git hooks
+
+The same linters that run in CI can run locally. Node tooling runs inside Docker, so no local Node install is needed.
+
+```bash
+make lint        # JS + HTML lint
+make lint-js     # ESLint on assets/js/
+make lint-html   # HTMLHint on the built site in _site/ (needs a previous `make server`)
+```
+
+A versioned pre-commit hook in `.githooks/` runs the fast linters before every commit. `make server` installs it automatically; to install it on its own:
+
+```bash
+make install-hook
+```
+
+Skip it once with `git commit --no-verify`.
+
 ## Customizing Bootstrap
 
 To change Bootstrap colors or variables:
