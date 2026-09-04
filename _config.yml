@@ -4,6 +4,9 @@ url: "https://www.puntopost.mx"
 # Override local en _config_dev.yml (ver `make server`).
 embed_url: "https://merchant.puntopost.mx/embed.js"
 
+plugins:
+  - jekyll-sitemap
+
 exclude:
   - Makefile
   - nginx.conf
