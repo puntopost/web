@@ -38,7 +38,7 @@ const getTrackingIdFromHash = () => {
 	if (!raw) return '';
 	try {
 		return decodeURIComponent(raw);
-	} catch (e) {
+	} catch {
 		return raw;
 	}
 };
