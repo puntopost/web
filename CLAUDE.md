@@ -31,6 +31,12 @@ Static marketing site for [www.puntopost.mx](https://www.puntopost.mx) — a par
 
 Each page is a subdirectory with its own `index.html`. Bootstrap CSS files live at the root (`bootstrap.min.css`, `bootstrap-icons.min.css`) and subpages reference them with `../`.
 
+## Local development
+
+- `make server` / `make stop` — Jekyll dev server in Docker (port 8791). `make server` also installs the git hooks.
+- `make lint` — same JS and HTML linters as CI, run in Docker. `lint-html` needs `_site/` from a previous `make server`.
+- `.githooks/pre-commit` runs the fast linters before every commit (`make install-hook` to set it up).
+
 ## Deploy
 
 GitHub Pages — push to `main` publishes automatically. Domain configured in `CNAME`.

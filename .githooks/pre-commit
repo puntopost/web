@@ -1,0 +1,14 @@
+#!/bin/sh
+# Pre-commit hook: runs the fast linters through the Makefile (same checks as CI).
+# Installed with `make install-hook` (also run by `make server`).
+# Skip once with `git commit --no-verify`.
+cd "$(git rev-parse --show-toplevel)" || exit 1
+
+make --no-print-directory lint-js || exit 1
+
+# HTML lint needs a built site. Only run it when one is there (make server keeps it fresh).
+if [ -d _site ]; then
+	make --no-print-directory lint-html || exit 1
+else
+	echo "pre-commit: _site/ not found, skipping HTML lint (run 'make server' to enable it)"
+fi
