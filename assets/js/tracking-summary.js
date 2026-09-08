@@ -64,14 +64,40 @@ const displayTrackingInfo = (data, trackingId) => {
 	const currentStatusTimeElement = document.querySelector('.js-current-status-time');
 	const isReturnFailStatus =
 		typeof data.status === 'string' && data.status.startsWith('return_fail');
-	currentStatusElement.textContent = isReturnFailStatus
-		? 'Devolución al remitente'
-		: getStatusText(data.status);
+
+	// En los estados de tránsito por almacén el copy del detalle de trayecto es más
+	// informativo que el genérico, porque nombra el almacén o el PuntoPost concreto.
+	// Si el movimiento equivalente todavía no existe, caemos al copy genérico.
+	const movementStatusForStatus = {
+		in_transit_depot: 'in_transit',
+		in_depot: 'in_destination',
+		in_transit_destination: 'in_transit'
+	};
+	const expectedMovementStatus = isReturnFailStatus
+		? undefined
+		: movementStatusForStatus[data.status];
+	const latestMovementEvent = expectedMovementStatus
+		? [...events]
+				.reverse()
+				.find((event) => event.type === 'movement' && event.status === expectedMovementStatus)
+		: null;
+
+	if (isReturnFailStatus) {
+		currentStatusElement.textContent = 'Devolución al remitente';
+	} else if (latestMovementEvent) {
+		currentStatusElement.textContent = latestMovementEvent.label;
+	} else {
+		currentStatusElement.textContent = getStatusText(data.status);
+	}
 
 	// Buscamos la marca de tiempo del estado actual en el historial, si existe.
 	// Si no existe, usamos la fecha del último estado del historial.
 	let currentStatusWhen = data.created_at;
-	if (Array.isArray(data.status_history) && data.status_history.length > 0) {
+	if (latestMovementEvent) {
+		// Si mostramos el copy del movimiento, usamos también su fecha para que
+		// coincida con la línea equivalente del historial.
+		currentStatusWhen = latestMovementEvent.rawDate;
+	} else if (Array.isArray(data.status_history) && data.status_history.length > 0) {
 		if (isReturnFailStatus && returnFailOriginEntry) {
 			// Para cualquier estado final return_fail*, usamos la fecha
 			// de return_fail_in_origin_point como momento de "Devolución al remitente".
@@ -286,7 +312,7 @@ const formatPlaceName = (place, role, isReturn) => {
 		return `PuntoPost ${place.name}`;
 	}
 
-	if (place.type === 'logistic') return ` ${place.name}`;
+	if (place.type === 'logistic') return place.name;
 
 	return place.name;
 };
