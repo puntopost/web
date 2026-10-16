@@ -297,7 +297,6 @@ const shouldIncludeStatusFromHistoryWithMovements = (status) =>
 	status === 'delivered' ||
 	status === 'incidence' ||
 	status === 'cancelled' ||
-	status === 'returned' ||
 	// Devolución: solo estados "especiales" que no se solapan con movements
 	status === 'return_in_destination_point' || // Entrega fallida, inicio proceso de devolución
 	status === 'return_delivered' || // Devolución entregada
@@ -312,8 +311,7 @@ const getReturnStartDate = (data) => {
 		'return_in_depot',
 		'return_in_transit_origin',
 		'return_in_origin_point',
-		'return_delivered',
-		'returned'
+		'return_delivered'
 	];
 
 	const returnEntries = data.status_history.filter((item) =>
@@ -421,14 +419,14 @@ const getStatusText = (status) => {
 			return 'Devolución en ruta hacia el punto de entrega';
 		case 'return_in_origin_point':
 			return 'Devolución disponible en punto de entrega';
+		case 'return_in_rerouted_point':
+			return 'Redirigiendo tu devolución a otro PuntoPost';
 		case 'return_delivered':
 			return 'Devolución entregada';
 		case 'incidence':
 			return 'Incidencia detectada, revisando';
 		case 'cancelled':
 			return 'Cancelado';
-		case 'returned':
-			return 'Devolución completada';
 		case 'lost':
 			return 'Siniestrado';
 		default:
