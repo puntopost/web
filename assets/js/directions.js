@@ -1,12 +1,7 @@
-function isIOS() {
-	return ['iPad Simulator', 'iPhone Simulator', 'iPod Simulator', 'iPad', 'iPhone', 'iPod']
-		.includes(navigator.platform)
-		|| (navigator.userAgent.includes('Mac') && 'ontouchend' in document);
-}
-
-export function getDirectionsURL(address, coordinate) {
+// Google Maps universal URL: on iOS/Android it opens the app if installed,
+// otherwise the browser. Apple Maps resolved daddr=<address> unreliably for
+// Mexican addresses, so we use coordinates and Google Maps everywhere.
+export function getDirectionsURL(coordinate) {
 	const coords = `${coordinate.latitude},${coordinate.longitude}`;
-	const encoded = encodeURIComponent(address);
-	if (isIOS()) return `https://maps.apple.com/?daddr=${encoded}&sll=${coords}&dirflg=d`;
-	return `https://www.google.com/maps/dir/?api=1&destination=${coords}&query=${encoded}&dir_action=navigate`;
+	return `https://www.google.com/maps/dir/?api=1&destination=${coords}&dir_action=navigate`;
 }

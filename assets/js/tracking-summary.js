@@ -128,7 +128,7 @@ const showLocationSection = (title, location) => {
 	document.querySelector('.js-location-section').classList.remove('d-none');
 	if (location.address?.coordinate) {
 		const mapLink = document.querySelector('.js-map-link');
-		mapLink.href = getDirectionsURL(location.address.address, location.address.coordinate);
+		mapLink.href = getDirectionsURL(location.address.coordinate);
 		mapLink.target = '_blank';
 		mapLink.rel = 'noopener noreferrer';
 		mapLink.classList.remove('d-none');
