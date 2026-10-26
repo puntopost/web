@@ -100,20 +100,22 @@ const displayTrackingInfo = (data, trackingId) => {
 
 	// En los estados de tránsito por almacén el copy del detalle de trayecto es más
 	// informativo que el genérico, porque nombra el almacén o el PuntoPost concreto.
-	// Si el movimiento equivalente todavía no existe, caemos al copy genérico.
-	const movementStatusForStatus = {
-		in_transit_depot: 'in_transit',
-		in_depot: 'in_destination',
-		in_transit_destination: 'in_transit'
-	};
-	const expectedMovementStatus = isReturnFailStatus
-		? undefined
-		: movementStatusForStatus[data.status];
-	const latestMovementEvent = expectedMovementStatus
-		? [...events]
-				.reverse()
-				.find((event) => event.type === 'movement' && event.status === expectedMovementStatus)
-		: null;
+	// Usamos el último movimiento cronológico en vez de buscar uno con un sub-estado
+	// concreto (p.ej. "in_destination"): un envío puede saltar de almacén en almacén
+	// sin pasar siempre por ese mismo sub-estado, y buscarlo por tipo puede encontrar
+	// un movimiento antiguo en vez del más reciente.
+	const statusesWithMovementDetail = [
+		'in_transit_depot',
+		'in_depot',
+		'in_transit_destination',
+		'return_in_transit_depot',
+		'return_in_depot',
+		'return_in_transit_origin'
+	];
+	const latestMovementEvent =
+		!isReturnFailStatus && statusesWithMovementDetail.includes(data.status)
+			? [...events].reverse().find((event) => event.type === 'movement')
+			: null;
 
 	if (isReturnFailStatus) {
 		currentStatusElement.textContent = 'Devolución al remitente';
@@ -207,7 +209,6 @@ const setToggleCollapseText = () => {
 const buildTimelineEvents = (data) => {
 	const events = [];
 	const hasMovements = Array.isArray(data.movements) && data.movements.length > 0;
-	const returnStartDate = getReturnStartDate(data);
 	const globalOriginId = data.origin?.id;
 	const globalDestinationId = data.destination?.id;
 
@@ -262,7 +263,7 @@ const buildTimelineEvents = (data) => {
 			}
 
 			const movementDate = new Date(movement.created_at);
-			const isReturn = returnStartDate && movementDate >= returnStartDate;
+			const isReturn = isInReturnFlowAt(data.status_history, movementDate);
 
 			const originRole =
 				movement.origin && movement.origin.id === globalOriginId
@@ -302,31 +303,22 @@ const shouldIncludeStatusFromHistoryWithMovements = (status) =>
 	status === 'return_delivered' || // Devolución entregada
 	status.startsWith('return_fail'); // Estados finales de devolución fallida (aunque luego cortemos por fecha)
 
-const getReturnStartDate = (data) => {
-	if (!Array.isArray(data.status_history)) return null;
+// Determina si, en un instante dado, el envío estaba en flujo de devolución.
+// No basta con mirar si *alguna vez* hubo un estado de devolución antes: una
+// devolución puede rectificarse (p.ej. se marcó por error y segundos después
+// se corrigió a un estado normal), así que miramos el último status_history
+// anterior o igual a esa fecha y nos fijamos solo en ese.
+const isInReturnFlowAt = (statusHistory, date) => {
+	if (!Array.isArray(statusHistory) || statusHistory.length === 0) return false;
 
-	const returnStatuses = [
-		'return_in_destination_point',
-		'return_in_transit_depot',
-		'return_in_depot',
-		'return_in_transit_origin',
-		'return_in_origin_point',
-		'return_delivered'
-	];
+	const priorEntries = statusHistory.filter((item) => new Date(item.when) <= date);
+	if (priorEntries.length === 0) return false;
 
-	const returnEntries = data.status_history.filter((item) =>
-		returnStatuses.includes(item.status)
+	const latestPriorEntry = priorEntries.reduce((latest, item) =>
+		new Date(item.when) > new Date(latest.when) ? item : latest
 	);
 
-	if (returnEntries.length === 0) return null;
-
-	// Tomamos la fecha más antigua en la que el envío entra en estado de devolución
-	const firstReturnWhen = returnEntries.reduce(
-		(min, item) => (item.when < min ? item.when : min),
-		returnEntries[0].when
-	);
-
-	return new Date(firstReturnWhen);
+	return latestPriorEntry.status.startsWith('return');
 };
 
 const formatPlaceName = (place, role, isReturn) => {
