@@ -8,7 +8,7 @@ Static marketing site for [www.puntopost.mx](https://www.puntopost.mx) — a par
 - Bootstrap 5.3.8 (compiled CSS, no SCSS in this repo — see README for customization)
 - Bootstrap Icons (CSS + WOFF)
 - Google Fonts: Quicksand (300-700)
-- Leaflet.js 1.7.1 (interactive map in map/)
+- Leaflet.js 1.9.4 (interactive map in map/) + MapLibre GL 5.24.0 via `maplibre-gl-leaflet`, which only draws the vector basemap: OpenFreeMap Positron restyled to look like CARTO Positron, with Spanish labels (`assets/js/basemap.js`, reusable in other sites)
 - Bootstrap JS via CDN: `cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js`
 
 ## Structure
