@@ -116,8 +116,10 @@ function restyle(_previous, style) {
 export function addBasemap(map) {
 	const layer = L.maplibreGL({
 		style: { version: 8, sources: {}, layers: [] },
-		attributionControl: false,   // Leaflet already renders the attribution
-		attribution: ATTRIBUTION
+		// maplibre-gl-leaflet ignores `attribution`: Leaflet's control shows what
+		// getAttribution() returns, which is this customAttribution. MapLibre's own
+		// control stays off (the plugin forces attributionControl: false on it).
+		attributionControl: { customAttribution: ATTRIBUTION }
 	}).addTo(map);
 	layer.getMaplibreMap().setStyle(STYLE_URL, { transformStyle: restyle });
 	return layer;
