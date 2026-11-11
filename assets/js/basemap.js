@@ -8,7 +8,7 @@ const STYLE_URL = 'https://tiles.openfreemap.org/styles/positron';
 const ATTRIBUTION =
 	'<a href="https://openfreemap.org" target="_blank">OpenFreeMap</a> '
 	+ '<a href="https://www.openmaptiles.org/" target="_blank">&copy; OpenMapTiles</a> '
-	+ 'Data from <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>';
+	+ 'Datos de <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>';
 
 // Spanish name, falling back to the local OSM name (already Spanish in Mexico).
 const NAME = ['coalesce', ['get', 'name:es'], ['get', 'name']];
