@@ -1,7 +1,7 @@
 ---
 layout: documentation
 title: "PuntoPost - App Shopify - Documentación"
-description: "Documentación del plugin de Shopify para integrar PuntoPost en tu tienda online."
+description: "Documentación de la app de Shopify para ofrecer envío a puntos de recogida PuntoPost en tu tienda online."
 banner: |
     <section class="text-white text-center rounded-bottom-4 pb-4 pt-3">
     <h1 class="fw-bold display-5 mb-3">App Shopify</h1>
@@ -10,26 +10,84 @@ banner: |
 toc:
     - id: introduccion
       label: Introducción
+    - id: requisitos
+      label: Requisitos y planes de Shopify
     - id: instalacion
       label: Instalación
-    - id: configurar-carrito
-      label: Configurar el carrito
-    - id: configurar-envios
-      label: Configurar tarifas de envío
     - id: credenciales
-      label: Configurar credenciales de PuntoPost
-    - id: vista-cliente
-      label: Vista del cliente
+      label: Configurar credenciales
+    - id: configurar-recogida
+      label: Configurar la recogida en el checkout
+    - id: zonas-envio
+      label: Añadir PuntoPost a las zonas de envío
+    - id: grow-advanced
+      label: Tiendas Grow y Advanced
+    - id: plus
+      label: Tiendas Plus
+    - id: diagnostico
+      label: Diagnóstico
     - id: gestion-pedidos
       label: Gestión de pedidos
+    - id: solo-checkout
+      label: Modo solo checkout
+    - id: solucion
+      label: Solución de problemas
 ---
 
 <section id="introduccion" class="bg-white rounded-3 shadow-sm p-4 p-lg-5 mb-4">
     <h2 class="fw-bold mb-4">Introducción</h2>
     <p class="text-body-secondary">
         Integra el método de envío PuntoPost en tu tienda Shopify para que tus clientes recojan sus pedidos en puntos de recogida cercanos.
-        La aplicación funciona con todos los planes de Shopify y proporciona un selector de puntos de recogida directamente en el carrito.
-        Incluye mapa interactivo, creación automática de paquetes, etiquetas QR y actualizaciones de estado.
+        Los puntos de recogida se ofrecen directamente en el checkout de Shopify, en el paso de métodos de envío.
+    </p>
+    <p class="text-body-secondary">
+        La app crea automáticamente los paquetes en PuntoPost al recibir los pedidos, genera las etiquetas con código QR y muestra el estado de cada paquete en el pedido.
+    </p>
+    <p class="text-body-secondary mb-0">
+        La forma en que el cliente elige el punto de recogida depende del plan de Shopify de tu tienda. La app detecta el plan automáticamente y se adapta a él. Esta documentación empieza por los pasos comunes a todos los planes y después explica por separado lo específico de las <a href="#grow-advanced">tiendas Grow y Advanced</a> y de las <a href="#plus">tiendas Plus</a>.
+    </p>
+</section>
+
+<section id="requisitos" class="bg-white rounded-3 shadow-sm p-4 p-lg-5 mb-4">
+    <h2 class="fw-bold mb-4">Requisitos y planes de Shopify</h2>
+    <p class="text-body-secondary mb-4">
+        PuntoPost calcula sus tarifas en el checkout mediante la función de Shopify <em>tarifas de envío calculadas por transportista</em> (<em>Carrier-Calculated Shipping</em>, CCS). Tu tienda necesita tener esta función activa para poder usar la app. Su disponibilidad depende del plan:
+    </p>
+    <div class="row row-cols-1 row-cols-md-2 g-3 mb-4">
+        <div class="col">
+            <div class="border rounded-3 p-3 h-100">
+                <p class="fw-bold mb-2">Basic / Starter</p>
+                <p class="text-body-secondary mb-1"><strong>CCS:</strong> no disponible.</p>
+                <p class="text-body-secondary mb-0"><strong>Funcionamiento:</strong> la app no puede funcionar. Es necesario cambiar de plan.</p>
+            </div>
+        </div>
+        <div class="col">
+            <div class="border rounded-3 p-3 h-100">
+                <p class="fw-bold mb-2">Grow</p>
+                <p class="text-body-secondary mb-1"><strong>CCS:</strong> incluido con facturación anual, o como complemento mensual que activa el soporte de Shopify.</p>
+                <p class="text-body-secondary mb-0"><strong>Funcionamiento:</strong> <a href="#grow-advanced">una tarifa por punto de recogida</a>.</p>
+            </div>
+        </div>
+        <div class="col">
+            <div class="border rounded-3 p-3 h-100">
+                <p class="fw-bold mb-2">Advanced</p>
+                <p class="text-body-secondary mb-1"><strong>CCS:</strong> incluido.</p>
+                <p class="text-body-secondary mb-0"><strong>Funcionamiento:</strong> <a href="#grow-advanced">una tarifa por punto de recogida</a>.</p>
+            </div>
+        </div>
+        <div class="col">
+            <div class="border rounded-3 p-3 h-100">
+                <p class="fw-bold mb-2">Plus</p>
+                <p class="text-body-secondary mb-1"><strong>CCS:</strong> incluido.</p>
+                <p class="text-body-secondary mb-0"><strong>Funcionamiento:</strong> <a href="#plus">selector de puntos con mapa</a>.</p>
+            </div>
+        </div>
+    </div>
+    <p class="text-body-secondary mb-4">
+        Si tu tienda no tiene CCS activo, la página principal de la app muestra el aviso <em>PuntoPost no puede funcionar en esta tienda</em> con los pasos a seguir según tu plan. Si tu plan debería incluirlo y no está activo, contacta con el soporte de Shopify y solicita que activen <em>Carrier-Calculated Shipping / third-party carrier services</em> en tu tienda.
+    </p>
+    <p class="text-body-secondary mb-0">
+        PuntoPost ofrece puntos de recogida en México, por lo que solo se muestran tarifas para direcciones de envío de México.
     </p>
 </section>
 
@@ -49,94 +107,14 @@ toc:
         Si encuentras alguna dificultad durante el proceso de instalación de la aplicación, consulta el <a href="https://help.shopify.com/es/manual/apps/apps-by-shopify/installing-apps" target="_blank" rel="noopener noreferrer">manual de instalación de aplicaciones de Shopify</a>.
     </p>
     <p class="text-body-secondary mt-4 mb-0">
-        Una vez completado el proceso de instalación de la aplicación, puedes comenzar con la configuración.
+        Al abrir la app por primera vez, esta registra automáticamente el servicio de tarifas de PuntoPost en tu tienda. Una vez instalada, puedes comenzar con la configuración.
     </p>
-</section>
-
-<section id="configurar-carrito" class="bg-white rounded-3 shadow-sm p-4 p-lg-5 mb-4">
-    <h2 class="fw-bold mb-4">Configurar el carrito</h2>
-
-    <div class="mb-4">
-        <h3 class="fw-bold mb-3">Configurar el carrito como Página</h3>
-        <p class="text-body-secondary mb-3">
-            El carrito debe estar configurado como <em>Página</em> en la personalización del tema. Esto es necesario porque el selector de puntos de recogida se añade a la página del carrito. Para configurarlo:
-        </p>
-        <ol class="text-body-secondary mb-3">
-            <li>Ve a la personalización del tema.</li>
-            <li>Selecciona <em>Configuración</em>.</li>
-            <li>Ve a la sección <em>Carrito</em>.</li>
-            <li>Selecciona <em>Página</em>.</li>
-        </ol>
-        <div class="border rounded p-3 bg-light text-center mb-3">
-            <img src="/assets/img/puntopost-shopify-1.webp" alt="Configuración del carrito como Página" class="img-fluid" loading="lazy">
-        </div>
-    </div>
-
-    <div class="mb-4">
-        <h3 class="fw-bold mb-3">Añadir el selector de puntos de recogida al carrito</h3>
-        <p class="text-body-secondary mb-3">
-            El selector de puntos de recogida debe añadirse al carrito para que los clientes puedan seleccionar dónde recoger su pedido. Para hacerlo:
-        </p>
-        <p>Ve a la personalización del tema.</p>
-        <div class="border rounded p-3 bg-light text-center mb-3">
-            <img src="/assets/img/puntopost-shopify-2.webp" alt="Configuración del carrito como Página" class="img-fluid" loading="lazy">
-        </div>
-        <p>Selecciona la plantilla de la página del carrito desde el menú desplegable en la parte superior.</p>
-        <div class="border rounded p-3 bg-light text-center mb-3">
-            <img src="/assets/img/puntopost-shopify-3.webp" alt="Configuración del carrito como Página" class="img-fluid" loading="lazy">
-        </div>
-        <p>Utiliza la opción <em>Plantilla » Aplicaciones » Agregar bloque</em>, selecciona <em>Apps</em> y pulsa sobre <em>Puntos recogida PuntoPost</em> para añadir el bloque del selector de puntos de recogida.</p>
-        <div class="border rounded p-3 bg-light text-center mb-3">
-            <img src="/assets/img/puntopost-shopify-4.webp" alt="Configuración del carrito como Página" class="img-fluid" loading="lazy">
-        </div>
-    </div>
-</section>
-
-<section id="configurar-envios" class="bg-white rounded-3 shadow-sm p-4 p-lg-5 mb-4">
-    <h2 class="fw-bold mb-4">Configurar tarifas de envío</h2>
-
-    <p class="text-body-secondary mb-4">
-        Para configurar el coste de envío que se cobrará a tus clientes cuando elijan la entrega a puntos de recogida PuntoPost, se debe añadir primero la tarifa en Shopify y, después, asignarla en la configuración de la app para que aplique cuando el usuario escoja un punto de recogida.
-    </p>
-
-    <div class="mb-4">
-        <h3 class="fw-bold mb-3">Añadir tarifa de envío</h3>
-
-        <div class="border rounded p-3 bg-light text-center mb-3">
-            <img src="/assets/img/puntopost-shopify-5.webp" alt="Configuración de las tarifas de envío" class="img-fluid" loading="lazy">
-        </div>
-
-        <p class="text-body-secondary mb-3">
-            Para añadir una nueva tarifa:
-        </p>
-        <ol class="text-body-secondary mb-3">
-            <li>Ve a la configuración de Envíos y entregas de Shopify</li>
-            <li>Selecciona la zona de envío correspondiente</li>
-            <li>Haz clic en el botón Añadir tarifa</li>
-            <li>Configura la tarifa según tus necesidades (por peso, valor del pedido, etc.)</li>
-            <li>Confirma añadiendo las tarifas con el botón Guardar en la parte superior de la pantalla de Configuración</li>
-        </ol>
-        <div class="border rounded p-3 bg-light text-center mb-3">
-            <img src="/assets/img/puntopost-shopify-6.webp" alt="Configuración de las tarifas de envío" class="img-fluid" loading="lazy">
-        </div>
-
-        <h3 class="fw-bold mb-3">Asignar como tarifa de envío</h3>
-        <p class="text-body-secondary mb-3">
-            Una vez creada la tarifa, esta se debe asignar como tarifa de envío de PuntoPost para que aplique cuando el usuario escoja un punto de recogida.
-        </p>
-        <div class="border rounded p-3 bg-light text-center mb-3">
-            <img src="/assets/img/puntopost-shopify-7.webp" alt="Configuración de la asignación de tarifa" class="img-fluid" loading="lazy">
-        </div>
-        <p class="text-body-secondary mb-3">
-            Para hacerlo, ve a la sección <em>Configuración de tarifas</em> y selecciona la tarifa correspondiente, la cual se mostrará a los clientes cuando seleccionen un punto de recogida de PuntoPost.
-        </p>
-    </div>
 </section>
 
 <section id="credenciales" class="bg-white rounded-3 shadow-sm p-4 p-lg-5 mb-4">
     <h2 class="fw-bold mb-4">Configurar credenciales de PuntoPost</h2>
     <p class="text-body-secondary mb-4">
-        Una vez instalada la aplicación, es necesario configurar tus credenciales de PuntoPost para establecer la conexión con la plataforma. Estas credenciales permiten que la aplicación se comunique con PuntoPost para crear paquetes automáticamente cuando se procesan los pedidos y recibir actualizaciones sobre el estado de los mismos.
+        Para establecer la conexión con PuntoPost es necesario configurar tus credenciales. Estas credenciales permiten que la aplicación consulte los puntos de recogida, cree los paquetes automáticamente cuando se reciben los pedidos y reciba las actualizaciones sobre su estado.
     </p>
     <p class="text-body-secondary mb-4">
         Si no dispones de estas credenciales, consulta con tu contacto de PuntoPost para recibirlas.
@@ -145,7 +123,7 @@ toc:
         <img src="/assets/img/puntopost-shopify-8.webp" alt="Configuración de las credenciales" class="img-fluid" loading="lazy">
     </div>
     <p class="text-body-secondary mb-4">
-        Introduce primero tu usuario y contraseña, junto al ID de comercio (Merchant ID), y pulsa el botón <em>Detectar tipo de comercio</em>. Dependiendo del tipo de comercio, deberás finalizar introduciendo las credenciales necesarias.
+        Introduce primero tu usuario y contraseña, junto al ID de comercio (Merchant ID), y pulsa el botón <em>Detectar tipo de comercio</em>. La app obtiene de PuntoPost el tipo de comercio (B2C o C2C) y si tienes las devoluciones activadas, y te pide los datos adicionales que correspondan.
     </p>
     <div class="border rounded p-3 bg-light text-center mb-3">
         <img src="/assets/img/puntopost-shopify-8-1.webp" alt="Configuración de las credenciales B2C" class="img-fluid" loading="lazy">
@@ -157,127 +135,313 @@ toc:
         <img src="/assets/img/puntopost-shopify-8-2.webp" alt="Configuración de las credenciales C2C" class="img-fluid" loading="lazy">
     </div>
     <p class="text-body-secondary mb-4">
-        En el caso de que el comercio sea C2C, deberás introducir los datos del remitente para poder gestionar los pedidos con PuntoPost.
+        En el caso de que el comercio sea C2C, deberás introducir los datos del remitente. Si además tienes las devoluciones activadas, también se pedirá el punto de origen (Origin ID).
+    </p>
+    <p class="text-body-secondary mb-0">
+        En esta misma pantalla está la opción <em>Usar PuntoPost solo en el checkout (sin crear paquetes)</em>, que activa el <a href="#solo-checkout">modo solo checkout</a>. Déjala desactivada si quieres que la app gestione los paquetes con PuntoPost.
     </p>
 </section>
 
-<section id="vista-cliente" class="bg-white rounded-3 shadow-sm p-4 p-lg-5 mb-4">
-    <h2 class="fw-bold mb-4">Vista del cliente</h2>
+<section id="configurar-recogida" class="bg-white rounded-3 shadow-sm p-4 p-lg-5 mb-4">
+    <h2 class="fw-bold mb-4">Configurar la recogida en el checkout</h2>
     <p class="text-body-secondary mb-4">
-        Una vez configurada la aplicación, los clientes podrán ver y utilizar el selector de puntos de recogida durante su proceso de compra. A continuación se muestra cómo se presenta la funcionalidad desde la perspectiva del cliente.
+        En la página principal de la app, en la sección <em>Configuración de recogida en checkout</em>, puedes ajustar cómo se ofrece PuntoPost a tus clientes:
     </p>
+    <dl class="text-body-secondary mb-4">
+        <dt class="text-body">Precio de envío (MXN)</dt>
+        <dd class="mb-3">Importe que se cobra al cliente por el envío a un punto PuntoPost.</dd>
+        <dt class="text-body">Umbral de envío gratis (MXN)</dt>
+        <dd class="mb-3">Los pedidos con un importe igual o superior tendrán el envío PuntoPost gratis. Déjalo vacío para desactivarlo.</dd>
+        <dt class="text-body">Prefijo del nombre de tarifa</dt>
+        <dd class="mb-3">Texto con el que aparece PuntoPost en el checkout. Por defecto, <em>PuntoPost</em>. Cómo se muestra depende del plan: consulta <a href="#grow-advanced">Grow y Advanced</a> o <a href="#plus">Plus</a>.</dd>
+        <dt class="text-body">Usar el punto de recogida como dirección de envío</dt>
+        <dd class="mb-3">Sustituye la dirección de envío del pedido por la del punto de recogida elegido, con el nombre del punto en el campo <em>Empresa</em>.</dd>
+        <dt class="text-body">Puntos de recogida a mostrar</dt>
+        <dd class="mb-0">Solo se aplica en tiendas Grow y Advanced (ver <a href="#grow-advanced">Tiendas Grow y Advanced</a>).</dd>
+    </dl>
+    <p class="text-body-secondary mb-4">
+        Pulsa <em>Guardar configuración</em> para aplicar los cambios.
+    </p>
+    <div class="mb-0">
+        <h3 class="fw-bold mb-3">Recomendación: email y teléfono obligatorios</h3>
+        <p class="text-body-secondary mb-0">
+            Te recomendamos hacer obligatorios el email y el teléfono en <em>Configuración » Checkout</em> de Shopify. PuntoPost los utiliza para avisar a tus clientes cuando su paquete llega al punto de recogida.
+        </p>
+    </div>
+</section>
+
+<section id="zonas-envio" class="bg-white rounded-3 shadow-sm p-4 p-lg-5 mb-4">
+    <h2 class="fw-bold mb-4">Añadir PuntoPost a las zonas de envío</h2>
+    <p class="text-body-secondary mb-4">
+        Para que Shopify consulte a PuntoPost en el checkout, añade PuntoPost como tarifa calculada en tu zona de envío de México:
+    </p>
+    <ol class="text-body-secondary mb-0">
+        <li class="mb-2">Ve a <em>Configuración » Envío y entrega</em> en el administrador de Shopify.</li>
+        <li class="mb-2">Abre el perfil de envío y edita la zona que incluye <em>México</em>.</li>
+        <li class="mb-2">Pulsa <em>Añadir tarifa</em> y elige la opción de tarifas calculadas por un transportista o una app.</li>
+        <li class="mb-2">Selecciona <em>PuntoPost</em> como servicio y guarda los cambios.</li>
+    </ol>
+</section>
+
+<section id="grow-advanced" class="bg-white rounded-3 shadow-sm p-4 p-lg-5 mb-4">
+    <h2 class="fw-bold mb-4">Tiendas Grow y Advanced</h2>
 
     <div class="mb-4">
-        <h3 class="fw-bold mb-3">Selector de puntos de recogida en el carrito</h3>
-        <p class="text-body-secondary mb-3">
-            Cuando el cliente añade productos y accede a la página del carrito, verá el selector de puntos de recogida de PuntoPost. Este selector aparece como un bloque en la página del carrito, permitiendo al cliente elegir dónde desea recoger su pedido antes de proceder al checkout.
+        <h3 class="fw-bold mb-3">Cómo funciona</h3>
+        <p class="text-body-secondary mb-0">
+            Cada punto de recogida cercano a la dirección del cliente aparece en el checkout como un método de envío independiente, con el nombre del punto, su dirección y su horario. El cliente elige el punto seleccionando directamente su tarifa. No hace falta configurar nada más en el checkout.
         </p>
-        <div class="border rounded p-3 bg-light text-center mb-3">
-            <img src="/assets/img/puntopost-shopify-9.webp" alt="Vista del cliente" class="img-fluid" loading="lazy">
-        </div>
     </div>
 
     <div class="mb-4">
-        <h3 class="fw-bold mb-3">Mapa interactivo para seleccionar punto de recogida</h3>
+        <h3 class="fw-bold mb-3">Configuración específica</h3>
+        <dl class="text-body-secondary mb-0">
+            <dt class="text-body">Puntos de recogida a mostrar</dt>
+            <dd class="mb-3">Número máximo de puntos que se muestran como tarifas en el checkout. Por defecto, 10.</dd>
+            <dt class="text-body">Prefijo del nombre de tarifa</dt>
+            <dd class="mb-0">Se muestra delante del nombre de cada punto. Por ejemplo, con el prefijo <em>Envío PuntoPost</em> la tarifa aparece como <em>Envío PuntoPost - Nombre del punto</em>.</dd>
+        </dl>
+    </div>
+
+    <div class="mb-0">
+        <h3 class="fw-bold mb-3">Vista del cliente</h3>
         <p class="text-body-secondary mb-3">
-            Al hacer clic en el selector de puntos de recogida, se abre un mapa interactivo donde el cliente puede buscar y seleccionar el punto de recogida más conveniente. El mapa muestra todos los puntos de recogida disponibles cercanos al código postal introducido por el cliente.
+            Después de introducir su dirección de envío, el cliente ve en los métodos de envío una tarifa por cada punto de recogida cercano y elige el punto seleccionando su tarifa.
+        </p>
+        <div class="border rounded p-3 bg-light text-center mb-0">
+            <img src="/assets/img/puntopost-shopify-12.webp" alt="Tarifa de un punto de recogida PuntoPost en el checkout" class="img-fluid" loading="lazy">
+        </div>
+    </div>
+</section>
+
+<section id="plus" class="bg-white rounded-3 shadow-sm p-4 p-lg-5 mb-4">
+    <h2 class="fw-bold mb-4">Tiendas Plus</h2>
+
+    <div class="mb-4">
+        <h3 class="fw-bold mb-3">Cómo funciona</h3>
+        <p class="text-body-secondary mb-0">
+            En el checkout aparece una única tarifa de PuntoPost. Al seleccionarla, se despliega debajo un selector donde el cliente elige el punto de recogida en un mapa interactivo o en un listado. El checkout no permite continuar hasta que el cliente elige un punto.
+        </p>
+    </div>
+
+    <div id="selector-plus" class="mb-4">
+        <h3 class="fw-bold mb-3">Activar el selector de puntos</h3>
+        <p class="text-body-secondary mb-3">
+            El selector es un bloque del checkout que debes añadir una vez desde el editor del checkout. Si no lo añades, tus clientes verán la tarifa de PuntoPost pero no podrán elegir el punto de recogida.
+        </p>
+        <ol class="text-body-secondary mb-0">
+            <li class="mb-2">Ve a <em>Configuración » Checkout</em> y pulsa <em>Personalizar</em>.</li>
+            <li class="mb-2">En la sección de métodos de envío, añade el bloque de app <em>Selector de punto PuntoPost</em>.</li>
+            <li class="mb-2">Deja vacío el ajuste <em>App URL</em> del bloque: solo se usa en entornos de desarrollo.</li>
+            <li class="mb-2">Guarda los cambios.</li>
+        </ol>
+    </div>
+
+    <div class="mb-4">
+        <h3 class="fw-bold mb-3">Configuración específica</h3>
+        <dl class="text-body-secondary mb-0">
+            <dt class="text-body">Prefijo del nombre de tarifa</dt>
+            <dd class="mb-0">Es el nombre de la tarifa única de PuntoPost en el checkout.</dd>
+        </dl>
+    </div>
+
+    <div class="mb-4">
+        <h3 class="fw-bold mb-3">Vista del cliente</h3>
+        <p class="text-body-secondary mb-3">
+            Después de introducir su dirección de envío, el cliente ve una única tarifa de PuntoPost. Al seleccionarla, se muestra debajo el selector con los puntos de recogida cercanos sobre un mapa. Al pulsar un punto se ven su nombre y dirección, y el botón <em>Seleccionar punto</em>.
         </p>
         <div class="border rounded p-3 bg-light text-center mb-3">
-            <img src="/assets/img/puntopost-shopify-10.webp" alt="Selector de puntos de recogida en el carrito" class="img-fluid" loading="lazy">
+            <img src="/assets/img/puntopost-shopify-plus-mapa.webp" alt="Selector de puntos de recogida PuntoPost con mapa en el checkout" class="img-fluid" loading="lazy">
         </div>
-
         <p class="text-body-secondary mb-3">
             El cliente puede:
         </p>
         <ul class="text-body-secondary mb-3">
-            <li>Buscar puntos de recogida por código postal</li>
-            <li>Navegar por el mapa para ver puntos cercanos</li>
-            <li>Ver información detallada de cada punto de recogida</li>
-            <li>Seleccionar el punto de recogida deseado</li>
+            <li>Moverse y hacer zoom en el mapa, y pulsar <em>Buscar en esta zona</em> para ver los puntos de otra zona.</li>
+            <li>Cambiar a la vista <em>Lista</em> para ver los puntos con su dirección y horario.</li>
+            <li>Cambiar el punto elegido con el botón <em>Editar</em>.</li>
         </ul>
         <div class="border rounded p-3 bg-light text-center mb-3">
-            <img src="/assets/img/puntopost-shopify-11.webp" alt="Selector de puntos de recogida en el carrito" class="img-fluid" loading="lazy">
+            <img src="/assets/img/puntopost-shopify-plus-lista.webp" alt="Listado de puntos de recogida PuntoPost en el checkout" class="img-fluid" loading="lazy">
         </div>
-
-    </div>
-
-    <div class="mb-4">
-        <h3 class="fw-bold mb-3">Método de envío en el checkout</h3>
         <p class="text-body-secondary mb-3">
-            Una vez que el cliente ha seleccionado un punto de recogida en el carrito, al proceder al checkout verá el método de envío de PuntoPost seleccionado con el coste correspondiente. El método de envío mostrará el nombre del punto de recogida seleccionado y el coste de envío configurado.
+            Una vez elegido, el selector muestra el punto seleccionado. Si el cliente intenta continuar con la tarifa de PuntoPost sin haber elegido un punto, el checkout se lo indica y no le deja avanzar.
         </p>
-        <div class="border rounded p-3 bg-light text-center mb-3">
-            <img src="/assets/img/puntopost-shopify-12.webp" alt="Método de envío en el checkout" class="img-fluid" loading="lazy">
+        <div class="border rounded p-3 bg-light text-center mb-0">
+            <img src="/assets/img/puntopost-shopify-plus-seleccionado.webp" alt="Punto de recogida PuntoPost seleccionado en el checkout" class="img-fluid" loading="lazy">
         </div>
     </div>
+
+    <div class="mb-0">
+        <h3 class="fw-bold mb-3">Si algo no funciona</h3>
+        <p class="text-body-secondary mb-3">
+            <strong>Aparece la tarifa de PuntoPost pero no el selector de puntos</strong>
+        </p>
+        <ul class="text-body-secondary mb-4">
+            <li>Añade el bloque <em>Selector de punto PuntoPost</em> en el editor del checkout (ver <a href="#selector-plus">Activar el selector de puntos</a>).</li>
+        </ul>
+        <p class="text-body-secondary mb-3">
+            <strong>El selector muestra «No se pudieron cargar los puntos de recogida»</strong>
+        </p>
+        <ul class="text-body-secondary mb-4">
+            <li>Comprueba que el ajuste <em>App URL</em> del bloque del selector en el editor del checkout está vacío.</li>
+        </ul>
+        <p class="text-body-secondary mb-3">
+            <strong>Aparece una tarifa por cada punto en lugar del selector</strong>
+        </p>
+        <ul class="text-body-secondary mb-0">
+            <li>Abre la app (página principal o <em>Diagnóstico</em>) para que vuelva a detectar el plan de la tienda. Shopify puede tardar hasta una hora en dejar de mostrar las tarifas anteriores.</li>
+        </ul>
+    </div>
+</section>
+
+<section id="diagnostico" class="bg-white rounded-3 shadow-sm p-4 p-lg-5 mb-4">
+    <h2 class="fw-bold mb-4">Diagnóstico</h2>
+    <p class="text-body-secondary mb-3">
+        La página <em>Diagnóstico</em> de la app te permite comprobar que todo está bien configurado. Muestra:
+    </p>
+    <ul class="text-body-secondary mb-3">
+        <li>El plan de Shopify de tu tienda.</li>
+        <li>El tipo de comercio, si tienes devoluciones activadas y si está activado el modo solo checkout.</li>
+        <li>Si las credenciales de PuntoPost están completas.</li>
+        <li>Si el servicio de tarifas de PuntoPost está registrado en Shopify y si PuntoPost está añadido a una zona de envío activa.</li>
+    </ul>
+    <p class="text-body-secondary mb-0">
+        También puedes simular una consulta de tarifas introduciendo un código postal de prueba (por ejemplo, <em>06600</em>) para ver cuántos puntos de recogida y tarifas se ofrecerían.
+    </p>
 </section>
 
 <section id="gestion-pedidos" class="bg-white rounded-3 shadow-sm p-4 p-lg-5 mb-4">
     <h2 class="fw-bold mb-4">Gestión de pedidos</h2>
     <p class="text-body-secondary mb-4">
-        Cuando el cliente realiza un pedido seleccionando un punto de recogida de PuntoPost, se pueden ver y gestionar estos pedidos desde el panel de administración de Shopify.
+        La gestión de pedidos es igual en todos los planes. Cuando un cliente realiza un pedido con un punto de recogida PuntoPost, la app crea automáticamente el paquete en PuntoPost y guarda el punto elegido en el pedido. Los pedidos de PuntoPost llevan la etiqueta <em>PuntoPost</em>.
     </p>
 
     <div class="mb-4">
         <h3 class="fw-bold mb-3">Visualización de pedidos</h3>
         <p class="text-body-secondary mb-3">
-            Los pedidos con puntos de recogida aparecen en la lista de pedidos de Shopify junto con el resto de pedidos. Se pueden identificar fácilmente ya que mostrarán la forma de entrega correspondiente.
+            Los pedidos con puntos de recogida aparecen en la lista de pedidos de Shopify junto con el resto de pedidos, con la forma de entrega correspondiente.
         </p>
         <div class="border rounded p-3 bg-light text-center mb-3">
-        <img src="/assets/img/puntopost-shopify-13.webp" alt="Método de envío en el checkout" class="img-fluid" loading="lazy">
+            <img src="/assets/img/puntopost-shopify-13.webp" alt="Pedidos PuntoPost en la lista de pedidos de Shopify" class="img-fluid" loading="lazy">
         </div>
+        <p class="text-body-secondary mb-0">
+            Además, la página <em>Pedidos PuntoPost</em> de la app reúne todos los pedidos enviados con PuntoPost, con su estado de preparación y el estado del paquete en PuntoPost, y permite filtrarlos por ambos estados.
+        </p>
     </div>
 
     <div class="mb-4">
-        <h3 class="fw-bold mb-3">Detalles del punto de recogida en el pedido</h3>
+        <h3 class="fw-bold mb-3">Información del paquete en el pedido</h3>
         <p class="text-body-secondary mb-3">
-            Al abrir los detalles de un pedido que utiliza PuntoPost, se muestra toda la información del punto de recogida seleccionado por el cliente. Esta información incluye:
+            Al abrir un pedido de PuntoPost, el bloque <em>Información de paquete PuntoPost</em> muestra:
         </p>
         <div class="border rounded p-3 bg-light text-center mb-3">
-            <img src="/assets/img/puntopost-shopify-14.webp" alt="Método de envío en el checkout" class="img-fluid" loading="lazy">
+            <img src="/assets/img/puntopost-shopify-14.webp" alt="Información de paquete PuntoPost en el detalle del pedido" class="img-fluid" loading="lazy">
         </div>
-
         <ul class="text-body-secondary mb-3">
-            <li>Nombre del punto de recogida</li>
-            <li>Dirección completa del punto de recogida</li>
-            <li>Horarios de atención</li>
-            <li>Etiqueta asignada al pedido</li>
+            <li>Nombre, dirección y horario del punto de recogida</li>
+            <li>Etiqueta y número de seguimiento del paquete</li>
+            <li>Estado del paquete en PuntoPost</li>
+            <li>Código QR de la etiqueta</li>
         </ul>
-        <p class="text-body-secondary mb-3">
-            Esta información te permite preparar el pedido correctamente y asegurarte de que se envíe al punto de recogida adecuado.
+        <p class="text-body-secondary mb-0">
+            Si no ves el bloque, añádelo desde la gestión de bloques de la página del pedido.
         </p>
     </div>
 
     <div class="mb-4">
-        <h3 class="fw-bold mb-3">Gestión de pedidos con punto de recogida</h3>
-        <p class="text-body-secondary mb-3">
-            Para gestionar pedidos con puntos de recogida de PuntoPost:
-        </p>
+        <h3 class="fw-bold mb-3">Preparar y enviar el pedido</h3>
         <ol class="text-body-secondary mb-3">
             <li>Revisa los detalles del pedido y confirma el punto de recogida seleccionado.</li>
             <li>Prepara el pedido y empaquétalo correctamente.</li>
-            <li>Una vez que el pedido esté listo para ser enviado, imprime la etiqueta con el código QR que se debe adjuntar al exterior del paquete.</li>
+            <li>Imprime la etiqueta con el código QR y adjúntala al exterior del paquete.</li>
         </ol>
         <div class="border rounded p-3 bg-light text-center mb-3">
-        <img src="/assets/img/puntopost-shopify-15.webp" alt="Gestión de pedidos con punto de recogida" class="img-fluid" loading="lazy">
+            <img src="/assets/img/puntopost-shopify-15.webp" alt="Opción de imprimir etiqueta PuntoPost en el pedido" class="img-fluid" loading="lazy">
         </div>
         <p class="text-body-secondary mb-3">
-            Para imprimir la etiqueta, desde el pedido selecciona la opción <em>Imprimir</em> y pulsa sobre PuntoPost. Se mostrará una previsualización de la etiqueta y se podrá imprimir esta directamente desde el navegador.
+            Para imprimir la etiqueta, desde el pedido selecciona la opción <em>Imprimir</em> y pulsa sobre <em>Imprimir etiqueta QR</em>. Se mostrará una previsualización de la etiqueta y se podrá imprimir directamente desde el navegador.
         </p>
         <div class="border rounded p-3 bg-light text-center mb-3">
-            <img src="/assets/img/puntopost-shopify-16.webp" alt="Gestión de pedidos con punto de recogida" class="img-fluid" loading="lazy">
+            <img src="/assets/img/puntopost-shopify-16.webp" alt="Previsualización de la etiqueta PuntoPost" class="img-fluid" loading="lazy">
         </div>
         <p class="text-body-secondary mb-3">
             Una vez impresa la etiqueta, se debe adjuntar al exterior del paquete.
         </p>
         <div class="border rounded p-3 bg-light text-center mb-3">
-            <img src="/assets/img/puntopost-shopify-17.webp" alt="Gestión de pedidos con punto de recogida" class="img-fluid" loading="lazy">
+            <img src="/assets/img/puntopost-shopify-17.webp" alt="Etiqueta PuntoPost adjunta al paquete" class="img-fluid" loading="lazy">
         </div>
         <p class="text-body-secondary mb-3">
-            En el caso de que el comercio sea B2C, se debe marcar el paquete como pendiente de recogida, pulsando el botón <em>Marcar como preparado</em>.                                    Esto indicará a PuntoPost que el paquete está listo y que debe pasar por el almacen de la tienda para recogerlo y poderlo enviar al punto de recogida.
+            En el caso de que el comercio sea B2C, marca el pedido como preparado con el botón <em>Marcar como preparado</em> de Shopify. La app avisa automáticamente a PuntoPost de que el paquete está listo para que pase a recogerlo por tu almacén y lo envíe al punto de recogida.
         </p>
-        <p class="text-body-secondary mb-3">
-            En el caso de que el comercio sea C2C, se puede llevar el paquete a un punto de recogida PuntoPost para que sea enviado al comprador.
+        <p class="text-body-secondary mb-0">
+            En el caso de que el comercio sea C2C, lleva el paquete a un punto PuntoPost para que sea enviado al comprador. Puedes buscar los puntos más cercanos en <a href="/map" target="_blank" rel="noopener noreferrer">Encuentra tu PuntoPost</a>.
         </p>
     </div>
+
+    <div class="mb-0">
+        <h3 class="fw-bold mb-3">Devoluciones</h3>
+        <p class="text-body-secondary mb-0">
+            Si tu comercio tiene las devoluciones de PuntoPost activadas, el bloque del pedido incluye el botón <em>Realizar devolución con PuntoPost</em>. Al confirmarlo se crea el paquete de devolución y se muestra su estado y el código QR de devolución, que puedes imprimir con <em>Imprimir QR de devolución</em>.
+        </p>
+    </div>
+</section>
+
+<section id="solo-checkout" class="bg-white rounded-3 shadow-sm p-4 p-lg-5 mb-4">
+    <h2 class="fw-bold mb-4">Modo solo checkout</h2>
+    <p class="text-body-secondary mb-4">
+        Este modo es para tiendas que gestionan los envíos de PuntoPost desde su propio sistema (ERP, OMS, WMS…) y funciona igual en todos los planes. Se activa con la opción <em>Usar PuntoPost solo en el checkout (sin crear paquetes)</em> de la pantalla de credenciales.
+    </p>
+    <ul class="text-body-secondary mb-4">
+        <li>El cliente elige el punto de recogida en el checkout igual que en el modo normal, según el plan de tu tienda.</li>
+        <li>La app guarda el punto elegido en el pedido.</li>
+        <li>La app <strong>no</strong> crea paquetes en PuntoPost, no genera etiquetas y no muestra seguimiento ni devoluciones. Todo eso queda a cargo de tu integración.</li>
+    </ul>
+
+    <h3 class="fw-bold mb-3">Datos del punto de recogida en el pedido</h3>
+    <p class="text-body-secondary mb-3">
+        Los pedidos de PuntoPost llevan la etiqueta <code>PuntoPost</code> y estos metacampos:
+    </p>
+    <dl class="text-body-secondary mb-3">
+        <dt><code>puntopost.pudo_id</code></dt>
+        <dd class="mb-3">Identificador del punto en PuntoPost. Es el valor que hay que usar como destino al crear el paquete en la API de PuntoPost. Siempre está presente.</dd>
+        <dt><code>puntopost.pudo_name</code></dt>
+        <dd class="mb-3">Nombre del punto, tal como lo vio el comprador.</dd>
+        <dt><code>puntopost.pudo_address</code></dt>
+        <dd class="mb-0">Dirección del punto en una línea.</dd>
+    </dl>
+    <p class="text-body-secondary mb-3">
+        <code>pudo_name</code> y <code>pudo_address</code> son informativos y pueden faltar en algún pedido, por lo que la integración debe basarse en <code>pudo_id</code>. Se pueden leer con la Admin API de Shopify con el permiso <code>read_orders</code>.
+    </p>
+    <p class="text-body-secondary mb-3">
+        La app escribe estos datos unos segundos después de crearse el pedido: primero los metacampos y después la etiqueta. Por eso, no leas el punto al recibir el webhook <code>orders/create</code>; espera a que el pedido tenga la etiqueta <code>PuntoPost</code> (por ejemplo, con el webhook <code>orders/updated</code> o consultando periódicamente los pedidos con <code>tag:PuntoPost</code>).
+    </p>
+    <p class="text-body-secondary mb-0">
+        La dirección de envío del pedido es la que introdujo el cliente, salvo que actives la opción <em>Usar el punto de recogida como dirección de envío</em>. Si necesitas más detalles para tu integración, solicita la guía técnica a tu contacto de PuntoPost.
+    </p>
+</section>
+
+<section id="solucion" class="bg-white rounded-3 shadow-sm p-4 p-lg-5 mb-4">
+    <h2 class="fw-bold mb-4">Solución de problemas</h2>
+    <p class="text-body-secondary mb-3">
+        <strong>La app indica que PuntoPost no puede funcionar en esta tienda</strong>
+    </p>
+    <ul class="text-body-secondary mb-4">
+        <li>Tu tienda no tiene activas las tarifas calculadas por transportista (CCS). Consulta <a href="#requisitos">Requisitos y planes de Shopify</a>.</li>
+    </ul>
+    <p class="text-body-secondary mb-3">
+        <strong>PuntoPost no aparece en los métodos de envío del checkout</strong>
+    </p>
+    <ul class="text-body-secondary mb-4">
+        <li>Comprueba que PuntoPost está añadido a la zona de envío de México (ver <a href="#zonas-envio">Añadir PuntoPost a las zonas de envío</a>).</li>
+        <li>Revisa que las credenciales de PuntoPost estén completas.</li>
+        <li>Asegúrate de que la dirección de envío es de México y tiene un código postal válido con puntos de recogida cercanos.</li>
+        <li>Revisa la página <a href="#diagnostico">Diagnóstico</a> de la app.</li>
+    </ul>
+    <p class="text-body-secondary mb-3">
+        <strong>Problemas con el selector de puntos en tiendas Plus</strong>
+    </p>
+    <ul class="text-body-secondary mb-0">
+        <li>Consulta <a href="#plus">Tiendas Plus » Si algo no funciona</a>.</li>
+    </ul>
 </section>
