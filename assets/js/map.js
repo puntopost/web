@@ -17,6 +17,8 @@ const MIN_FETCH_RADIUS_KM = Math.ceil(CELL_SIZE * 111 * 1.5);
 const MEXICO_BOUNDS = L.latLngBounds([14.5, -118.5], [32.8, -86.5]);
 const MIN_ZOOM = 6;
 const MAX_ZOOM = 19;
+const CP_PATTERN = /^\d{5}$/;
+const COORDS_PATTERN = /^(-?\d{1,2}(?:\.\d+)?),\s*(-?\d{1,3}(?:\.\d+)?)$/;
 
 const markerIcon = L.icon({ iconUrl: '/assets/img/PING1.svg', iconSize: [49, 54], iconAnchor: [24, 43], popupAnchor: [0, -38] });
 const markerIconSelected = L.icon({ iconUrl: '/assets/img/PING2.svg', iconSize: [63, 70], iconAnchor: [32, 58], popupAnchor: [0, -50] });
@@ -130,11 +132,18 @@ async function fetchAllPages(firstURL, fetchId, onPage) {
 	return null;
 }
 
+// ---- URL hash -------------------------------------------------------------
+
+function setHash(value) {
+	window.history.replaceState(null, '', '#' + encodeURIComponent(value));
+}
+
 // ---- Markers --------------------------------------------------------------
 
 function createMarkerObj(pudo) {
 	const { latitude, longitude } = pudo.address.coordinate;
 	const marker = L.marker([latitude, longitude], { icon: markerIcon });
+	marker.pudoId = pudo.external_id;
 	marker.bindPopup(buildPopupHTML(pudo));
 	return marker;
 }
@@ -189,6 +198,16 @@ function buildPopupHTML(pudo) {
 
 let cpSearchInProgress = false;
 
+// Red dot marking the searched spot: the postal code centroid or the
+// coordinates of a #lat,lng link. Only one at a time.
+function placeSearchMarker(map, latlng) {
+	if (cpMarker) map.removeLayer(cpMarker);
+	cpMarker = L.circleMarker(
+		latlng,
+		{ color: '#FF4B5C', fillColor: '#FF4B5C', fillOpacity: 1, radius: 5, weight: 2 }
+	).addTo(map);
+}
+
 async function loadCPSearch(map, cp) {
 	cpSearchInProgress = true;
 	const fetchId = ++activeFetchId;
@@ -209,11 +228,8 @@ async function loadCPSearch(map, cp) {
 			hideSpinner();
 
 			if (coord) {
-				if (cpMarker) map.removeLayer(cpMarker);
-				cpMarker = L.circleMarker(
-					[coord.latitude, coord.longitude],
-					{ color: '#FF4B5C', fillColor: '#FF4B5C', fillOpacity: 1, radius: 5, weight: 2 }
-				).addTo(map);
+				setHash(cp);
+				placeSearchMarker(map, [coord.latitude, coord.longitude]);
 
 				const cellKey = Math.floor(coord.latitude / CELL_SIZE) + ',' + Math.floor(coord.longitude / CELL_SIZE);
 				const alreadyCovered = loadedCells.has(cellKey);
@@ -303,7 +319,7 @@ function scheduleViewportLoad(map) {
 
 // ---- Input ----------------------------------------------------------------
 
-function setupCPInput(map) {
+function setupCPInput(map, initialCP) {
 	const cpInput = document.getElementById('find-pudos-input');
 	const btn = document.querySelector('.js-find-pudos');
 	if (!btn || !cpInput) return;
@@ -338,6 +354,12 @@ function setupCPInput(map) {
 	});
 	cpInput.addEventListener('keypress', e => { if (e.key === 'Enter') submit(); });
 	btn.addEventListener('click', submit);
+
+	if (initialCP) {
+		mask.unmaskedValue = initialCP;
+		cpInput.classList.add('has-value');
+		submit();
+	}
 }
 
 // ---- Geolocate ------------------------------------------------------------
@@ -416,8 +438,31 @@ function setupGeolocate(map) {
 
 const DEEP_LINK_UNAVAILABLE = 'Lo sentimos, este punto de entrega no está disponible. Por favor contáctanos por <a href="https://api.whatsapp.com/send/?phone=525528795640&text=Hola,+tengo+una+consulta%3A&type=phone_number&app_absent=0" target="_blank" rel="noopener noreferrer" class="text-white fw-bold text-decoration-none">WhatsApp</a> y te ayudaremos a resolverlo lo antes posible.';
 
-async function resolveDeepLink() {
-	const pudoId = location.hash.slice(1);
+const COORDS_OUT_OF_BOUNDS = 'Las coordenadas del enlace están fuera de la zona de cobertura.';
+
+// The hash can be a postal code (#06000), coordinates (#19.4326,-99.1332)
+// or, otherwise, a pickup point id (#MX003594).
+function parseHash() {
+	let hash;
+	try {
+		hash = decodeURIComponent(location.hash.slice(1)).trim();
+	} catch {
+		return null;
+	}
+	if (!hash) return null;
+	if (CP_PATTERN.test(hash)) return { cp: hash };
+	const coords = hash.match(COORDS_PATTERN);
+	if (coords) return { coords: [Number(coords[1]), Number(coords[2])] };
+	return { pudoId: hash };
+}
+
+function validCoords(coords) {
+	if (MEXICO_BOUNDS.contains(coords)) return coords;
+	showToast(COORDS_OUT_OF_BOUNDS, 'warning');
+	return null;
+}
+
+async function resolveDeepLink(pudoId) {
 	if (!pudoId) return null;
 
 	showSpinner(true);
@@ -442,11 +487,13 @@ async function resolveDeepLink() {
 // ---- Init -----------------------------------------------------------------
 
 (async function init() {
-	const deepLink = await resolveDeepLink();
+	const hash = parseHash() || {};
+	const deepLink = await resolveDeepLink(hash.pudoId);
+	const hashCoords = hash.coords ? validCoords(hash.coords) : null;
 
 	const center = deepLink
 		? [deepLink.address.coordinate.latitude, deepLink.address.coordinate.longitude]
-		: DEFAULT_CENTER;
+		: hashCoords || DEFAULT_CENTER;
 
 	const map = L.map('map', {
 		maxBounds: MEXICO_BOUNDS.pad(0.2),
@@ -477,7 +524,10 @@ async function resolveDeepLink() {
 	map.addLayer(clusterGroup);
 
 	map.on('popupopen', e => {
-		if (e.popup._source) e.popup._source.setIcon(markerIconSelected);
+		if (e.popup._source) {
+			e.popup._source.setIcon(markerIconSelected);
+			setHash(e.popup._source.pudoId);
+		}
 		const px = map.project(e.popup._latlng);
 		px.y -= e.popup._container.clientHeight / 1.5;
 		map.panTo(map.unproject(px), { animate: true });
@@ -490,6 +540,8 @@ async function resolveDeepLink() {
 
 	await loadViewport(map);
 
+	if (hashCoords && !deepLink) placeSearchMarker(map, hashCoords);
+
 	if (deepLink) {
 		let marker = markerCache.get(deepLink.external_id);
 		if (!marker) {
@@ -500,6 +552,6 @@ async function resolveDeepLink() {
 		marker.openPopup();
 	}
 
-	setupCPInput(map);
+	setupCPInput(map, hash.cp);
 	setupGeolocate(map);
 })();
