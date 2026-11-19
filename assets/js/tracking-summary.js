@@ -117,8 +117,14 @@ const displayTrackingInfo = (data, trackingId) => {
 			? [...events].reverse().find((event) => event.type === 'movement')
 			: null;
 
+	// El tipo de incidencia solo se muestra en el estado actual: las incidencias no
+	// están ligadas al historial de estados, así que el historial sigue genérico.
+	const incidenceText = data.status === 'incidence' ? getIncidenceText(data.incidence) : null;
+
 	if (isReturnFailStatus) {
 		currentStatusElement.textContent = 'Devolución al remitente';
+	} else if (incidenceText) {
+		currentStatusElement.textContent = incidenceText;
 	} else if (latestMovementEvent) {
 		currentStatusElement.textContent = latestMovementEvent.label;
 	} else {
@@ -425,6 +431,24 @@ const getStatusText = (status) => {
 			return status;
 	}
 };
+
+// Mensajes para el cliente según el tipo de incidencia abierta (`detail.incidence.type`).
+// PROVISIONALES: pendientes de que negocio los valide, sobre todo los de
+// `shipment_lost` y `shipment_damaged`.
+// Un tipo que no esté aquí (incluido `problem`, que es el genérico de backend) usa el
+// texto genérico de `getStatusText('incidence')`.
+const INCIDENCE_MESSAGES = {
+	pudo_closed: 'Encontramos cerrado el PuntoPost, estamos reprogramando tu envío',
+	pudo_incorrect: 'Hubo un problema con el PuntoPost asignado, lo estamos revisando',
+	pudo_out_working_hours: 'Llegamos al PuntoPost fuera de su horario, estamos reprogramando tu envío',
+	shipment_damaged: 'Tu paquete presenta daños, lo estamos revisando',
+	shipment_lost: 'No localizamos tu paquete, lo estamos buscando'
+};
+
+// Devuelve el mensaje del tipo de incidencia, o null si no hay incidencia pública
+// abierta (campo ausente o null) o si el tipo no tiene mensaje propio.
+const getIncidenceText = (incidence) =>
+	Object.hasOwn(INCIDENCE_MESSAGES, incidence?.type) ? INCIDENCE_MESSAGES[incidence.type] : null;
 
 const showStatusBadge = (status) =>
 	document.querySelector(`.js-status-badge-${status}`)?.classList.remove('d-none');
