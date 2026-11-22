@@ -84,9 +84,16 @@ function registerFetchedArea(lat, lng, radiusKm) {
 	const maxR = Math.floor((lat + deg) / CELL_SIZE);
 	const minC = Math.floor((lng - deg) / CELL_SIZE);
 	const maxC = Math.floor((lng + deg) / CELL_SIZE);
-	for (let r = minR; r <= maxR; r++)
-		for (let c = minC; c <= maxC; c++)
-			loadedCells.add(r + ',' + c);
+	const kmPerLngDeg = 111 * Math.cos((lat * Math.PI) / 180);
+	for (let r = minR; r <= maxR; r++) {
+		for (let c = minC; c <= maxC; c++) {
+			const farLat = Math.max(Math.abs(lat - r * CELL_SIZE), Math.abs(lat - (r + 1) * CELL_SIZE));
+			const farLng = Math.max(Math.abs(lng - c * CELL_SIZE), Math.abs(lng - (c + 1) * CELL_SIZE));
+			if (Math.hypot(farLat * 111, farLng * kmPerLngDeg) <= radiusKm) {
+				loadedCells.add(r + ',' + c);
+			}
+		}
+	}
 }
 
 function uncoveredCenter(map) {
@@ -215,12 +222,7 @@ async function loadCPSearch(map, cp) {
 					{ color: '#FF4B5C', fillColor: '#FF4B5C', fillOpacity: 1, radius: 5, weight: 2 }
 				).addTo(map);
 
-				const cellKey = Math.floor(coord.latitude / CELL_SIZE) + ',' + Math.floor(coord.longitude / CELL_SIZE);
-				const alreadyCovered = loadedCells.has(cellKey);
-
-				if (!alreadyCovered) {
-					registerFetchedArea(coord.latitude, coord.longitude, radiusKm);
-				}
+				registerFetchedArea(coord.latitude, coord.longitude, radiusKm);
 
 				geometryPromise.then(geometry => {
 					if (fetchId !== activeFetchId) return;
@@ -235,7 +237,6 @@ async function loadCPSearch(map, cp) {
 						map.flyTo([coord.latitude, coord.longitude], DEFAULT_ZOOM, { animate: true, duration: 0.75 });
 					}
 				});
-				if (alreadyCovered) return true;
 			}
 		}
 
