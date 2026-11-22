@@ -347,6 +347,7 @@ function setupCPInput(map, initialCP) {
 		}
 		if (cpSearchInProgress) return;
 		if (geoWatchId !== null) stopGeolocate(map);
+		cpInput.blur();
 		enqueueCPSearch(map, cp);
 	};
 
