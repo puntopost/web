@@ -61,10 +61,10 @@ const fetchTrackingInfo = async (trackingId) => {
 		}
 		return;
 	}
-	displayTrackingInfo(result.body.detail, trackingId);
+	displayTrackingInfo(result.body.detail, result.body.incidences, trackingId);
 };
 
-const displayTrackingInfo = (data, trackingId) => {
+const displayTrackingInfo = (data, incidences, trackingId) => {
 	showStatusBadge(data.status);
 
 	setToggleCollapseText();
@@ -117,7 +117,10 @@ const displayTrackingInfo = (data, trackingId) => {
 			? [...events].reverse().find((event) => event.type === 'movement')
 			: null;
 
-	const incidenceText = data.status === 'incidence' ? getIncidenceText(data.incidence) : null;
+	const openIncidence = Array.isArray(incidences)
+		? incidences.find((incidence) => incidence.status === 'opened')
+		: null;
+	const incidenceText = data.status === 'incidence' ? getIncidenceText(openIncidence) : null;
 
 	if (isReturnFailStatus) {
 		currentStatusElement.textContent = 'Devolución al remitente';
