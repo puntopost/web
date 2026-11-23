@@ -117,8 +117,6 @@ const displayTrackingInfo = (data, trackingId) => {
 			? [...events].reverse().find((event) => event.type === 'movement')
 			: null;
 
-	// El tipo de incidencia solo se muestra en el estado actual: las incidencias no
-	// están ligadas al historial de estados, así que el historial sigue genérico.
 	const incidenceText = data.status === 'incidence' ? getIncidenceText(data.incidence) : null;
 
 	if (isReturnFailStatus) {
@@ -432,11 +430,6 @@ const getStatusText = (status) => {
 	}
 };
 
-// Mensajes para el cliente según el tipo de incidencia abierta (`detail.incidence.type`),
-// validados por negocio en el PR #112.
-// Un tipo que no esté aquí (incluido `problem`, que es el genérico de backend) y los
-// tipos internos, que backend envía como `incidence: null`, usan el texto genérico de
-// `getStatusText('incidence')`.
 const INCIDENCE_MESSAGES = {
 	pudo_closed: 'Encontramos cerrado tu PuntoPost, estamos reprogramando tu envío',
 	pudo_incorrect: 'Hubo un problema con tu PuntoPost asignado, lo estamos revisando',
@@ -445,8 +438,6 @@ const INCIDENCE_MESSAGES = {
 	shipment_lost: 'Estamos ubicando tu paquete, en breve tendrás novedades'
 };
 
-// Devuelve el mensaje del tipo de incidencia, o null si no hay incidencia pública
-// abierta (campo ausente o null) o si el tipo no tiene mensaje propio.
 const getIncidenceText = (incidence) =>
 	Object.hasOwn(INCIDENCE_MESSAGES, incidence?.type) ? INCIDENCE_MESSAGES[incidence.type] : null;
 
