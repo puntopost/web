@@ -422,7 +422,7 @@ const getStatusText = (status) => {
 		case 'return_delivered':
 			return 'Devolución entregada';
 		case 'incidence':
-			return 'Incidencia detectada, revisando';
+			return 'Tuvimos un inconveniente con tu envío, ya lo estamos revisando';
 		case 'cancelled':
 			return 'Cancelado';
 		case 'lost':
@@ -432,17 +432,17 @@ const getStatusText = (status) => {
 	}
 };
 
-// Mensajes para el cliente según el tipo de incidencia abierta (`detail.incidence.type`).
-// PROVISIONALES: pendientes de que negocio los valide, sobre todo los de
-// `shipment_lost` y `shipment_damaged`.
-// Un tipo que no esté aquí (incluido `problem`, que es el genérico de backend) usa el
-// texto genérico de `getStatusText('incidence')`.
+// Mensajes para el cliente según el tipo de incidencia abierta (`detail.incidence.type`),
+// validados por negocio en el PR #112.
+// Un tipo que no esté aquí (incluido `problem`, que es el genérico de backend) y los
+// tipos internos, que backend envía como `incidence: null`, usan el texto genérico de
+// `getStatusText('incidence')`.
 const INCIDENCE_MESSAGES = {
-	pudo_closed: 'Encontramos cerrado el PuntoPost, estamos reprogramando tu envío',
-	pudo_incorrect: 'Hubo un problema con el PuntoPost asignado, lo estamos revisando',
-	pudo_out_working_hours: 'Llegamos al PuntoPost fuera de su horario, estamos reprogramando tu envío',
-	shipment_damaged: 'Tu paquete presenta daños, lo estamos revisando',
-	shipment_lost: 'No localizamos tu paquete, lo estamos buscando'
+	pudo_closed: 'Encontramos cerrado tu PuntoPost, estamos reprogramando tu envío',
+	pudo_incorrect: 'Hubo un problema con tu PuntoPost asignado, lo estamos revisando',
+	pudo_out_working_hours: 'Llegamos a tu PuntoPost fuera de su horario, estamos reprogramando tu envío',
+	shipment_damaged: 'Detectamos un posible daño en tu paquete, lo estamos revisando',
+	shipment_lost: 'Estamos ubicando tu paquete, en breve tendrás novedades'
 };
 
 // Devuelve el mensaje del tipo de incidencia, o null si no hay incidencia pública
