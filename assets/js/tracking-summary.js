@@ -61,10 +61,10 @@ const fetchTrackingInfo = async (trackingId) => {
 		}
 		return;
 	}
-	displayTrackingInfo(result.body.detail, trackingId);
+	displayTrackingInfo(result.body.detail, result.body.incidences, trackingId);
 };
 
-const displayTrackingInfo = (data, trackingId) => {
+const displayTrackingInfo = (data, incidences, trackingId) => {
 	showStatusBadge(data.status);
 
 	setToggleCollapseText();
@@ -117,8 +117,15 @@ const displayTrackingInfo = (data, trackingId) => {
 			? [...events].reverse().find((event) => event.type === 'movement')
 			: null;
 
+	const openIncidence = Array.isArray(incidences)
+		? incidences.find((incidence) => incidence.status === 'opened')
+		: null;
+	const incidenceText = data.status === 'incidence' ? getIncidenceText(openIncidence) : null;
+
 	if (isReturnFailStatus) {
 		currentStatusElement.textContent = 'Devolución al remitente';
+	} else if (incidenceText) {
+		currentStatusElement.textContent = incidenceText;
 	} else if (latestMovementEvent) {
 		currentStatusElement.textContent = latestMovementEvent.label;
 	} else {
@@ -416,7 +423,7 @@ const getStatusText = (status) => {
 		case 'return_delivered':
 			return 'Devolución entregada';
 		case 'incidence':
-			return 'Incidencia detectada, revisando';
+			return 'Tuvimos un inconveniente con tu envío, ya lo estamos revisando';
 		case 'cancelled':
 			return 'Cancelado';
 		case 'lost':
@@ -425,6 +432,17 @@ const getStatusText = (status) => {
 			return status;
 	}
 };
+
+const INCIDENCE_MESSAGES = {
+	pudo_closed: 'Encontramos cerrado tu PuntoPost, estamos reprogramando tu envío',
+	pudo_incorrect: 'Hubo un problema con tu PuntoPost asignado, lo estamos revisando',
+	pudo_out_working_hours: 'Llegamos a tu PuntoPost fuera de su horario, estamos reprogramando tu envío',
+	shipment_damaged: 'Detectamos un posible daño en tu paquete, lo estamos revisando',
+	shipment_lost: 'Estamos ubicando tu paquete, en breve tendrás novedades'
+};
+
+const getIncidenceText = (incidence) =>
+	Object.hasOwn(INCIDENCE_MESSAGES, incidence?.type) ? INCIDENCE_MESSAGES[incidence.type] : null;
 
 const showStatusBadge = (status) =>
 	document.querySelector(`.js-status-badge-${status}`)?.classList.remove('d-none');
