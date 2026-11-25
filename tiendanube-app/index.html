@@ -1,0 +1,236 @@
+---
+layout: documentation
+title: "PuntoPost - App Tiendanube - Documentación"
+description: "Documentación de la app de Tiendanube para ofrecer envío a puntos de recogida PuntoPost en tu tienda online."
+banner: |
+    <section class="text-white text-center rounded-bottom-4 pb-4 pt-3">
+    <h1 class="fw-bold display-5 mb-3">App Tiendanube</h1>
+    <p class="fs-5 mb-0">Documentación de integración</p>
+    </section>
+toc:
+    - id: introduccion
+      label: Introducción
+    - id: requisitos
+      label: Requisitos
+    - id: instalacion
+      label: Instalación
+    - id: credenciales
+      label: Configurar credenciales
+    - id: ajustes-checkout
+      label: Ajustes del checkout
+    - id: vista-comprador
+      label: Vista del comprador
+    - id: gestion-pedidos
+      label: Gestión de pedidos
+    - id: seguimiento
+      label: Seguimiento del pedido
+    - id: solucion
+      label: Solución de problemas
+---
+
+<section id="introduccion" class="bg-white rounded-3 shadow-sm p-4 p-lg-5 mb-4">
+    <h2 class="fw-bold mb-4">Introducción</h2>
+    <p class="text-body-secondary">
+        Integra el método de envío PuntoPost en tu tienda Tiendanube para que tus clientes recojan sus pedidos en puntos de recogida cercanos.
+        Los puntos de recogida se ofrecen directamente en el checkout de Tiendanube, junto al resto de opciones de envío.
+    </p>
+    <p class="text-body-secondary mb-0">
+        La app crea automáticamente los paquetes en PuntoPost cuando se pagan los pedidos, genera las etiquetas con código QR y mantiene actualizado el seguimiento de cada pedido en Tiendanube.
+    </p>
+</section>
+
+<section id="requisitos" class="bg-white rounded-3 shadow-sm p-4 p-lg-5 mb-4">
+    <h2 class="fw-bold mb-4">Requisitos</h2>
+    <ul class="list-unstyled mb-0">
+        <li class="mb-2"><i class="bi bi-check-circle-fill text-primary me-2"></i>Una tienda Tiendanube de México, en pesos mexicanos (MXN).</li>
+        <li class="mb-0"><i class="bi bi-check-circle-fill text-primary me-2"></i>Una cuenta de PuntoPost: usuario y contraseña de la API e ID de merchant. Si no los tienes, pídelos a tu contacto de PuntoPost.</li>
+    </ul>
+</section>
+
+<section id="instalacion" class="bg-white rounded-3 shadow-sm p-4 p-lg-5 mb-4">
+    <h2 class="fw-bold mb-4">Instalación</h2>
+    <ol class="text-body-secondary mb-4">
+        <li class="mb-3">Inicia sesión en el administrador de tu tienda Tiendanube.</li>
+        <li class="mb-3">Abre el <a href="https://www.tiendanube.com/apps/53138/authorize" target="_blank" rel="noopener noreferrer">enlace de instalación de la app PuntoPost</a>.</li>
+        <li class="mb-3">Tiendanube te muestra los permisos que necesita la app. Pulsa <em>Aceptar</em> para completar la instalación.</li>
+    </ol>
+    <div class="border rounded p-3 bg-light text-center mb-3">
+        <img src="/assets/img/puntopost-tiendanube-instalacion.webp" alt="Pantalla de permisos para instalar la app PuntoPost en Tiendanube" class="img-fluid" loading="lazy">
+    </div>
+    <p class="text-body-secondary mb-4">
+        Mientras la app no esté publicada en la tienda de aplicaciones de Tiendanube, verás el aviso <em>Esta aplicación no está disponible en la tienda de aplicaciones</em>. Es normal al instalar desde el enlace.
+    </p>
+    <p class="text-body-secondary mb-0">
+        La app se abre dentro del administrador de Tiendanube, con tres pestañas: <em>General</em>, <em>Credenciales</em> y <em>Envíos</em>. Mientras no configures tus credenciales, la pestaña <em>General</em> muestra el aviso <em>Conecta tu cuenta de PuntoPost</em> con el botón <em>Configurar credenciales</em>.
+    </p>
+    <div class="border rounded p-3 bg-light text-center mt-4 mb-0">
+        <img src="/assets/img/puntopost-tiendanube-conectar.webp" alt="Pestaña General de la app PuntoPost sin credenciales" class="img-fluid" loading="lazy">
+    </div>
+</section>
+
+<section id="credenciales" class="bg-white rounded-3 shadow-sm p-4 p-lg-5 mb-4">
+    <h2 class="fw-bold mb-4">Configurar credenciales de PuntoPost</h2>
+    <p class="text-body-secondary mb-4">
+        Las credenciales permiten que la app consulte los puntos de recogida, cree los paquetes de tus pedidos y reciba las actualizaciones de su estado. Se configuran en la pestaña <em>Credenciales</em>:
+    </p>
+    <div class="border rounded p-3 bg-light text-center mb-4">
+        <img src="/assets/img/puntopost-tiendanube-credenciales.webp" alt="Pestaña Credenciales de la app PuntoPost" class="img-fluid" loading="lazy">
+    </div>
+    <ol class="text-body-secondary mb-4">
+        <li class="mb-2">Introduce el <em>Usuario de la API</em>, la <em>Contraseña de la API</em> y el <em>ID de merchant</em>.</li>
+        <li class="mb-2">Pulsa <em>Comprobar</em>. La app consulta a PuntoPost y muestra el <em>Tipo de cuenta detectado</em> (B2C o C2C) y si tu cuenta <em>Admite devoluciones</em>.</li>
+        <li class="mb-2">Completa los datos que pide tu tipo de cuenta (ver abajo).</li>
+        <li class="mb-2">Pulsa <em>Guardar</em>.</li>
+    </ol>
+    <div class="border rounded p-3 bg-light text-center mb-4">
+        <img src="/assets/img/puntopost-tiendanube-credenciales-b2c.webp" alt="Credenciales de una cuenta B2C con el ID de origen" class="img-fluid" loading="lazy">
+    </div>
+    <dl class="text-body-secondary mb-4">
+        <dt class="text-body">Cuenta B2C</dt>
+        <dd class="mb-3">Pide el <em>ID de origen (Origin ID)</em>: el punto desde el que PuntoPost recoge tus paquetes.</dd>
+        <dt class="text-body">Cuenta C2C</dt>
+        <dd class="mb-0">Pide los datos del remitente: <em>Nombre del remitente</em>, <em>Apellido del remitente</em>, <em>Correo del remitente</em> y <em>Teléfono del remitente</em>. Si tu cuenta admite devoluciones, pide también el <em>ID de origen (Origin ID)</em>: el punto al que vuelven los paquetes devueltos.</dd>
+    </dl>
+    <p class="text-body-secondary mb-4">
+        Al guardar unas credenciales válidas, la app añade PuntoPost como transportista de tu tienda y la pantalla indica <em>PuntoPost está activo en tu checkout.</em> No tienes que configurar nada más en Tiendanube. Mientras falte algún dato, verás <em>PuntoPost no aparecerá en tu checkout hasta completar la configuración.</em>
+    </p>
+    <p class="text-body-secondary mb-0">
+        Para cambiar las credenciales más adelante, deja vacía la contraseña si quieres conservar la actual. Con <em>Quitar credenciales</em> PuntoPost deja de aparecer en tu checkout.
+    </p>
+</section>
+
+<section id="ajustes-checkout" class="bg-white rounded-3 shadow-sm p-4 p-lg-5 mb-4">
+    <h2 class="fw-bold mb-4">Ajustes del checkout</h2>
+    <p class="text-body-secondary mb-4">
+        En la pestaña <em>General</em>, en <em>Ajustes del checkout</em>, puedes ajustar cómo se ofrece PuntoPost a tus clientes:
+    </p>
+    <div class="border rounded p-3 bg-light text-center mb-4">
+        <img src="/assets/img/puntopost-tiendanube-ajustes.webp" alt="Ajustes del checkout de la app PuntoPost" class="img-fluid" loading="lazy">
+    </div>
+    <dl class="text-body-secondary mb-0">
+        <dt class="text-body">Número de puntos que se ofrecen</dt>
+        <dd class="mb-3">Cuántos puntos de recogida cercanos se muestran en el checkout, entre 1 y 15. Por defecto, 10. Tiendanube solo garantiza mostrar 10 puntos; de 11 a 15 puede que no se muestren todos.</dd>
+        <dt class="text-body">Precio del envío (MXN)</dt>
+        <dd class="mb-3">Importe que se cobra al cliente por el envío a un punto PuntoPost.</dd>
+        <dt class="text-body">Envío gratis a partir de (MXN, opcional)</dt>
+        <dd class="mb-0">Los pedidos con un importe igual o superior tendrán el envío PuntoPost gratis. Déjalo vacío para desactivarlo.</dd>
+    </dl>
+</section>
+
+<section id="vista-comprador" class="bg-white rounded-3 shadow-sm p-4 p-lg-5 mb-4">
+    <h2 class="fw-bold mb-4">Vista del comprador</h2>
+    <p class="text-body-secondary mb-4">
+        Después de introducir su código postal, el cliente ve entre las opciones de envío los puntos PuntoPost cercanos, hasta el número que hayas configurado. Cada punto aparece como una opción de recogida con el nombre del punto y su horario (por ejemplo, <em>PuntoPost - Nombre del punto [L-V 9-18]</em>), junto con su dirección y el precio del envío. El cliente elige el punto seleccionando su opción.
+    </p>
+    <div class="border rounded p-3 bg-light text-center mb-4">
+        <img src="/assets/img/puntopost-tiendanube-checkout.webp" alt="Punto de entrega PuntoPost en el checkout de Tiendanube" class="img-fluid" loading="lazy">
+    </div>
+    <p class="text-body-secondary mb-4">
+        Si no hay puntos PuntoPost cerca del código postal del cliente, PuntoPost no aparece entre las opciones de envío.
+    </p>
+    <div class="mb-0">
+        <h3 class="fw-bold mb-3">Recomendación: email y teléfono obligatorios</h3>
+        <p class="text-body-secondary mb-0">
+            PuntoPost utiliza el email y el teléfono del cliente para avisarle cuando su paquete llega al punto de recogida. Te recomendamos pedirlos siempre en el checkout de tu tienda.
+        </p>
+    </div>
+</section>
+
+<section id="gestion-pedidos" class="bg-white rounded-3 shadow-sm p-4 p-lg-5 mb-4">
+    <h2 class="fw-bold mb-4">Gestión de pedidos</h2>
+    <p class="text-body-secondary mb-4">
+        Cuando se paga un pedido con un punto PuntoPost, la app crea automáticamente el paquete en PuntoPost.
+    </p>
+
+    <div class="mb-4">
+        <h3 class="fw-bold mb-3">Envío del pedido</h3>
+        <p class="text-body-secondary mb-3">
+            En el detalle del pedido en Tiendanube, abre el menú <em>Aplicaciones</em> y pulsa <em>PuntoPost - Ver envío</em>.
+        </p>
+    <div class="border rounded p-3 bg-light text-center mb-3">
+        <img src="/assets/img/puntopost-tiendanube-pedido.webp" alt="Enlace PuntoPost - Ver envío en el detalle del pedido" class="img-fluid" loading="lazy">
+    </div>
+        <p class="text-body-secondary mb-3">
+            Se abre la pantalla <em>Envío del pedido</em> de la app, que muestra:
+        </p>
+        <ul class="text-body-secondary mb-3">
+            <li>El punto de entrega elegido por el cliente, con su dirección y su horario.</li>
+            <li>El estado del paquete en PuntoPost y su número de seguimiento.</li>
+            <li>La etiqueta del paquete, con el botón <em>Imprimir etiqueta</em> para imprimir el código QR.</li>
+        </ul>
+    <div class="border rounded p-3 bg-light text-center mb-3">
+        <img src="/assets/img/puntopost-tiendanube-envio.webp" alt="Pantalla Envío del pedido de la app PuntoPost" class="img-fluid" loading="lazy">
+    </div>
+        <p class="text-body-secondary mb-0">
+            Si el paquete todavía no se ha creado, puedes crearlo con <em>Crear envío</em>. Si algo falla, la pantalla muestra el error (por ejemplo, <em>No se pudo crear el envío.</em>) y el botón <em>Reintentar</em>.
+        </p>
+    </div>
+
+    <div class="mb-4">
+        <h3 class="fw-bold mb-3">Preparar y enviar el pedido</h3>
+        <ol class="text-body-secondary mb-3">
+            <li>Revisa los detalles del pedido y confirma el punto de recogida seleccionado.</li>
+            <li>Prepara el pedido y empaquétalo correctamente.</li>
+            <li>Imprime la etiqueta con el código QR y adjúntala al exterior del paquete.</li>
+        </ol>
+        <p class="text-body-secondary mb-3">
+            En el caso de que el comercio sea B2C, marca el pedido como empaquetado en Tiendanube o con el botón <em>Marcar como empaquetado</em> de la app. La app avisa automáticamente a PuntoPost de que el paquete está listo para que pase a recogerlo y lo envíe al punto de recogida. El envío pasa a <em>Avisado a PuntoPost</em>.
+        </p>
+        <p class="text-body-secondary mb-0">
+            En el caso de que el comercio sea C2C, lleva el paquete a un punto PuntoPost para que sea enviado al comprador. Puedes buscar los puntos más cercanos en <a href="/map" target="_blank" rel="noopener noreferrer">Encuentra tu PuntoPost</a>.
+        </p>
+    </div>
+
+    <div class="mb-0">
+        <h3 class="fw-bold mb-3">Pestaña Envíos</h3>
+        <p class="text-body-secondary mb-3">
+            La pestaña <em>Envíos</em> de la app reúne todos los envíos de tu tienda. Puedes filtrarlos (<em>Todos</em>, <em>Con error</em>, <em>Sin avisar a PuntoPost</em>), seleccionar varios e imprimir sus etiquetas de una vez con <em>Imprimir etiquetas</em>.
+        </p>
+    <div class="border rounded p-3 bg-light text-center mt-3 mb-0">
+        <img src="/assets/img/puntopost-tiendanube-envios.webp" alt="Pestaña Envíos de la app PuntoPost" class="img-fluid" loading="lazy">
+    </div>
+    </div>
+</section>
+
+<section id="seguimiento" class="bg-white rounded-3 shadow-sm p-4 p-lg-5 mb-4">
+    <h2 class="fw-bold mb-4">Seguimiento del pedido</h2>
+    <p class="text-body-secondary mb-3">
+        No tienes que marcar el pedido como enviado: lo hace la app. Cuando PuntoPost recibe el paquete, la app marca el pedido como enviado en Tiendanube con el número y el enlace de seguimiento, y Tiendanube avisa al cliente.
+    </p>
+    <p class="text-body-secondary mb-3">
+        A partir de ahí, la app añade al seguimiento del pedido cada cambio del paquete: <em>En camino</em>, <em>Llegando a destino</em>, <em>Listo para recoger</em> y <em>Entregado</em>, así como las incidencias o la devolución al remitente.
+    </p>
+    <p class="text-body-secondary mb-0">
+        Cuando el paquete llega al punto de recogida, PuntoPost envía al cliente un correo con el código QR para recogerlo.
+    </p>
+</section>
+
+<section id="solucion" class="bg-white rounded-3 shadow-sm p-4 p-lg-5 mb-4">
+    <h2 class="fw-bold mb-4">Solución de problemas</h2>
+    <p class="text-body-secondary mb-3">
+        <strong>PuntoPost no aparece en las opciones de envío del checkout</strong>
+    </p>
+    <ul class="text-body-secondary mb-4">
+        <li>Comprueba en la pestaña <em>Credenciales</em> que aparece <em>PuntoPost está activo en tu checkout.</em></li>
+        <li>Asegúrate de que la dirección de envío es de México y tiene un código postal con puntos PuntoPost cercanos.</li>
+    </ul>
+    <p class="text-body-secondary mb-3">
+        <strong>No se pudo crear el envío</strong>
+    </p>
+    <ul class="text-body-secondary mb-4">
+        <li>Abre <em>PuntoPost - Ver envío</em> en el pedido para ver el error y pulsa <em>Reintentar</em>.</li>
+        <li>En la pestaña <em>Envíos</em>, el filtro <em>Con error</em> muestra todos los envíos con problemas.</li>
+    </ul>
+    <p class="text-body-secondary mb-3">
+        <strong>La app muestra «No se ha podido completar la operación»</strong>
+    </p>
+    <ul class="text-body-secondary mb-4">
+        <li>Inténtalo de nuevo en unos minutos. Si el problema continúa, contacta con PuntoPost.</li>
+    </ul>
+    <p class="text-body-secondary mb-3">
+        <strong>La app indica que no está bien instalada en esta tienda</strong>
+    </p>
+    <ul class="text-body-secondary mb-0">
+        <li>Desinstala la app desde el administrador de Tiendanube y vuelve a instalarla con el <a href="#instalacion">enlace de instalación</a>.</li>
+    </ul>
+</section>
