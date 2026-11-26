@@ -15,7 +15,7 @@
 - Marca escrita «Tiendanube» (una palabra) en textos, título y alt.
 - Español de México; los textos de la interfaz de la app, citados tal cual en `<em>` (lista en la Tarea 1).
 - Mobile first: comprobar a 375 px de ancho, sin scroll horizontal, y a 1280 px.
-- Enlace de instalación `https://www.tiendanube.com/apps/53138/authorize` (app de desarrollo) hasta tener el id de la de producción. **No se sube a `main`** hasta cambiarlo.
+- Enlace de instalación `https://www.tiendanube.com/apps/53138/authorize`: la 53138 es la única app de Tiendanube y apunta a producción (2026-11-26).
 - No documentar: devoluciones, paquetes adicionales, impresión masiva desde el listado de pedidos de Tiendanube, modo solo checkout, requisitos de plan.
 - Imágenes: WebP, `class="img-fluid" loading="lazy"`, alt descriptivo, sin datos personales reales.
 - Commits: uno por acción y solo cuando Kevin lo pida.
@@ -48,7 +48,7 @@ El ciclo de cada tarea es: comprobar que falla (la URL da 404 o el enlace no exi
   - `requisitos` → Requisitos: tienda en México (MXN); cuenta de PuntoPost con usuario y contraseña de API e ID de merchant (los da el contacto de PuntoPost).
   - `instalacion` → Instalación: botón/enlace al enlace de instalación, aceptar los permisos en Tiendanube; la app se abre en el admin con las pestañas «General», «Credenciales», «Envíos». Sin credenciales, «General» muestra «Conecta tu cuenta de PuntoPost» con «Configurar credenciales».
   - `credenciales` → Configurar credenciales: «Usuario de la API», «Contraseña de la API» (vacía conserva la actual), «ID de merchant», botón «Comprobar»; muestra «Tipo de cuenta detectado» y «Admite devoluciones»; B2C pide «ID de origen (Origin ID)»; C2C pide «Nombre del remitente», «Apellido del remitente», «Correo del remitente», «Teléfono del remitente»; «Guardar». Al guardar unas credenciales válidas, la app añade PuntoPost como transportista de la tienda: no hay que configurar nada más en Tiendanube. Mensajes: «PuntoPost está activo en tu checkout.» / «PuntoPost no aparecerá en tu checkout hasta completar la configuración.»; «Quitar credenciales» hace que deje de aparecer.
-  - `ajustes-checkout` → Ajustes del checkout (lista `<dl>` como Shopify): «Número de puntos que se ofrecen» (1 a 15, 10 por defecto; Tiendanube solo garantiza 10), «Precio del envío (MXN)», «Envío gratis a partir de (MXN, opcional)». (Sin «Nombre del método de envío»: se quitó.)
+  - `ajustes-checkout` → Ajustes del checkout (lista `<dl>` como Shopify): «Número de puntos que se ofrecen» (1 a 10, 10 por defecto; el máximo de Tiendanube), «Precio del envío (MXN)», «Envío gratis a partir de (MXN, opcional)». (Sin «Nombre del método de envío»: se quitó.)
   - `vista-comprador` → Vista del comprador: tras poner su código postal ve una opción de recogida por cada punto PuntoPost cercano (hasta el número configurado), con el nombre «PuntoPost - punto [horario]», la dirección y el precio. Recomendación: email y teléfono obligatorios, PuntoPost los usa para avisar al comprador.
   - `gestion-pedidos` → Gestión de pedidos: paquete creado solo al pagarse el pedido; en el pedido, link «PuntoPost - Ver envío» → «Envío del pedido» (punto, dirección, «Horario», «Estado», «Seguimiento», «Etiqueta», «Imprimir etiqueta»); «Crear envío» si no se creó, «No se pudo crear el envío.» con «Reintentar». B2C: marcar el pedido como empaquetado en Tiendanube o con «Marcar como empaquetado» avisa a PuntoPost para que pase a recogerlo («Avisado a PuntoPost»). C2C: llevar el paquete a un punto, con enlace a `/map`. Pestaña «Envíos»: filtros «Todos», «Con error», «Sin avisar a PuntoPost», selección múltiple e «Imprimir etiquetas».
   - `seguimiento` → Seguimiento: al recoger PuntoPost el paquete, la app marca el pedido como enviado con el código y el enlace de seguimiento (Tiendanube avisa al comprador); después publica «En camino», «Llegando a destino», «Listo para recoger», «Entregado». El correo con el QR de recogida lo manda PuntoPost al llegar al punto.
@@ -86,5 +86,5 @@ El ciclo de cada tarea es: comprobar que falla (la URL da 404 o el enlace no exi
 
 ### Antes de publicar
 
-- Sustituir `53138` por el id de la app de producción en el enlace de instalación.
+- Rehacer las capturas que cambiaron con el paso a producción (ayuda del número de puntos; nombre de la app si en el portal pasa a «PuntoPost»).
 - Revisión final de Kevin en local y PR a `main`.

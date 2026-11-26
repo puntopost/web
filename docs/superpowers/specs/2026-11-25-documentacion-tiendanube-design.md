@@ -20,8 +20,8 @@ Los comercios de Tiendanube en México deben tener una guía de la app de PuntoP
 
 ## Restricciones
 
-- No se sube a `main` hasta que exista la app de producción y su enlace de instalación (decisión de Kevin).
-- El enlace de instalación de Tiendanube es `https://www.tiendanube.com/apps/{app_id}/authorize`: depende del id de la app, no del dominio de la app. La app de producción tendrá un id distinto del de la de desarrollo (`53138`). Hasta tenerlo, la página usa el de desarrollo para probar en local y se sustituye antes de publicar.
+- No se sube a `main` hasta que la app esté en producción (decisión de Kevin).
+- El enlace de instalación de Tiendanube es `https://www.tiendanube.com/apps/{app_id}/authorize`: depende del id de la app, no del dominio de la app. Solo hay una app, la `53138`, y apunta a producción (2026-11-26).
 - Mobile first; contenido en español de México; textos de la interfaz de la app citados tal cual.
 
 ## Enfoques
@@ -36,7 +36,7 @@ Los comercios de Tiendanube en México deben tener una guía de la app de PuntoP
 2. **Requisitos:** tienda en México (MXN) y cuenta de PuntoPost (usuario y contraseña de API, ID de merchant).
 3. **Instalación:** enlace directo, autorización en Tiendanube; la app se abre dentro del admin con las pestañas «General», «Credenciales» y «Envíos».
 4. **Configurar credenciales:** campos, botón «Comprobar», B2C («ID de origen») y C2C (datos del remitente), «Guardar», «Quitar credenciales». Al guardar, PuntoPost se añade solo como transportista de la tienda.
-5. **Ajustes del checkout:** número de puntos (1 a 15, 10 por defecto, solo 10 garantizados), precio, envío gratis a partir de. (El nombre del método se quitó el 2026-11-25: las opciones se llaman siempre «PuntoPost - punto [horario]».)
+5. **Ajustes del checkout:** número de puntos (1 a 10, 10 por defecto; el máximo de Tiendanube), precio, envío gratis a partir de. (El nombre del método se quitó el 2026-11-25: las opciones se llaman siempre «PuntoPost - punto [horario]».)
 6. **Vista del comprador:** una opción por punto en un radio de 3 km del código postal, «PuntoPost - punto [horario]» con su dirección. Se documenta lo que hace la app hoy, sin hablar de planes.
 7. **Gestión de pedidos:** paquete creado al pagarse el pedido; link «PuntoPost - Ver envío» (punto, estado, seguimiento, «Imprimir etiqueta»); «Crear envío» y «Reintentar»; B2C «Marcar como empaquetado»; C2C llevar el paquete a un punto; pestaña «Envíos» con filtros e «Imprimir etiquetas».
 8. **Seguimiento:** la app marca el pedido como enviado con el código y el enlace de seguimiento cuando PuntoPost recoge el paquete, y publica los estados siguientes en el pedido. El correo con el QR de recogida lo manda PuntoPost.
