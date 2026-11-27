@@ -167,7 +167,10 @@ const displayTrackingInfo = (data, incidences, trackingId) => {
 	let skippedCurrentStatus = false;
 	let historyCount = 0;
 	sortedEvents.forEach((event) => {
-		if (!skippedCurrentStatus && event.type === 'status' && event.status === data.status) {
+		const isCurrentStatusEvent = latestMovementEvent
+			? event === latestMovementEvent
+			: event.type === 'status' && event.status === data.status;
+		if (!skippedCurrentStatus && isCurrentStatusEvent) {
 			skippedCurrentStatus = true;
 			return;
 		}
@@ -297,7 +300,12 @@ const buildTimelineEvents = (data) => {
 	}
 
 	// Orden cronológico ascendente; el caller lo invertirá si hace falta
-	return events.sort((a, b) => a.date - b.date);
+	events.sort((a, b) => a.date - b.date);
+
+	// Colapsar eventos consecutivos con el mismo texto (p.ej. dos movimientos
+	// "in_origin" en el mismo punto por un re-manifiesto): conservamos el más
+	// antiguo, que es cuando el paquete llegó a ese estado.
+	return events.filter((event, index) => index === 0 || event.label !== events[index - 1].label);
 };
 
 const shouldIncludeStatusFromHistoryWithMovements = (status) =>
